@@ -1,0 +1,21 @@
+import { writable } from 'svelte/store';
+
+export const user = writable({});
+export const userEmail = writable("");
+export const refereeOfClub = writable(false);
+export const refereeOfCounty = writable(false);
+export const secretaryOfClub = writable(false);
+export const secretaryOfCounty = writable(false);
+export const secretaryOfProvince = writable(false);
+export const secretaryOfCouncil = writable(false);
+export const teamOfficial = writable(false);
+export const firstName = writable("");
+export const lastName = writable("");
+export const clubRef = writable("");
+export const teams = writable([]);
+export const games = writable([]);
+export const clubCrest = writable("");
+export const countyCrest = writable("");
+export const clubName = writable("");
+export const countyName = writable("");
+export const provinceName = writable("");

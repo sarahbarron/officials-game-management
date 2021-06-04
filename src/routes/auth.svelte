@@ -1,14 +1,14 @@
 <script lang="ts">
     import Auth from "../components/Auth.svelte";
-    import Logo from "../components/Logo.svelte";
+    import router from "page";
     export let qs;
 
-    qs.action = qs.action || "register";
-    if (!["login", "register"].includes(qs.action)) qs.action = "register";
+    qs.action = qs.action || "login";
+    if (!["login"].includes(qs.action)) qs.action = "login";
 </script>
 
 <h1 class="w3-center w3-jumbo">GAA Game Management Login</h1>
-<Auth
-    authMode={qs.action}
-    on:auth={() => (window.location.href = qs.next || "/")}
-/>
+<Auth on:auth={() => router.redirect("/home")} />
+<!-- <Auth on:auth={() => router.redirect(qs.next || "/home")} /> -->
+
+<!-- <Auth on:auth={() => (window.location.href = qs.next || "/")} /> -->

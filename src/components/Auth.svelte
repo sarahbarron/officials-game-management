@@ -1,19 +1,51 @@
 <script lang="ts">
     import { auth, googleAuth } from "../services/firebase";
-    import { createEventDispatcher } from "svelte";
-    import { fade } from "svelte/transition";
+    import { createEventDispatcher, onDestroy } from "svelte";
     import ErrorAlert from "./ErrorAlert.svelte";
+    import {
+        user,
+        userEmail,
+        refereeOfClub,
+        refereeOfCounty,
+        secretaryOfClub,
+        secretaryOfCounty,
+        secretaryOfProvince,
+        secretaryOfCouncil,
+        teamOfficial,
+        firstName,
+        lastName,
+        clubRef,
+        teams,
+        games,
+        clubCrest,
+        countyCrest,
+        clubName,
+        countyName,
+        provinceName,
+    } from "../services/storeUser";
+    import { getMember } from "../services/getUserDetails";
 
-    export let authMode: "login" | "register" = "register";
     let isAuthenticated = false;
     let err: string | null = null;
 
     const eventDispatch = createEventDispatcher();
 
+    let user_email: string;
+    const unsubscribeUserEmail = userEmail.subscribe((value) => {
+        user_email = value;
+    });
+    onDestroy(unsubscribeUserEmail);
+
+    $: if (user_email != null && user_email != undefined && user_email != "") {
+        console.log(`User Email ${user_email}`);
+        getMember(user_email);
+    }
     // only authenticate the user if the user is not already authenticated
     auth.onAuthStateChanged((user) => {
         isAuthenticated = !!user;
-        if (user) eventDispatch("auth");
+        if (user) {
+            eventDispatch("auth");
+        }
     });
 
     function login() {
@@ -33,39 +65,11 @@
 
         // sign in using firebase
         auth.signInWithEmailAndPassword(email, password)
-            .then(() => {
-                eventDispatch("done");
-                eventDispatch("auth");
-            })
-            .catch((e) => {
-                err = `(${e.code}) ${e.message}`;
-            });
-    }
-
-    function register() {
-        const email = (document.getElementById("r-email") as HTMLInputElement)
-            .value;
-        const password = (
-            document.getElementById("r-password") as HTMLInputElement
-        ).value;
-        const cpassword = (
-            document.getElementById("r-cpassword") as HTMLInputElement
-        ).value;
-
-        // form validation
-        if (!email || !password || !cpassword) {
-            err = "Fill out all fields!";
-            return;
-        }
-        if (password !== cpassword) {
-            err = "Passwords don't match!";
-            return;
-        }
-        err = "";
-
-        // creating the user
-        auth.createUserWithEmailAndPassword(email, password)
-            .then(() => {
+            .then((userCredential) => {
+                let authUser = result.user;
+                let email = result.user.email;
+                user.set(authUser);
+                userEmail.set(email);
                 eventDispatch("done");
                 eventDispatch("auth");
             })
@@ -76,12 +80,16 @@
 
     function google() {
         auth.signInWithPopup(googleAuth)
-            .then(() => {
+            .then((result) => {
+                let authUser = result.user;
+                let email = result.user.email;
+                user.set(authUser);
+                userEmail.set(email);
                 eventDispatch("auth");
                 eventDispatch("done");
             })
             .catch((e) => {
-                err = `(${e.code}) ${e.message}`;
+                err = `(${e.code}) ${e.message} ${e.email} ${e.credential}`;
             });
     }
     function logout() {
@@ -90,27 +98,51 @@
                 .then(() => {
                     eventDispatch("done");
                     eventDispatch("logout");
+                    resetStore();
                 })
                 .catch((e) => {
                     throw new Error(e);
                 });
         }
     }
+
+    const resetStore = () => {
+        user.set({});
+        userEmail.set("");
+        refereeOfClub.set(false);
+        refereeOfCounty.set(false);
+        secretaryOfClub.set(false);
+        secretaryOfCounty.set(false);
+        secretaryOfProvince.set(false);
+        secretaryOfCouncil.set(false);
+        teamOfficial.set(false);
+        firstName.set("");
+        lastName.set("");
+        clubRef.set("");
+        teams.set([]);
+        games.set([]);
+        clubCrest.set("");
+        countyCrest.set("");
+        clubName.set("");
+        countyName.set("");
+        provinceName.set("");
+    };
 </script>
 
-<div id="login-card" class="card center">
+<div id="login-card" class="card mb-50 center">
     <div class="card-body">
         {#if !isAuthenticated}
             <div>
                 <h2>GAA Officials Login</h2>
             </div>
             <div>
-                <form>
-                    <div>
-                        {#if err}
+                <form on:submit|preventDefault={login}>
+                    {#if err}
+                        <div>
                             <ErrorAlert message={err} />
-                        {/if}
-                    </div>
+                        </div>
+                    {/if}
+
                     <div class="form-group">
                         <label for="l-email">Email</label>
 
@@ -142,39 +174,31 @@
                             <button
                                 class="btn btn-primary center-btn"
                                 on:click={google}
-                                ><i id="google-icon" class="fa fa-google" />
-                                Sign in with Google</button
-                            >
+                                ><i class="fa fa-google font-icons" />
+                                Sign in with Google
+                            </button>
                         </div>
                     </div>
                 </form>
             </div>
         {:else}
-            <div class="w3-container">
+            <div class="col-12">
                 <h2>Logged in</h2>
             </div>
-            <div class="w3-container">
-                <p class="w3-large w3-text-green w3-center">
-                    <i class="fas fa-check fa-5x" />
-                </p>
-                <p class="w3-center">Logged in</p>
-                <p>
-                    <button
-                        class="center-btn"
-                        style="width: 100%"
-                        on:click={logout}>Log out</button
-                    >
-                </p>
+            <div class="col-12 center-btn">
+                <button class="btn btn-primary" on:click={logout}>
+                    Log out
+                    <i class="fa fa-sign-out font-icons" />
+                </button>
             </div>
         {/if}
     </div>
 </div>
 
 <style>
-    #google-icon {
+    .font-icons {
         padding: 0px 10px;
     }
-
     .center-btn {
         text-align: center;
     }
@@ -192,7 +216,6 @@
     }
 
     #login-card {
-        margin-bottom: 50px;
         width: 100vw;
     }
 

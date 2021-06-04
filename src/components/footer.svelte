@@ -15,11 +15,18 @@
 <style>
     footer {
         background-color: #005e82;
-        padding-bottom: 20px;
+        padding: 5px;
     }
     footer > div {
         color: aliceblue;
-        font-size: larger;
-        font-weight: bolder;
+    }
+    @media (min-width: 768px) {
+        footer {
+            background-color: #005e82;
+            padding: 10px;
+        }
+        footer > div {
+            font-size: larger;
+        }
     }
 </style>

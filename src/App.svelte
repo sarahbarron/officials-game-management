@@ -3,13 +3,14 @@
 	import Auth from "./routes/auth.svelte";
 	import Index from "./routes/index.svelte";
 	import NotFound from "./routes/notfound.svelte";
+	import UpcomingGames from "./routes/UpcomingGames.svelte";
 	import { queryString } from "./services/util";
 
 	let page;
 	let params = {};
 	let qs = {};
 
-	router("/", () => (page = Index));
+	router("/", () => (page = Auth));
 	router(
 		"/404/:msg",
 		(ctx: { params: {}; querystring: string }, next) => {
@@ -18,19 +19,19 @@
 		},
 		() => (page = NotFound)
 	);
-	router(
-		"/auth",
-		(ctx, next) => {
-			qs = queryString(ctx.querystring);
-			next();
-		},
-		() => (page = Auth)
-	);
+	// router(
+	// 	"/auth",
+	// 	(ctx, next) => {
+	// 		qs = queryString(ctx.querystring);
+	// 		next();
+	// 	},
+	// 	() => (page = Auth)
+	// );
 	router("/login", () => router.redirect("/auth"));
-	router("/register", () => router.redirect("/auth"));
+	router("/home", () => (page = UpcomingGames));
 
 	router("/*", () => (page = NotFound));
 	router.start();
 </script>
 
-<svelte:component this={page} {params} />
+<svelte:component this={page} {params} {qs} />

@@ -1,32 +1,13 @@
-<script>
-    let year = new Date().getFullYear();
+<script lang="ts">
+    import Auth from "../components/Auth.svelte";
+    import Logo from "../components/Logo.svelte";
+    import router from "page";
 </script>
 
-<!-- Footer -->
-<footer class="page-footer">
-    <!-- Copyright -->
-    <div class="footer-copyright text-center py-3 font-weight-bold">
-        © <span id="copyright-year">{year}</span> Copyright: Sarah Barron
-    </div>
-    <!-- Copyright -->
-</footer>
+<div>
+    <h1 class="heading">Gaa Officials Game Management</h1>
 
-<!-- Footer -->
-<style>
-    footer {
-        background-color: #005e82;
-        padding: 5px;
-    }
-    footer > div {
-        color: aliceblue;
-    }
-    @media (min-width: 768px) {
-        footer {
-            background-color: #005e82;
-            padding: 10px;
-        }
-        footer > div {
-            font-size: larger;
-        }
-    }
-</style>
+    <Logo />
+    <Auth on:auth={() => router.redirect("/home")} />
+    <!-- <Auth on:auth={() => (window.location.href = "/#")} /> -->
+</div>
