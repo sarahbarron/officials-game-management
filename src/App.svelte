@@ -3,7 +3,7 @@
 	import Auth from "./routes/auth.svelte";
 	import Index from "./routes/index.svelte";
 	import NotFound from "./routes/notfound.svelte";
-	import UpcomingGames from "./routes/UpcomingGames.svelte";
+	import Dashboard from "./routes/dashboard.svelte";
 	import { queryString } from "./services/util";
 
 	let page;
@@ -19,16 +19,16 @@
 		},
 		() => (page = NotFound)
 	);
-	// router(
-	// 	"/auth",
-	// 	(ctx, next) => {
-	// 		qs = queryString(ctx.querystring);
-	// 		next();
-	// 	},
-	// 	() => (page = Auth)
-	// );
+	router(
+		"/auth",
+		(ctx, next) => {
+			qs = queryString(ctx.querystring);
+			next();
+		},
+		() => (page = Auth)
+	);
 	router("/login", () => router.redirect("/auth"));
-	router("/home", () => (page = UpcomingGames));
+	router("/home", () => (page = Dashboard));
 
 	router("/*", () => (page = NotFound));
 	router.start();

@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
     import Auth from "../components/Auth.svelte";
     import Logo from "../components/Logo.svelte";
     import router from "page";
@@ -9,5 +9,4 @@
 
     <Logo />
     <Auth on:auth={() => router.redirect("/home")} />
-    <!-- <Auth on:auth={() => (window.location.href = "/#")} /> -->
-</div>
+</div> -->

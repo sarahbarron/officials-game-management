@@ -12,7 +12,5 @@ export const auth = firebase.auth();
 export const googleAuth = new firebase.auth.GoogleAuthProvider();
 
 // Firestore
-//export const firestore = firebase.firestore();
-
 export const db = firebase.firestore();
 export const rtdb = firebase.database();

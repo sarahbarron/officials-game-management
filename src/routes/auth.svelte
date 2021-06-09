@@ -1,5 +1,6 @@
 <script lang="ts">
     import Auth from "../components/Auth.svelte";
+    import Logo from "../components/Logo.svelte";
     import router from "page";
     export let qs;
 
@@ -8,7 +9,5 @@
 </script>
 
 <h1 class="w3-center w3-jumbo">GAA Game Management Login</h1>
+<Logo />
 <Auth on:auth={() => router.redirect("/home")} />
-<!-- <Auth on:auth={() => router.redirect(qs.next || "/home")} /> -->
-
-<!-- <Auth on:auth={() => (window.location.href = qs.next || "/")} /> -->

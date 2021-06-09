@@ -2,40 +2,23 @@
     import { auth, googleAuth } from "../services/firebase";
     import { createEventDispatcher, onDestroy } from "svelte";
     import ErrorAlert from "./ErrorAlert.svelte";
-    import {
-        user,
-        userEmail,
-        refereeOfClub,
-        refereeOfCounty,
-        secretaryOfClub,
-        secretaryOfCounty,
-        secretaryOfProvince,
-        secretaryOfCouncil,
-        teamOfficial,
-        firstName,
-        lastName,
-        clubRef,
-        teams,
-        games,
-        clubCrest,
-        countyCrest,
-        clubName,
-        countyName,
-        provinceName,
-    } from "../services/storeUser";
+    import { userEmail } from "../services/storeUser";
     import { getMember } from "../services/getUserDetails";
+    import Logout from "./Logout.svelte";
 
     let isAuthenticated = false;
     let err: string | null = null;
 
     const eventDispatch = createEventDispatcher();
 
+    // Subscribe to user email
     let user_email: string;
     const unsubscribeUserEmail = userEmail.subscribe((value) => {
         user_email = value;
     });
     onDestroy(unsubscribeUserEmail);
 
+    // If the user email is updated get the member details
     $: if (user_email != null && user_email != undefined && user_email != "") {
         console.log(`User Email ${user_email}`);
         getMember(user_email);
@@ -48,8 +31,8 @@
         }
     });
 
+    // Login with email and password
     function login() {
-        // again, remove "as HTMLInputElement" if using js
         const email = (document.getElementById("l-email") as HTMLInputElement)
             .value;
         const password = (
@@ -66,9 +49,7 @@
         // sign in using firebase
         auth.signInWithEmailAndPassword(email, password)
             .then((userCredential) => {
-                let authUser = result.user;
-                let email = result.user.email;
-                user.set(authUser);
+                let email = userCredential.user.email;
                 userEmail.set(email);
                 eventDispatch("done");
                 eventDispatch("auth");
@@ -78,12 +59,11 @@
             });
     }
 
+    // Sign in with google
     function google() {
         auth.signInWithPopup(googleAuth)
             .then((result) => {
-                let authUser = result.user;
                 let email = result.user.email;
-                user.set(authUser);
                 userEmail.set(email);
                 eventDispatch("auth");
                 eventDispatch("done");
@@ -92,41 +72,6 @@
                 err = `(${e.code}) ${e.message} ${e.email} ${e.credential}`;
             });
     }
-    function logout() {
-        if (auth.currentUser) {
-            auth.signOut()
-                .then(() => {
-                    eventDispatch("done");
-                    eventDispatch("logout");
-                    resetStore();
-                })
-                .catch((e) => {
-                    throw new Error(e);
-                });
-        }
-    }
-
-    const resetStore = () => {
-        user.set({});
-        userEmail.set("");
-        refereeOfClub.set(false);
-        refereeOfCounty.set(false);
-        secretaryOfClub.set(false);
-        secretaryOfCounty.set(false);
-        secretaryOfProvince.set(false);
-        secretaryOfCouncil.set(false);
-        teamOfficial.set(false);
-        firstName.set("");
-        lastName.set("");
-        clubRef.set("");
-        teams.set([]);
-        games.set([]);
-        clubCrest.set("");
-        countyCrest.set("");
-        clubName.set("");
-        countyName.set("");
-        provinceName.set("");
-    };
 </script>
 
 <div id="login-card" class="card mb-50 center">
@@ -186,10 +131,7 @@
                 <h2>Logged in</h2>
             </div>
             <div class="col-12 center-btn">
-                <button class="btn btn-primary" on:click={logout}>
-                    Log out
-                    <i class="fa fa-sign-out font-icons" />
-                </button>
+                <Logout />
             </div>
         {/if}
     </div>

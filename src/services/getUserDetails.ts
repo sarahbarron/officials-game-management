@@ -40,26 +40,49 @@ let getMemberDetails = async (email: string) => {
         let fName = doc.data().firstName;
         let lName = doc.data().lastName;
         clubId = doc.data().ownClub.id;
-        userEmail.set(email);
-        refereeOfClub.set(refOfClub);
-        refereeOfCounty.set(refOfCounty);
-        secretaryOfClub.set(secOfClub);
-        secretaryOfCounty.set(secOfCounty);
-        secretaryOfProvince.set(secOfProvince);
-        secretaryOfCouncil.set(secOfCouncil);
-        teamOfficial.set(teamOf);
-        firstName.set(fName);
-        lastName.set(lName);
-        clubRef.set(clubId);
+
+        if (email != undefined && email != null) {
+            userEmail.set(email);
+        }
+        if (refOfClub != undefined && refOfClub != null) {
+            refereeOfClub.set(refOfClub);
+        }
+        if (refOfCounty != undefined && refOfCounty) {
+            refereeOfCounty.set(refOfCounty);
+        }
+        if (secOfClub != undefined && secOfClub != null) {
+            secretaryOfClub.set(secOfClub);
+        }
+        if (secOfCouncil != null && secOfCouncil != undefined) {
+            secretaryOfCounty.set(secOfCounty);
+        }
+        if (secOfProvince != null && secOfProvince != undefined) {
+            secretaryOfProvince.set(secOfProvince);
+        }
+        if (secOfCouncil != null && secOfCouncil != undefined) {
+            secretaryOfCouncil.set(secOfCouncil);
+        }
+        if (teamOf != null && teamOf != undefined) {
+            teamOfficial.set(teamOf);
+        }
+        if (fName != null && fName != undefined) {
+            firstName.set(fName);
+        }
+        if (lName != null && lName != undefined) {
+            lastName.set(lName);
+        }
+        if (clubId != null && clubId != undefined) {
+            clubRef.set(clubId);
+        }
         console.log(`referee of club: ${refOfClub}
-        referee of county: ${refOfCounty} \n
-        secretary of club: ${secOfClub}, \n
-        secretary of county ${secOfCounty} \n
-        secretary of province: ${secOfProvince}\n
-        secretary of council: ${secOfCouncil}\n
-        team official: ${teamOf}\n
-        Name: ${fName} ${lName}\n
-        Club Ref: ${clubId}\n
+        referee of county: ${refOfCounty},
+        secretary of club: ${secOfClub}, 
+        secretary of county ${secOfCounty},
+        secretary of province: ${secOfProvince},
+        secretary of council: ${secOfCouncil},
+        team official: ${teamOf},
+        Name: ${fName} ${lName},
+        Club Ref: ${clubId},
         `);
     });
     return true;

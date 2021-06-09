@@ -1,6 +1,4 @@
 import { writable } from 'svelte/store';
-
-export const user = writable({});
 export const userEmail = writable("");
 export const refereeOfClub = writable(false);
 export const refereeOfCounty = writable(false);
@@ -19,3 +17,26 @@ export const countyCrest = writable("");
 export const clubName = writable("");
 export const countyName = writable("");
 export const provinceName = writable("");
+
+
+export const resetStore = () => {
+    userEmail.set("");
+    refereeOfClub.set(false);
+    refereeOfCounty.set(false);
+    secretaryOfClub.set(false);
+    secretaryOfCounty.set(false);
+    secretaryOfProvince.set(false);
+    secretaryOfCouncil.set(false);
+    teamOfficial.set(false);
+    firstName.set("");
+    lastName.set("");
+    clubRef.set("");
+    teams.set([]);
+    games.set([]);
+    clubCrest.set("");
+    countyCrest.set("");
+    clubName.set("");
+    countyName.set("");
+    provinceName.set("");
+    console.log("Store Reset");
+};
