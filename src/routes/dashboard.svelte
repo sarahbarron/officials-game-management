@@ -6,6 +6,7 @@
     import {
         firstName,
         lastName,
+        memberDocument,
         refereeOfClub,
         refereeOfCounty,
         secretaryOfClub,
@@ -33,7 +34,6 @@
         if (user === null) router.redirect("/login");
     }
 
-    // Subsribe to store values
     let first_name: string;
     const unsubscribeFirstName = firstName.subscribe((value) => {
         first_name = value;
@@ -96,35 +96,45 @@
         console.log(value);
     });
     onDestroy(unsubcribeRefOfCounty);
+
+    let heading = `${first_name} ${last_name}'s Dashboard`;
 </script>
 
-{#if typeof user === "undefined"}
-    <i class="fas fa-spinner w3-spin fa-3x" />
-{:else if user}
-    <Nav />
-    <h1>{$firstName} {$lastName}'s Dashboard</h1>
-    <!-- <Heading1 heading={{$first_name}} /> -->
-    {#if referee_of_county}
-        <RefereeOfCounty />
+<div class="container-fluid">
+    {#if typeof user === "undefined"}
+        <i class="fas fa-spinner w3-spin fa-3x" />
+    {:else if user}
+        <Nav />
+        <Heading1 {heading} />
+        {#if referee_of_county}
+            <RefereeOfCounty />
+            <br />
+        {/if}
+        {#if referee_of_club}
+            <RefereeOfClub />
+            <br />
+        {/if}
+        {#if team_official}
+            <TeamOfficial />
+            <br />
+        {/if}
+        {#if secretary_of_council}
+            <SecretaryOfCouncil />
+            <br />
+        {/if}
+        {#if secretary_of_province}
+            <SecretaryOfProvince />
+            <br />
+        {/if}
+        {#if secretary_of_county}
+            <SecretaryOfCounty />
+            <br />
+        {/if}
+        {#if secretary_of_club}
+            <SecretaryOfClub />
+            <br />
+        {/if}
+    {:else}
+        <h2>{@html loginString}</h2>
     {/if}
-    {#if referee_of_club}
-        <RefereeOfClub />
-    {/if}
-    {#if team_official}
-        <TeamOfficial />
-    {/if}
-    {#if secretary_of_council}
-        <SecretaryOfCouncil />
-    {/if}
-    {#if secretary_of_province}
-        <SecretaryOfProvince />
-    {/if}
-    {#if secretary_of_county}
-        <SecretaryOfCounty />
-    {/if}
-    {#if secretary_of_club}
-        <SecretaryOfClub />
-    {/if}
-{:else}
-    <h2>{@html loginString}</h2>
-{/if}
+</div>

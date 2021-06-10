@@ -1,14 +1,16 @@
 
 import {
-    userEmail,
+    userEmail, memberDocument,
     refereeOfClub,
     refereeOfCounty, secretaryOfClub, secretaryOfCounty, secretaryOfProvince,
     secretaryOfCouncil, teamOfficial, firstName, lastName, clubRef, clubCrest, clubName,
-    countyCrest, countyName, provinceName
+    countyCrest, countyName, provinceName,
+    refUpcomingGames
 } from './storeUser';
-import { auth, db, rtdb } from "../services/firebase";
+import { db } from "../services/firebase";
 
 const member = db.collection('Member');
+
 
 let clubId: string;
 let countyId: string;
@@ -30,6 +32,7 @@ let getMemberDetails = async (email: string) => {
     const querySnapshot = await member.where("email", "==", email).get()
     querySnapshot.forEach((doc) => {
         console.log("for each");
+        let memberDoc = doc.id;
         let refOfClub = doc.data().refereeOfClub;
         let refOfCounty = doc.data().refereeOfCounty;
         let secOfClub = doc.data().secretaryOfClub;
@@ -41,6 +44,9 @@ let getMemberDetails = async (email: string) => {
         let lName = doc.data().lastName;
         clubId = doc.data().ownClub.id;
 
+        if (memberDoc != undefined && memberDoc != null) {
+            memberDocument.set(memberDoc);
+        }
         if (email != undefined && email != null) {
             userEmail.set(email);
         }
@@ -74,7 +80,9 @@ let getMemberDetails = async (email: string) => {
         if (clubId != null && clubId != undefined) {
             clubRef.set(clubId);
         }
-        console.log(`referee of club: ${refOfClub}
+        console.log(`
+        member doc path: ${memberDoc}
+        referee of club: ${refOfClub}
         referee of county: ${refOfCounty},
         secretary of club: ${secOfClub}, 
         secretary of county ${secOfCounty},
@@ -114,6 +122,103 @@ let getCountyDetails = async (countyId: string) => {
         provinceName.set(province);
 
         console.log(`Province: ${province}, Crest: ${crest}`);
+
+    }
+    return true;
+}
+
+
+export let getRefereeUpcomingGames = async (memberId: string) => {
+    let game = {};
+    let games = [];
+    const memberDoc = db.doc(`/Member/${memberId}`);
+    const gamesCollection = db.collection("Game");
+    const querySnapshot = await gamesCollection
+        .where("referee", "==", memberDoc)
+        .where("dateTime", ">=", new Date())
+        .orderBy("dateTime")
+        .get()
+    querySnapshot.forEach((doc) => {
+        let competitionId = doc.data().competition;
+        let dateTime = doc.data().dateTime;
+        let linesmen = doc.data().linesmen;
+        let umpires = doc.data().umpires;
+        let refereeId = doc.data().referee;
+        let substituteRefereeId = doc.data().substituteReferee;
+        let teamAId = doc.data().teamA;
+        let teamBId = doc.data().teamB;
+        let venueId = doc.data().venue;
+
+        if (competitionId == null || competitionId == undefined) {
+            competitionId = "";
+        }
+        else {
+            competitionId = competitionId.id
+        }
+        if (dateTime == null || dateTime == undefined) {
+            dateTime = "";
+        }
+        if (linesmen == null || linesmen == undefined) {
+            linesmen = "";
+        }
+        if (umpires == null || umpires == undefined) {
+            umpires = "";
+        }
+        if (refereeId == null || refereeId == undefined) {
+            refereeId = "";
+        }
+        else {
+            refereeId = refereeId.id;
+        }
+        if (substituteRefereeId == null || substituteRefereeId == undefined) {
+            substituteRefereeId = "";
+        }
+        else {
+            substituteRefereeId = substituteRefereeId.id;
+        }
+        if (teamAId == null || teamAId == undefined) {
+            teamAId = "";
+        }
+        else {
+            teamAId = teamAId.id;
+        }
+        if (teamBId == null || teamBId == undefined) {
+            teamBId = "";
+        }
+        else {
+            teamBId = teamBId.id;
+        }
+        if (venueId == null || venueId == undefined) {
+            venueId = "";
+        }
+        else {
+            venueId = venueId.id;
+        }
+        game = {
+            competitionId: competitionId,
+            dateTime: dateTime,
+            linesmen: linesmen,
+            refereeId: refereeId,
+            substituteRefereeId: substituteRefereeId,
+            teamAId: teamAId,
+            teamBId: teamBId,
+            umpires: umpires,
+            venueId: venueId
+        }
+        games = [...games, game];
+    });
+    refUpcomingGames.set(games);
+}
+
+export let getCompetition = async (compId: string) => {
+    const comp = db.collection("Competition").doc(compId);
+    const doc = await comp.get();
+    if (doc.exists) {
+        let county = doc.data().county;
+        let province = doc.data().province;
+        let isNational = doc.data().isNational;
+        let name = doc.data().name;
+        let sport = doc.data().sportType.id;
 
     }
     return true;
