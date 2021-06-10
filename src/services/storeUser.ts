@@ -1,22 +1,23 @@
 import { writable } from 'svelte/store';
-export const userEmail = writable("");
-export const refereeOfClub = writable(false);
-export const refereeOfCounty = writable(false);
-export const secretaryOfClub = writable(false);
-export const secretaryOfCounty = writable(false);
-export const secretaryOfProvince = writable(false);
-export const secretaryOfCouncil = writable(false);
-export const teamOfficial = writable(false);
-export const firstName = writable("");
-export const lastName = writable("");
-export const clubRef = writable("");
-export const teams = writable([]);
-export const games = writable([]);
-export const clubCrest = writable("");
-export const countyCrest = writable("");
-export const clubName = writable("");
-export const countyName = writable("");
-export const provinceName = writable("");
+import { localStore } from './localStore';
+export const userEmail = localStore('userEmail', "");
+export const refereeOfClub = localStore('refereeOfClub', false);
+export const refereeOfCounty = localStore('refereeOfCounty', false);
+export const secretaryOfClub = localStore('secretaryOfClub', false);
+export const secretaryOfCounty = localStore('secretaryOfCounty', false);
+export const secretaryOfProvince = localStore('secretaryOfProvince', false);
+export const secretaryOfCouncil = localStore('secretaryOfCouncil', false);
+export const teamOfficial = localStore('teamOfficial', false);
+export const firstName = localStore('firstName', "");
+export const lastName = localStore('lastName', "");
+export const clubRef = localStore('clubRef', "");
+export const teams = localStore('teams', []);
+export const games = localStore('games', []);
+export const clubCrest = localStore('clubCrest', "");
+export const countyCrest = localStore('countyCrest', "");
+export const clubName = localStore('clubName', "");
+export const countyName = localStore('countyName', "");
+export const provinceName = localStore('provinceName', "");
 
 
 export const resetStore = () => {
@@ -40,3 +41,4 @@ export const resetStore = () => {
     provinceName.set("");
     console.log("Store Reset");
 };
+

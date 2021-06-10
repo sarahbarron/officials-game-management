@@ -2,10 +2,14 @@
     export let active: string = "";
     export let href: string = "";
     export let text: string = "";
+    export let id: string = "";
+    export let aria: boolean = false;
 </script>
 
-<li class="nav-item ${active}">
-    <a class="nav-link" {href}> {text} <span class="sr-only">{text}</span></a>
+<li {id} class="nav-item">
+    <a class="nav-link {active}" aria-current={aria} {href}>
+        {text} <span class="sr-only">{text}</span></a
+    >
 </li>
 
 <style>

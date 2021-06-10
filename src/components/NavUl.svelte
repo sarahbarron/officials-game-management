@@ -4,19 +4,13 @@
 </script>
 
 <ul class="navbar-nav navbar-nav-scroll" style="--bs-scroll-height: 200px;">
-    <NavLi
-        id="home"
-        href="/home"
-        text="Home"
-        active="active"
-        aria-current="home page"
-    />
+    <NavLi id="home" href="/home" text="Home" active="active" aria="true" />
     <NavLi
         id="past-games"
         href="/home"
         text="Past Games"
         active=""
-        aria-current="past games"
+        aria="false"
     />
     <Logout logoutBtnColors="logoutBtnColors" />
 </ul>
