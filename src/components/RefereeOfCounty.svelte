@@ -1,7 +1,11 @@
 <script lang="ts">
     import Card from "./Card.svelte";
-    import { memberDocument, refereeOfCounty } from "../services/storeUser";
-    import { getRefereeUpcomingGames } from "../services/getUserDetails";
+    import {
+        memberDocument,
+        refereeOfCounty,
+        refUpcomingGames,
+    } from "../services/storeUser";
+    import { getRefereeUpcomingGames } from "../services/firebaseQueries";
     import { onDestroy } from "svelte";
     let cardHeader: string = "Referee - County";
 
@@ -18,8 +22,24 @@
         isRefereeOfCounty = value;
     });
     onDestroy(unsubscribeIsRefOfCounty);
+
+    let refereeUpcomingGames: [];
+    const unsubscribeRefereeUpcomingGames = refUpcomingGames.subscribe(
+        (value) => {
+            refereeUpcomingGames = value;
+        }
+    );
+    onDestroy(unsubscribeRefereeUpcomingGames);
+
     $: if (isRefereeOfCounty) {
-        getRefereeUpcomingGames(member_document);
+        getRefereesGames();
+    }
+
+    const getRefereesGames = async () => {
+        await getRefereeUpcomingGames(member_document);
+    };
+    $: if (refereeUpcomingGames.length > 0) {
+        console.log(refereeUpcomingGames);
     }
 </script>
 

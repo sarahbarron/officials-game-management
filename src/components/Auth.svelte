@@ -3,7 +3,7 @@
     import { createEventDispatcher, onDestroy } from "svelte";
     import ErrorAlert from "./ErrorAlert.svelte";
     import { userEmail } from "../services/storeUser";
-    import { getMember } from "../services/getUserDetails";
+    import { getMember } from "../services/firebaseQueries";
     import Logout from "./Logout.svelte";
 
     let isAuthenticated = false;

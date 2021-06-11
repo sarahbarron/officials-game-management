@@ -37,63 +37,54 @@
     let first_name: string;
     const unsubscribeFirstName = firstName.subscribe((value) => {
         first_name = value;
-        console.log(value);
     });
     onDestroy(unsubscribeFirstName);
 
     let last_name: string;
     const unsubscribeLastName = lastName.subscribe((value) => {
         last_name = value;
-        console.log(value);
     });
     onDestroy(unsubscribeLastName);
 
     let secretary_of_council: boolean;
     const unsubcribeSecOfCouncil = secretaryOfCouncil.subscribe((value) => {
         secretary_of_council = value;
-        console.log(value);
     });
     onDestroy(unsubcribeSecOfCouncil);
 
     let secretary_of_province: boolean;
     const unsubcribeSecOfProvince = secretaryOfProvince.subscribe((value) => {
         secretary_of_province = value;
-        console.log(value);
     });
     onDestroy(unsubcribeSecOfProvince);
 
     let secretary_of_county: boolean;
     const unsubcribeSecOfCounty = secretaryOfCounty.subscribe((value) => {
         secretary_of_county = value;
-        console.log(value);
     });
     onDestroy(unsubcribeSecOfCounty);
 
     let secretary_of_club: boolean;
     const unsubcribeSecOfClub = secretaryOfClub.subscribe((value) => {
         secretary_of_club = value;
-        console.log(value);
     });
     onDestroy(unsubcribeSecOfClub);
 
     let team_official: boolean;
     const unsubcribeTeamOfficial = teamOfficial.subscribe((value) => {
         team_official = value;
-        console.log(value);
     });
     onDestroy(unsubcribeTeamOfficial);
 
     let referee_of_club: boolean;
     const unsubcribeRefOfClub = refereeOfClub.subscribe((value) => {
         referee_of_club = value;
-        console.log(value);
     });
     onDestroy(unsubcribeRefOfClub);
 
     let referee_of_county: boolean;
     const unsubcribeRefOfCounty = refereeOfCounty.subscribe((value) => {
         referee_of_county = value;
-        console.log(value);
     });
     onDestroy(unsubcribeRefOfCounty);
 
