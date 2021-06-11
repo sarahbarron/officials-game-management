@@ -111,36 +111,24 @@ export let getRefereeUpcomingGames = async (memberId: string) => {
         querySnapshot.forEach(async (doc) => {
             const gamePromise = await createGame(doc);
 
-            let competitionId = gamePromise.competitionId;
             let competition = gamePromise.competition;
             let dateTime = gamePromise.dateTime;
             let linesmen = gamePromise.linesmen;
             let umpires = gamePromise.umpires;
-            let refereeId = gamePromise.refereeId;
             let referee = gamePromise.referee;
-            let substituteRefereeId = gamePromise.substituteReferee;
             let substituteReferee = gamePromise.substituteReferee;
-            let teamAId = gamePromise.teamAId;
             let teamA = gamePromise.teamA;
             let teamB = gamePromise.teamB;
-            let teamBId = gamePromise.teamBId;
-            let venueId = gamePromise.venueId;
             let venue = gamePromise.venue;
             const game = {
-                competitionId: competitionId,
                 competition: competition,
                 dateTime: dateTime,
                 linesmen: linesmen,
                 umpires: umpires,
-                refereeId: refereeId,
                 referee: referee,
-                substituteRefereeId,
                 substituteReferee,
-                teamAId: teamAId,
                 teamA: teamA,
                 teamB: teamB,
-                teamBId: teamBId,
-                venueId: venueId,
                 venue: venue
             }
             games = [...games, game];
@@ -163,8 +151,15 @@ export let getRefereesName = async (refId: string) => {
         const doc = await referee.get();
         if (doc.exists) {
             let firstName = doc.data().firstName;
+            if (firstName == null || firstName == undefined) {
+                firstName = "";
+            }
             let lastName = doc.data().lastName;
+            if (lastName == null || lastName == undefined) {
+                lastName = ";"
+            }
             let name = {
+                id: refId,
                 firstName: firstName,
                 lastName: lastName
             }
@@ -185,9 +180,9 @@ export let createGame = async (doc) => {
         let linesmen = doc.data().linesmen;
         let umpires = doc.data().umpires;
         let refereeId = doc.data().referee;
-        let referee: string = "";
+        let referee: {};
         let substituteRefereeId = doc.data().substituteReferee;
-        let substituteReferee: string = "";
+        let substituteReferee: {};
         let teamAId = doc.data().teamA;
         let teamA = {};
         let teamB = {};
@@ -199,6 +194,7 @@ export let createGame = async (doc) => {
             competitionId = competitionId.id
             const compPromise = await getCompetition(competitionId);
 
+            let id = compPromise.id;
             const county = compPromise.county;
             const province = compPromise.province;
             const isNational = compPromise.isNational;
@@ -207,6 +203,7 @@ export let createGame = async (doc) => {
             let gradeId = compPromise.gradeId;
             let grade = compPromise.grade;
             competition = {
+                id: id,
                 county: county,
                 province: province,
                 isNational: isNational,
@@ -217,34 +214,51 @@ export let createGame = async (doc) => {
             }
         }
         else {
-            competitionId = "";
+            competitionId = null;
         }
 
-        if (dateTime == null || dateTime == undefined) {
-            dateTime = "";
+        if (dateTime == undefined) {
+            dateTime = null;
         }
-        if (linesmen == null || linesmen == undefined) {
-            linesmen = "";
+        if (linesmen == undefined) {
+            linesmen = null;
         }
         if (refereeId != null && refereeId != undefined) {
             refereeId = refereeId.id;
             const refPromise = await getRefereesName(refereeId);
-            referee = `${refPromise.firstName} ${refPromise.lastName}`;
+            let firstName = refPromise.firstName;
+            let lastName = refPromise.lastName;
+            let id = refPromise.id;
+
+            referee = {
+                id: id,
+                firstName: firstName,
+                lastName: lastName
+
+            };
         }
         else {
-            refereeId = "";
+            refereeId = null;
         }
         if (substituteRefereeId != null && substituteRefereeId != undefined) {
             substituteRefereeId = substituteRefereeId.id;
             const subRefPromise = await getRefereesName(substituteRefereeId);
-            substituteReferee = `${subRefPromise.firstName}} ${subRefPromise.lastName}`;
+            let firstName = subRefPromise.firstName;
+            let lastName = subRefPromise.lastName;
+            let id = subRefPromise.id
+            substituteReferee = {
+                id: id,
+                firstName: firstName,
+                lastName: lastName
+            };
         }
         else {
-            substituteRefereeId = "";
+            substituteRefereeId = null;
         }
         if (teamAId != null && teamAId != undefined) {
             teamAId = teamAId.id;
             const teamAPromise = await getTeam(teamAId);
+            const id = teamAPromise.id;
             const clubId = teamAPromise.clubId;
             const county = teamAPromise.county;
             const gradeId = teamAPromise.gradeId;
@@ -257,6 +271,7 @@ export let createGame = async (doc) => {
             const teamOfficialIds = teamAPromise.teamOfficialIds;
             const teamOfficials = teamAPromise.teamOfficials;
             teamA = {
+                id: id,
                 clubId: clubId,
                 county: county,
                 gradeId: gradeId,
@@ -271,11 +286,12 @@ export let createGame = async (doc) => {
             }
         }
         else {
-            teamAId = "";
+            teamAId = null;
         }
         if (teamBId != null && teamBId != undefined) {
             teamBId = teamBId.id;
             const teamAPromise = await getTeam(teamBId);
+            const id = teamAPromise.id;
             const clubId = teamAPromise.clubId;
             const county = teamAPromise.county;
             const gradeId = teamAPromise.gradeId;
@@ -288,6 +304,7 @@ export let createGame = async (doc) => {
             const teamOfficialIds = teamAPromise.teamOfficialIds;
             const teamOfficials = teamAPromise.teamOfficials;
             teamB = {
+                id: id,
                 clubId: clubId,
                 county: county,
                 gradeId: gradeId,
@@ -302,18 +319,20 @@ export let createGame = async (doc) => {
             }
         }
         else {
-            teamBId = "";
+            teamBId = null;
         }
         if (venueId != null && venueId != undefined) {
             venueId = venueId.id;
             const venuePromise = await getVenue(venueId);
-            const name = venuePromise.name
+            const id = venuePromise.id;
+            const name = venuePromise.name;
             const lat = venuePromise.lat;
             const lng = venuePromise.lng;
             let clubId = venuePromise.clubId;
             const county = venuePromise.county;
 
             venue = {
+                id: id,
                 name: name,
                 lat: lat,
                 lng: lng,
@@ -323,26 +342,20 @@ export let createGame = async (doc) => {
 
         }
         else {
-            venueId = ""
+            venueId = null
         }
 
 
         const game = {
             gameId: doc.id,
-            competitionId: competitionId,
             competition: competition,
             dateTime: dateTime,
             linesmen: linesmen,
-            refereeId: refereeId,
             referee: referee,
-            substituteRefereeId: substituteRefereeId,
             substituteReferee: substituteReferee,
-            teamAId: teamAId,
             teamA: teamA,
-            teamBId: teamBId,
             teamB: teamB,
             umpires: umpires,
-            venueId: venueId,
             venue: venue
         }
         return game;
@@ -357,25 +370,25 @@ export let getCompetition = async (compId: string) => {
         const doc = await compDoc.get();
         if (doc.exists) {
             let county = doc.data().county;
-            if (county == null || county == undefined) {
-                county = "";
+            if (county != null || county != undefined) {
+                county = county.id;
             }
             else {
-                county = county.id;
+                county = null;
             }
 
             let province = doc.data().province;
-            if (province === null || province === undefined) {
-                province = "";
+            if (province === undefined) {
+                province = null;
             }
             let isNational = doc.data().isNational;
-            if (isNational == null || isNational == undefined) {
-                isNational = "";
+            if (isNational == undefined) {
+                isNational = null;
             }
 
             let name = doc.data().name;
-            if (name == null || name == undefined) {
-                name = "";
+            if (name == undefined) {
+                name = null;
             }
 
             let sport = doc.data().sportType;
@@ -383,7 +396,7 @@ export let getCompetition = async (compId: string) => {
                 sport = sport.id;
             }
             else {
-                sport = "";
+                sport = null;
             }
 
             let gradeId = doc.data().grade;
@@ -393,11 +406,11 @@ export let getCompetition = async (compId: string) => {
                 const gradePromise = await getGrade(gradeId);
                 let level = gradePromise.level;
                 if (level == null || level == undefined) {
-                    level = "";
+                    level = null;
                 }
                 let name = gradePromise.name;
                 if (name == null || name == undefined) {
-                    name = "";
+                    name = null;
                 }
                 grade = {
                     level: level,
@@ -405,10 +418,11 @@ export let getCompetition = async (compId: string) => {
                 }
             }
             else {
-                gradeId = "";
+                gradeId = null;
             }
 
             let competition = {
+                id: compId,
                 county: county,
                 province: province,
                 isNational: isNational,
@@ -449,13 +463,13 @@ export let getTeam = async (teamId: string) => {
                 clubId = clubId.id;
             }
             else {
-                clubId = "";
+                clubId = null;
             }
             if (county != null && county != undefined) {
                 county = county.id;
             }
             else {
-                county = "";
+                county = null;
             }
 
             if (gradeId != null && gradeId != undefined) {
@@ -469,33 +483,34 @@ export let getTeam = async (teamId: string) => {
                 }
             }
             else {
-                gradeId = "";
+                gradeId = null;
             }
             if (sport != null && sport != undefined) {
                 sport = sport.id;
             }
             else {
-                sport = "";
+                sport = null;
             }
-            if (name == null || name == undefined) {
-                name = "";
+            if (name == undefined) {
+                name = null;
             }
             if (playerIds != null && playerIds != undefined) {
 
             }
             else {
-                playerIds = "";
+                playerIds = null;
             }
-            if (teamName == null || teamName == undefined) {
-                teamName = "";
+            if (teamName == undefined) {
+                teamName = null;
             }
             if (teamOfficialIds != null && teamOfficialIds != undefined) {
 
             }
             else {
-                teamOfficialIds = "";
+                teamOfficialIds = null;
             }
             let team = {
+                id: teamId,
                 clubId: clubId,
                 county: county,
                 gradeId: gradeId,
@@ -523,12 +538,12 @@ let getGrade = async (gradeId: string) => {
         const doc = await gradeDoc.get();
         if (doc.exists) {
             let level = doc.data().level;
-            if (level == null || level == undefined) {
-                level = "";
+            if (level == undefined) {
+                level = null;
             }
             let name = doc.data().name;
-            if (name == null || name == undefined) {
-                name = "";
+            if (name == undefined) {
+                name = null;
             }
             const grade = {
                 level: level,
@@ -549,29 +564,34 @@ let getVenue = async (venueId: string) => {
         const doc = await venueDoc.get();
         if (doc.exists) {
             let name = doc.data().name;
-            if (name == null || name == undefined) {
-                name = "";
+            if (name == undefined) {
+                name = null;
             }
             let lat = doc.data().lat;
-            if (lat == null || lat == undefined) {
-                lat = "";
+            if (lat == undefined) {
+                lat = null;
             }
             let lng = doc.data().lng;
-            if (lng == null || lng == undefined) {
-                lng = "";
+            if (lng == undefined) {
+                lng = null;
             }
             let clubId = doc.data().club;
-            let county = doc.data().county;
-            if (county == null || county == undefined) {
-                county = "";
-            }
             if (clubId != null && clubId != undefined) {
                 clubId = clubId.id;
             }
             else {
-                clubId = "";
+                clubId = null;
             }
+            let county = doc.data().county;
+            if (county != null || county != undefined) {
+                county = county.id;
+            }
+            else {
+                county = null;
+            }
+
             const venue = {
+                id: venueId,
                 clubId: clubId,
                 county: county,
                 name: name,
