@@ -101,6 +101,7 @@ let getMemberDetails = async (email: string) => {
 export let getRefereeUpcomingGames = async (memberId: string) => {
     try {
         let games = [];
+        let i = 0;
         const memberDoc = db.doc(`/Member/${memberId}`);
         const gamesCollection = db.collection("Game");
         const querySnapshot = await gamesCollection
@@ -109,8 +110,9 @@ export let getRefereeUpcomingGames = async (memberId: string) => {
             .orderBy("dateTime")
             .get()
         querySnapshot.forEach(async (doc) => {
-            const gamePromise = await createGame(doc);
 
+            const gamePromise = await createGame(doc);
+            let id = gamePromise.gameId;
             let competition = gamePromise.competition;
             let dateTime = gamePromise.dateTime;
             let linesmen = gamePromise.linesmen;
@@ -121,6 +123,7 @@ export let getRefereeUpcomingGames = async (memberId: string) => {
             let teamB = gamePromise.teamB;
             let venue = gamePromise.venue;
             const game = {
+                id: id,
                 competition: competition,
                 dateTime: dateTime,
                 linesmen: linesmen,
@@ -132,9 +135,10 @@ export let getRefereeUpcomingGames = async (memberId: string) => {
                 venue: venue
             }
             games = [...games, game];
-            if (games != null && games != undefined) {
+            if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
                 refUpcomingGames.set(games);
             }
+            i++;
         });
 
 
@@ -145,10 +149,10 @@ export let getRefereeUpcomingGames = async (memberId: string) => {
     }
 }
 
-export let getRefereesName = async (refId: string) => {
+export let getMemberName = async (id: string) => {
     try {
-        const referee = db.collection("Member").doc(refId);
-        const doc = await referee.get();
+        const member = db.collection("Member").doc(id);
+        const doc = await member.get();
         if (doc.exists) {
             let firstName = doc.data().firstName;
             if (firstName == null || firstName == undefined) {
@@ -159,7 +163,7 @@ export let getRefereesName = async (refId: string) => {
                 lastName = ";"
             }
             let name = {
-                id: refId,
+                id: doc.id,
                 firstName: firstName,
                 lastName: lastName
             }
@@ -167,13 +171,14 @@ export let getRefereesName = async (refId: string) => {
         }
         return;
     } catch (e) {
-        console.log("getRefereeName exception: " + e);
+        console.log("getMemberName exception: " + e);
         return
     }
 }
 
 export let createGame = async (doc) => {
     try {
+        let gameId = doc.id;
         let competitionId = doc.data().competition;
         let competition = {};
         let dateTime = doc.data().dateTime;
@@ -225,7 +230,7 @@ export let createGame = async (doc) => {
         }
         if (refereeId != null && refereeId != undefined) {
             refereeId = refereeId.id;
-            const refPromise = await getRefereesName(refereeId);
+            const refPromise = await getMemberName(refereeId);
             let firstName = refPromise.firstName;
             let lastName = refPromise.lastName;
             let id = refPromise.id;
@@ -242,7 +247,7 @@ export let createGame = async (doc) => {
         }
         if (substituteRefereeId != null && substituteRefereeId != undefined) {
             substituteRefereeId = substituteRefereeId.id;
-            const subRefPromise = await getRefereesName(substituteRefereeId);
+            const subRefPromise = await getMemberName(substituteRefereeId);
             let firstName = subRefPromise.firstName;
             let lastName = subRefPromise.lastName;
             let id = subRefPromise.id
@@ -257,14 +262,13 @@ export let createGame = async (doc) => {
         }
         if (teamAId != null && teamAId != undefined) {
             teamAId = teamAId.id;
-            const teamAPromise = await getTeam(teamAId);
+            const teamAPromise = await getTeam(gameId, teamAId);
             const id = teamAPromise.id;
             const clubId = teamAPromise.clubId;
             const county = teamAPromise.county;
             const gradeId = teamAPromise.gradeId;
             const grade = teamAPromise.grade;
             const name = teamAPromise.name;
-            const playerIds = teamAPromise.playerIds;
             const players = teamAPromise.players;
             const sport = teamAPromise.sport;
             const teamName = teamAPromise.teamName;
@@ -277,7 +281,6 @@ export let createGame = async (doc) => {
                 gradeId: gradeId,
                 grade: grade,
                 name: name,
-                playerIds: playerIds,
                 players: players,
                 sport: sport,
                 teamName: teamName,
@@ -290,7 +293,7 @@ export let createGame = async (doc) => {
         }
         if (teamBId != null && teamBId != undefined) {
             teamBId = teamBId.id;
-            const teamAPromise = await getTeam(teamBId);
+            const teamAPromise = await getTeam(gameId, teamBId);
             const id = teamAPromise.id;
             const clubId = teamAPromise.clubId;
             const county = teamAPromise.county;
@@ -347,7 +350,7 @@ export let createGame = async (doc) => {
 
 
         const game = {
-            gameId: doc.id,
+            gameId: gameId,
             competition: competition,
             dateTime: dateTime,
             linesmen: linesmen,
@@ -442,7 +445,7 @@ export let getCompetition = async (compId: string) => {
     }
 }
 
-export let getTeam = async (teamId: string) => {
+export let getTeam = async (gameId: string, teamId: string) => {
     try {
         const teamDoc = db.collection("Team").doc(teamId);
         const doc = await teamDoc.get();
@@ -495,7 +498,25 @@ export let getTeam = async (teamId: string) => {
                 name = null;
             }
             if (playerIds != null && playerIds != undefined) {
+                for (let i = 0; i < playerIds.length; i++) {
 
+                    const playerPromise = await getPlayerDetails(gameId, teamId, playerIds[i].id);
+                    const id = playerPromise.id;
+                    const firstName = playerPromise.firstName;
+                    const lastName = playerPromise.lastName;
+                    const fieldPosition = playerPromise.fieldPosition;
+                    const jerseyNumber = playerPromise.jerseyNumber;
+                    const onField = playerPromise.onField;
+                    const player = {
+                        id: id,
+                        firstName: firstName,
+                        lastName: lastName,
+                        fieldPosition: fieldPosition,
+                        jerseyNumber: jerseyNumber,
+                        onField: onField
+                    }
+                    players = [...players, player];
+                }
             }
             else {
                 playerIds = null;
@@ -657,3 +678,49 @@ let getCountyDetails = async (countyId: string) => {
         return
     }
 }
+
+let getPlayerDetails = async (gameId: string, teamId: string, playerId: string) => {
+    try {
+
+        let member = await getMemberName(playerId);
+        let firstName = member.firstName;
+        let lastName = member.lastName;
+
+        const playerDoc = db.collection("Game").doc(gameId).collection("teamsheet").doc(teamId).collection("players").doc(playerId);
+        const doc = await playerDoc.get();
+
+        if (doc.exists) {
+            let id = doc.id;
+            let fieldPosition = doc.data().fieldPosition;
+            let jerseyNumber = doc.data().jerseyNumber;
+            let onField = doc.data().onField;
+            const player = {
+                id: id,
+                firstName: firstName,
+                lastName: lastName,
+                fieldPosition: fieldPosition,
+                jerseyNumber: jerseyNumber,
+                onField: onField
+            }
+
+            return player;
+        }
+        else {
+            const player = {
+                id: playerId,
+                firstName: firstName,
+                lastName: lastName,
+                fieldPosition: null,
+                jerseyNumber: null,
+                onField: null
+            }
+            return player;
+
+        }
+
+    } catch (e) {
+        console.log("getPlayerDetails exception: " + e);
+        return
+    }
+}
+

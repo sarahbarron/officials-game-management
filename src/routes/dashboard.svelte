@@ -16,8 +16,7 @@
         teamOfficial,
     } from "../services/storeUser";
     import Heading1 from "../components/Heading1.svelte";
-    import RefereeOfCounty from "../components/RefereeOfCounty.svelte";
-    import RefereeOfClub from "../components/RefereeOfClub.svelte";
+    import Referee from "../components/Referee.svelte";
     import TeamOfficial from "../components/TeamOfficial.svelte";
     import SecretaryOfCouncil from "../components/SecretaryOfCouncil.svelte";
     import SecretaryOfProvince from "../components/SecretaryOfProvince.svelte";
@@ -97,12 +96,8 @@
     {:else if user}
         <Nav />
         <Heading1 {heading} />
-        {#if referee_of_county}
-            <RefereeOfCounty />
-            <br />
-        {/if}
-        {#if referee_of_club}
-            <RefereeOfClub />
+        {#if referee_of_county || referee_of_club}
+            <Referee />
             <br />
         {/if}
         {#if team_official}
