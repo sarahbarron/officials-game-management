@@ -6,7 +6,6 @@
     import {
         firstName,
         lastName,
-        memberDocument,
         refereeOfClub,
         refereeOfCounty,
         secretaryOfClub,
@@ -16,12 +15,7 @@
         teamOfficial,
     } from "../services/storeUser";
     import Heading1 from "../components/Heading1.svelte";
-    import Referee from "../components/Referee.svelte";
-    import TeamOfficial from "../components/TeamOfficial.svelte";
-    import SecretaryOfCouncil from "../components/SecretaryOfCouncil.svelte";
-    import SecretaryOfProvince from "../components/SecretaryOfProvince.svelte";
-    import SecretaryOfCounty from "../components/SecretaryOfCounty.svelte";
-    import SecretaryOfClub from "../components/SecretaryOfClub.svelte";
+    import OfficialCard from "../components/OfficialCard.svelte";
     let loginString = `You need to <a href='/login'>Login</a>`;
     interface User {
         email: String;
@@ -87,7 +81,10 @@
     });
     onDestroy(unsubcribeRefOfCounty);
 
-    let heading = `${first_name} ${last_name}'s Dashboard`;
+    let heading = "";
+    $: if (last_name.length > 0) {
+        heading = `${first_name} ${last_name}'s Dashboard`;
+    }
 </script>
 
 <div class="container-fluid">
@@ -95,29 +92,58 @@
         <i class="fas fa-spinner w3-spin fa-3x" />
     {:else if user}
         <Nav />
+
         <Heading1 {heading} />
+
         {#if referee_of_county || referee_of_club}
-            <Referee />
+            <OfficialCard
+                cardHeader="Referee"
+                innerCard="upcoming"
+                userType="refOfCounty"
+            />
             <br />
         {/if}
         {#if team_official}
-            <TeamOfficial />
+            <OfficialCard
+                cardHeader="Team Official"
+                innerCard="upcoming"
+                userType="teamOfficial"
+            />
             <br />
         {/if}
         {#if secretary_of_council}
-            <SecretaryOfCouncil />
+            <OfficialCard
+                cardHeader="Council Secretary"
+                innerCard="upcoming"
+                userType="secOfCouncil"
+            />
+
             <br />
         {/if}
         {#if secretary_of_province}
-            <SecretaryOfProvince />
+            <OfficialCard
+                cardHeader="Provincial Secretary"
+                innerCard="upcoming"
+                userType="secOfProvince"
+            />
+
             <br />
         {/if}
         {#if secretary_of_county}
-            <SecretaryOfCounty />
+            <OfficialCard
+                cardHeader="County Secretary"
+                innerCard="upcoming"
+                userType="secOfCounty"
+            />
             <br />
         {/if}
         {#if secretary_of_club}
-            <SecretaryOfClub />
+            <OfficialCard
+                cardHeader="Club Secretary"
+                innerCard="upcoming"
+                userType="secOfClub"
+            />
+
             <br />
         {/if}
     {:else}

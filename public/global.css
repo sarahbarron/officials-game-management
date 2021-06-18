@@ -85,6 +85,10 @@ div>h1{
 .mb-50 {
 	margin-bottom: 50px !important;
 }
+
+.title-lighter{
+	font-weight: lighter;
+}
 @media (min-width: 768px) {
 	.heading {
 		font-size: 60px;

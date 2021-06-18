@@ -1,11 +1,49 @@
 <script lang="ts">
-    export let heading: string = "";
+    export let heading: string = "Upcoming Games";
     export let games = [];
 </script>
 
 <h3>{heading}</h3>
+<hr />
 {#each games as game (game.id)}
-    <div class="col-12">
-        <p>{game.id}</p>
+    <div class="row">
+        <div class="col-3 title-lighter"><p>Competition</p></div>
+        <div class="col-9"><h4>{game.competition.name}</h4></div>
     </div>
+    <div class="row">
+        <div class="col-3">
+            <p><span class="title-lighter">Date:</span></p>
+        </div>
+        <div class="col-9">
+            <p>{game.dateTime}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            <p><span class="title-lighter">Teams</span></p>
+        </div>
+        <div class="col-9"><p>{game.teamA.name} V {game.teamB.name}</p></div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            <p><span class="title-lighter">Venue:</span></p>
+        </div>
+        <div class="col-9">
+            <p>{game.venue.name}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            <p>
+                <span class="title-lighter">Referee:</span>
+            </p>
+        </div>
+        <div class="col-9">
+            <p>
+                {game.referee.firstName}
+                {game.referee.lastName}
+            </p>
+        </div>
+    </div>
+    <hr />
 {/each}

@@ -1,12 +1,15 @@
 <script lang="ts">
     export let userType: string = "";
     let games = [];
-    let countyGames = [];
-    let clubGames = [];
     import { onDestroy } from "svelte";
-    import { dataset_dev } from "svelte/internal";
-    import { getCompetition } from "../services/firebaseQueries";
-    import { refUpcomingGames } from "../services/storeUser";
+    import {
+        refUpcomingGames,
+        secClubUpcomingGames,
+        teamOfficialUpcomingGames,
+        secCountyUpcomingGames,
+        secProvinceUpcomingGames,
+        secCouncilUpcomingGames,
+    } from "../services/storeUser";
     import UpcomingGameListItem from "./UpcomingGameListItem.svelte";
     if (userType === "refOfCounty") {
         const unsubscribeRefereeUpcomingGames = refUpcomingGames.subscribe(
@@ -16,22 +19,51 @@
         );
         onDestroy(unsubscribeRefereeUpcomingGames);
     }
-
-    $: if (games.length > 0) {
-        console.log("Games" + games);
-        for (let i = 0; i < games.length; i++) {
-            if (games[i].competition.isNational) {
-                countyGames = [...countyGames, games[i]];
-            } else {
-                clubGames = [...clubGames, games[i]];
-            }
-        }
+    if (userType === "teamOfficial") {
+        const unsubscribeTeamOfficialUpcomingGames =
+            teamOfficialUpcomingGames.subscribe((value) => {
+                games = value;
+            });
+        onDestroy(unsubscribeTeamOfficialUpcomingGames);
     }
+
+    if (userType === "secOfClub") {
+        const unsubscribeSecOfClubUpcomingGames =
+            secClubUpcomingGames.subscribe((value) => {
+                games = value;
+            });
+        onDestroy(unsubscribeSecOfClubUpcomingGames);
+    }
+
+    if (userType === "secOfCounty") {
+        const unsubscribeSecOfCountyUpcomingGames =
+            secCountyUpcomingGames.subscribe((value) => {
+                games = value;
+                console.log(`sec of county games ${games}`);
+            });
+        onDestroy(unsubscribeSecOfCountyUpcomingGames);
+    }
+
+    if (userType === "secOfProvince") {
+        const unsubscribeSecOfProvinceUpcomingGames =
+            secProvinceUpcomingGames.subscribe((value) => {
+                games = value;
+            });
+        onDestroy(unsubscribeSecOfProvinceUpcomingGames);
+    }
+    if (userType === "secOfCouncil") {
+        const unsubscribeSecOfCouncilUpcomingGames =
+            secCouncilUpcomingGames.subscribe((value) => {
+                games = value;
+            });
+        onDestroy(unsubscribeSecOfCouncilUpcomingGames);
+    }
+
+    $: games;
 </script>
 
-{#if countyGames.length > 0}
-    <UpcomingGameListItem heading="Upcoming County Games" games={countyGames} />
-{/if}
-{#if clubGames.length > 0}
-    <UpcomingGameListItem heading="Upcoming Club Games" games={clubGames} />
+{#if games.length === 0}
+    <p>Retrieving upcoming games one moment ...</p>
+{:else}
+    <UpcomingGameListItem {games} />
 {/if}
