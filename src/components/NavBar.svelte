@@ -57,21 +57,9 @@
 </script>
 
 <nav id="nav-bar" class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-        <!-- <span class="navbar-brand mb-0 h1">GAA GAME MANAGMENT</span> -->
+    <div class="container">
         <NavBrand />
         <NavToggleBtn />
-        <!-- <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNavDarkDropdown"
-            aria-controls="navbarNavDarkDropdown"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-        >
-            <span class="navbar-toggler-icon" />
-        </button> -->
         <div
             class="collapse navbar-collapse justify-content-end"
             id="navbarNavDarkDropdown"

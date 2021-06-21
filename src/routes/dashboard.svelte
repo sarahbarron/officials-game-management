@@ -97,17 +97,18 @@
         <i class="fas fa-spinner w3-spin fa-3x" />
     {:else if user}
         <Nav />
+        <div class="container">
+            <Heading1 {heading} />
 
-        <Heading1 {heading} />
-
-        <DashboardAccordion
-            {referee}
-            {team_official}
-            {secretary_of_council}
-            {secretary_of_province}
-            {secretary_of_county}
-            {secretary_of_club}
-        />
+            <DashboardAccordion
+                {referee}
+                {team_official}
+                {secretary_of_council}
+                {secretary_of_province}
+                {secretary_of_county}
+                {secretary_of_club}
+            />
+        </div>
     {:else}
         <h2>{@html loginString}</h2>
     {/if}
