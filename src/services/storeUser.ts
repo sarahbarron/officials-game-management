@@ -3,6 +3,7 @@ import { localStore } from './localStore';
 export const refUpcomingGames = localStore("refCountyUpcomingGames", []);
 export const secClubUpcomingGames = localStore("secClubUpcomingGames", []);
 export const secCountyUpcomingGames = localStore("secCountyUpcomingGames", []);
+export const secCountyUpcomingCountyGames = localStore("secCountyUpcomingCountyGames", []);
 export const secProvinceUpcomingGames = localStore("secProvinceUpcomingGames", []);
 export const secCouncilUpcomingGames = localStore("secCouncilUpcomingGames", []);
 export const teamOfficialUpcomingGames = localStore("teamOfficialUpcomingGames", []);

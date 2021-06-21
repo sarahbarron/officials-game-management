@@ -15,7 +15,7 @@
         teamOfficial,
     } from "../services/storeUser";
     import Heading1 from "../components/Heading1.svelte";
-    import OfficialCard from "../components/OfficialCard.svelte";
+    import DashboardAccordion from "../components/DashboardAccordion.svelte";
     let loginString = `You need to <a href='/login'>Login</a>`;
     interface User {
         email: String;
@@ -85,6 +85,11 @@
     $: if (last_name.length > 0) {
         heading = `${first_name} ${last_name}'s Dashboard`;
     }
+
+    let referee: boolean = false;
+    if (referee_of_club || referee_of_county) {
+        referee = true;
+    }
 </script>
 
 <div class="container-fluid">
@@ -95,57 +100,14 @@
 
         <Heading1 {heading} />
 
-        {#if referee_of_county || referee_of_club}
-            <OfficialCard
-                cardHeader="Referee"
-                innerCard="upcoming"
-                userType="refOfCounty"
-            />
-            <br />
-        {/if}
-        {#if team_official}
-            <OfficialCard
-                cardHeader="Team Official"
-                innerCard="upcoming"
-                userType="teamOfficial"
-            />
-            <br />
-        {/if}
-        {#if secretary_of_council}
-            <OfficialCard
-                cardHeader="Council Secretary"
-                innerCard="upcoming"
-                userType="secOfCouncil"
-            />
-
-            <br />
-        {/if}
-        {#if secretary_of_province}
-            <OfficialCard
-                cardHeader="Provincial Secretary"
-                innerCard="upcoming"
-                userType="secOfProvince"
-            />
-
-            <br />
-        {/if}
-        {#if secretary_of_county}
-            <OfficialCard
-                cardHeader="County Secretary"
-                innerCard="upcoming"
-                userType="secOfCounty"
-            />
-            <br />
-        {/if}
-        {#if secretary_of_club}
-            <OfficialCard
-                cardHeader="Club Secretary"
-                innerCard="upcoming"
-                userType="secOfClub"
-            />
-
-            <br />
-        {/if}
+        <DashboardAccordion
+            {referee}
+            {team_official}
+            {secretary_of_council}
+            {secretary_of_province}
+            {secretary_of_county}
+            {secretary_of_club}
+        />
     {:else}
         <h2>{@html loginString}</h2>
     {/if}

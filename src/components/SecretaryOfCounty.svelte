@@ -1,6 +1,13 @@
 <script lang="ts">
     import Card from "./Card.svelte";
-    let cardHeader: string = "Secretary - County";
+    import { secCountyUpcomingGames } from "../services/storeUser";
+    import { onDestroy } from "svelte";
+    let games = [];
+    let cardHeader: string = "Upcoming Club Games";
+    const unsubscribeSecretary = secCountyUpcomingGames.subscribe((value) => {
+        games = value;
+    });
+    onDestroy(unsubscribeSecretary);
 </script>
 
-<Card {cardHeader} />
+<Card {cardHeader} {games} innerCard="upcoming" />

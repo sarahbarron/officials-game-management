@@ -3,10 +3,10 @@
     import BodyCard from "./BodyCard.svelte";
     export let cardHeader: string = "";
     export let innerCard: string = "";
-    export let userType: string = "";
+    export let games = [];
 </script>
 
 <div class="card">
     <HeaderCard {cardHeader} />
-    <BodyCard {innerCard} {userType} />
+    <BodyCard {innerCard} {games} />
 </div>
