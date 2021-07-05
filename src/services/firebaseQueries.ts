@@ -3,7 +3,8 @@ import {
     refereeOfClub, refereeOfCounty, secretaryOfClub, secretaryOfCounty, secretaryOfProvince,
     secretaryOfCouncil, teamOfficial, firstName, lastName, clubRef, clubName,
     crest, countyCrest, countyName, provinceName,
-    refUpcomingGames, secCountyUpcomingGames, secClubUpcomingGames, secCountyUpcomingCountyGames
+    refUpcomingGames, secCountyUpcomingGames, secClubUpcomingGames, secCountyUpcomingCountyGames, 
+    secProvinceUpcomingGames, secCouncilUpcomingGames
 } from './storeUser';
 import { db } from "./firebase";
 
@@ -35,8 +36,6 @@ let getMemberDetails = async (email: string) => {
     try {
         const querySnapshot = await member.where("email", "==", email).get()
         querySnapshot.forEach((doc) => {
-            console.log("for each");
-
             let memberDoc = doc.id;
             let refOfClub = doc.data().refereeOfClub;
             let refOfCounty = doc.data().refereeOfCounty;
@@ -274,15 +273,128 @@ let getSecretaryOfCountyUpcomingClubGames = async (clubId: string) => {
         console.log(`getSecretaryOfCountyUpcomingGames exception: ${e}`);
     }
 }
-let getSecretaryOfProvinceUpcomingGames = async (memberId: string) => {
+let getSecretaryOfProvinceUpcomingGames = async (clubId: string) => {
     try {
 
-    } catch (e) {
+          let i = 0;
+        let games = [];
+        const club = await db.collection("Club").doc(clubId).get();
+       
+        const countyRef = club.data().county;
+        const county = await db.collection("County").doc(countyRef.id).get();
+
+        const provinceRef = county.data().province;
+
+        const competitionsDocs = db.collection("Competition");
+        const competitions = await competitionsDocs
+            .where("isProvincial", "==", provinceRef).get();
+    
+        competitions.forEach(async (doc) => {
+            const competitionRef = db.collection("Competition").doc(doc.id);
+            const gamesCollection = db.collection("Game");
+            const querySnapshot = await gamesCollection
+                .where("competition", "==", competitionRef)
+                .where("dateTime", ">=", new Date())
+                .orderBy("dateTime")
+                .get()
+            querySnapshot.forEach(async (doc) => {
+                const gamePromise = await createGame(doc);
+                let id = gamePromise.gameId;
+                let competition = gamePromise.competition;
+                let dateTime = gamePromise.dateTime;
+                let linesmen = gamePromise.linesmen;
+                let umpires = gamePromise.umpires;
+                let referee = gamePromise.referee;
+                let substituteReferee = gamePromise.substituteReferee;
+                let teamA = gamePromise.teamA;
+                let teamB = gamePromise.teamB;
+                let venue = gamePromise.venue;
+                const game = {
+                    id: id,
+                    competition: competition,
+                    dateTime: dateTime,
+                    linesmen: linesmen,
+                    umpires: umpires,
+                    referee: referee,
+                    substituteReferee,
+                    teamA: teamA,
+                    teamB: teamB,
+                    venue: venue
+                }
+
+                games = [...games, game];
+                if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
+                    secProvinceUpcomingGames.set(games);
+                    console.log(`secProvinceUpcomingGames set`);
+                }
+                i++;
+            });
+
+            return;
+        });
+}catch(e){
         console.log(`getSecretaryOfProvinceUpcomingGames exception: ${e}`);
-    }
+
 }
+}
+
 let getSecretaryOfCouncilUpcomingGames = async (memberId: string) => {
     try {
+
+          let i = 0;
+        let games = [];
+        const club = await db.collection("Club").doc(clubId).get();
+        
+        const competitionsDocs = db.collection("Competition");
+        const competitions = await competitionsDocs
+            .where("isNational", "==", true).get();
+
+        competitions.forEach(async (doc) => {
+            console.log(`Council comp docs ${doc.id}`);
+            const competitionRef = db.collection("Competition").doc(doc.id);
+            const gamesCollection = db.collection("Game");
+            const querySnapshot = await gamesCollection
+                .where("competition", "==", competitionRef)
+                .where("dateTime", ">=", new Date())
+                .orderBy("dateTime")
+                .get()
+            querySnapshot.forEach(async (doc) => {
+            console.log(`Council game docs ${doc.id}`);
+
+                const gamePromise = await createGame(doc);
+                let id = gamePromise.gameId;
+                let competition = gamePromise.competition;
+                let dateTime = gamePromise.dateTime;
+                let linesmen = gamePromise.linesmen;
+                let umpires = gamePromise.umpires;
+                let referee = gamePromise.referee;
+                let substituteReferee = gamePromise.substituteReferee;
+                let teamA = gamePromise.teamA;
+                let teamB = gamePromise.teamB;
+                let venue = gamePromise.venue;
+                const game = {
+                    id: id,
+                    competition: competition,
+                    dateTime: dateTime,
+                    linesmen: linesmen,
+                    umpires: umpires,
+                    referee: referee,
+                    substituteReferee,
+                    teamA: teamA,
+                    teamB: teamB,
+                    venue: venue
+                }
+
+                games = [...games, game];
+                if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
+                    console.log(`before secCouncilUpcomingGames set`);
+                    secCouncilUpcomingGames.set(games);
+                    console.log(`secCouncilUpcomingGames set`);
+                }
+                i++;
+            });
+            return;
+        });
 
     } catch (e) {
         console.log(`getSecretaryOfCouncilUpcomingGames exception: ${e}`);
