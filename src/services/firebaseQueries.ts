@@ -3,10 +3,11 @@ import {
     refereeOfClub, refereeOfCounty, secretaryOfClub, secretaryOfCounty, secretaryOfProvince,
     secretaryOfCouncil, teamOfficial, firstName, lastName, clubRef, clubName,
     crest, countyCrest, countyName, provinceName,
-    refUpcomingGames, secCountyUpcomingGames, secClubUpcomingGames, secCountyUpcomingCountyGames, 
-    secProvinceUpcomingGames, secCouncilUpcomingGames
+    refUpcomingGames, secCountyUpcomingGames, secClubUpcomingGames, secCountyUpcomingCountyGames,
+    secProvinceUpcomingGames, secCouncilUpcomingGames, teamOfficialUpcomingGames
 } from './storeUser';
 import { db } from "./firebase";
+import { missing_component } from 'svelte/internal';
 
 const member = db.collection('Member');
 
@@ -14,11 +15,12 @@ const member = db.collection('Member');
 let clubId: string;
 let countyId: string;
 
+/* Retrieve member details, club details and county details
+*/
 export let getMember = async (email: string) => {
     console.log("getMember: " + email);
     try {
         await getMemberDetails(email);
-        console.log("Own Club: " + clubId);
         if (clubId != null && clubId != undefined) {
             await getClubDetails(clubId);
         }
@@ -31,6 +33,8 @@ export let getMember = async (email: string) => {
     }
 }
 
+/* Retrieve a members details from firestore
+*/
 let getMemberDetails = async (email: string) => {
     console.log(`getMemberDetails: ${email}`);
     try {
@@ -74,6 +78,9 @@ let getMemberDetails = async (email: string) => {
             }
             if (teamOf != null && teamOf != undefined) {
                 teamOfficial.set(teamOf);
+                if (teamOf) {
+                    getTeamOfficialUpcomingGames(memberDoc);
+                }
             }
             if (fName != null && fName != undefined) {
                 firstName.set(fName);
@@ -95,7 +102,7 @@ let getMemberDetails = async (email: string) => {
 
                 }
                 if (secOfCouncil) {
-                    getSecretaryOfCouncilUpcomingGames(clubId);
+                    getSecretaryOfCouncilUpcomingGames();
                 }
             }
 
@@ -111,6 +118,10 @@ let getMemberDetails = async (email: string) => {
     }
 }
 
+/* Retrieve the games from firebase for the users club, 
+the date and time is in the future and order the documents 
+by date and time.
+*/
 let getSecretaryOfClubUpcomingGames = async (clubId: string) => {
     try {
 
@@ -124,7 +135,6 @@ let getSecretaryOfClubUpcomingGames = async (clubId: string) => {
             .orderBy("dateTime")
             .get();
         querySnapshot.forEach(async (doc) => {
-            console.log(`Club games ${doc.id}`);
             const gamePromise = await createGame(doc);
             let id = gamePromise.gameId;
             let competition = gamePromise.competition;
@@ -149,8 +159,9 @@ let getSecretaryOfClubUpcomingGames = async (clubId: string) => {
                 venue: venue
             }
 
-            games = [...games, game];
-            console.log(`Club Games ${games}`);
+            if (!games.includes(game)) {
+                games = [...games, game];
+            }
             if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
                 secClubUpcomingGames.set(games);
                 console.log(`secClubUpcomingGames set`);
@@ -164,6 +175,10 @@ let getSecretaryOfClubUpcomingGames = async (clubId: string) => {
     }
 }
 
+/* Retrieve the county games from firebase for the users county, 
+the date and time is in the future and order the documents 
+by date and time.
+*/
 let getSecretaryUpcomingCountyGames = async (clubId: string) => {
     try {
         let i = 0;
@@ -178,7 +193,6 @@ let getSecretaryUpcomingCountyGames = async (clubId: string) => {
             .orderBy("dateTime")
             .get();
         querySnapshot.forEach(async (doc) => {
-            console.log(`Club games ${doc.id}`);
             const gamePromise = await createGame(doc);
             let id = gamePromise.gameId;
             let competition = gamePromise.competition;
@@ -203,8 +217,9 @@ let getSecretaryUpcomingCountyGames = async (clubId: string) => {
                 venue: venue
             }
 
-            games = [...games, game];
-            console.log(`Club Games ${games}`);
+            if (!games.includes(game)) {
+                games = [...games, game];
+            }
             if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
                 secCountyUpcomingCountyGames.set(games);
                 console.log(`secCountyUpcomingCountyGames set`);
@@ -215,9 +230,13 @@ let getSecretaryUpcomingCountyGames = async (clubId: string) => {
 
     } catch (e) { console.log(`getSecretaryUpcomingCountyGames exception: ${e}`); }
 }
+
+/* Retrieve the club games from firebase for the users county, 
+the date and time is in the future and order the documents 
+by date and time.
+*/
 let getSecretaryOfCountyUpcomingClubGames = async (clubId: string) => {
     try {
-        let i = 0;
         let games = [];
         const club = await db.collection("Club").doc(clubId).get();
         const countyRef = club.data().county;
@@ -226,6 +245,7 @@ let getSecretaryOfCountyUpcomingClubGames = async (clubId: string) => {
             .where("county", "==", countyRef).get();
 
         competitions.forEach(async (doc) => {
+            let i = 0;
             const competitionRef = db.collection("Competition").doc(doc.id);
             const gamesCollection = db.collection("Game");
             const querySnapshot = await gamesCollection
@@ -258,7 +278,9 @@ let getSecretaryOfCountyUpcomingClubGames = async (clubId: string) => {
                     venue: venue
                 }
 
-                games = [...games, game];
+                if (!games.includes(game)) {
+                    games = [...games, game];
+                }
                 if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
                     secCountyUpcomingGames.set(games);
                     console.log(`secCountyUpcomingGames set`);
@@ -273,13 +295,16 @@ let getSecretaryOfCountyUpcomingClubGames = async (clubId: string) => {
         console.log(`getSecretaryOfCountyUpcomingGames exception: ${e}`);
     }
 }
+
+/* Retrieve the games from firebase for the users province, 
+the date and time is in the future and order the documents 
+by date and time.
+*/
 let getSecretaryOfProvinceUpcomingGames = async (clubId: string) => {
     try {
-
-          let i = 0;
         let games = [];
         const club = await db.collection("Club").doc(clubId).get();
-       
+
         const countyRef = club.data().county;
         const county = await db.collection("County").doc(countyRef.id).get();
 
@@ -288,8 +313,9 @@ let getSecretaryOfProvinceUpcomingGames = async (clubId: string) => {
         const competitionsDocs = db.collection("Competition");
         const competitions = await competitionsDocs
             .where("isProvincial", "==", provinceRef).get();
-    
+
         competitions.forEach(async (doc) => {
+            let i = 0;
             const competitionRef = db.collection("Competition").doc(doc.id);
             const gamesCollection = db.collection("Game");
             const querySnapshot = await gamesCollection
@@ -322,7 +348,9 @@ let getSecretaryOfProvinceUpcomingGames = async (clubId: string) => {
                     venue: venue
                 }
 
-                games = [...games, game];
+                if (!games.includes(game)) {
+                    games = [...games, game];
+                }
                 if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
                     secProvinceUpcomingGames.set(games);
                     console.log(`secProvinceUpcomingGames set`);
@@ -332,25 +360,25 @@ let getSecretaryOfProvinceUpcomingGames = async (clubId: string) => {
 
             return;
         });
-}catch(e){
+    } catch (e) {
         console.log(`getSecretaryOfProvinceUpcomingGames exception: ${e}`);
 
+    }
 }
-}
-
-let getSecretaryOfCouncilUpcomingGames = async (memberId: string) => {
+/* Retrieve the games from firebase where the games are national 
+games, the date and time is in the future and order the documents 
+by date and time.
+*/
+let getSecretaryOfCouncilUpcomingGames = async () => {
     try {
 
-          let i = 0;
         let games = [];
-        const club = await db.collection("Club").doc(clubId).get();
-        
         const competitionsDocs = db.collection("Competition");
         const competitions = await competitionsDocs
             .where("isNational", "==", true).get();
 
         competitions.forEach(async (doc) => {
-            console.log(`Council comp docs ${doc.id}`);
+            let i = 0;
             const competitionRef = db.collection("Competition").doc(doc.id);
             const gamesCollection = db.collection("Game");
             const querySnapshot = await gamesCollection
@@ -359,8 +387,6 @@ let getSecretaryOfCouncilUpcomingGames = async (memberId: string) => {
                 .orderBy("dateTime")
                 .get()
             querySnapshot.forEach(async (doc) => {
-            console.log(`Council game docs ${doc.id}`);
-
                 const gamePromise = await createGame(doc);
                 let id = gamePromise.gameId;
                 let competition = gamePromise.competition;
@@ -385,9 +411,10 @@ let getSecretaryOfCouncilUpcomingGames = async (memberId: string) => {
                     venue: venue
                 }
 
-                games = [...games, game];
+                if (!games.includes(game)) {
+                    games = [...games, game];
+                }
                 if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
-                    console.log(`before secCouncilUpcomingGames set`);
                     secCouncilUpcomingGames.set(games);
                     console.log(`secCouncilUpcomingGames set`);
                 }
@@ -400,16 +427,16 @@ let getSecretaryOfCouncilUpcomingGames = async (memberId: string) => {
         console.log(`getSecretaryOfCouncilUpcomingGames exception: ${e}`);
     }
 }
+
+/* Retrieve the games from firebase where the referee
+          is equal to this referee, the date and time is
+          in the future and order the documents by date and
+          time.
+      */
 let getRefereeUpcomingGames = async (memberId: string) => {
     try {
         let i = 0;
         let games = [];
-
-        /* Retrieve the games from firebase where the referee
-            is equal to this referee, the date and time is
-            in the future and order the documents by date and
-            time.
-        */
         const memberDoc = db.doc(`/Member/${memberId}`);
         const gamesCollection = db.collection("Game");
         const querySnapshot = await gamesCollection
@@ -441,7 +468,9 @@ let getRefereeUpcomingGames = async (memberId: string) => {
                 teamB: teamB,
                 venue: venue
             }
-            games = [...games, game];
+            if (!games.includes(game)) {
+                games = [...games, game];
+            }
             if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
                 refUpcomingGames.set(games);
             }
@@ -455,6 +484,111 @@ let getRefereeUpcomingGames = async (memberId: string) => {
     }
 }
 
+/*
+Retrieve Games for a team official
+*/
+export let getTeamOfficialUpcomingGames = async (memberId: string) => {
+    try {
+        let games = [];
+        const memberRef = db.collection("Member").doc(memberId);
+        const teamsCollection = db.collection("Team");
+        const teamOfficialsTeams = await teamsCollection
+            .where('teamOfficials', 'array-contains', memberRef)
+            .get();
+        teamOfficialsTeams.forEach(async (teamDoc) => {
+            let i = 0;
+            console.log(`team official upcoming games involved in team ID ${teamDoc.id}`);
+            const teamRef = db.collection('Team').doc(teamDoc.id);
+            const gamesCollection = db.collection("Game");
+            const querySnapshotA = await gamesCollection
+                .where("teamA", "==", teamRef)
+                .where("dateTime", ">=", new Date())
+                .orderBy("dateTime")
+                .get();
+            querySnapshotA.forEach(async (gameDoc) => {
+                console.log(`Team: ${teamDoc.id} Game ${gameDoc.id}`);
+                const gamePromise = await createGame(gameDoc);
+                let id = gamePromise.gameId;
+                let competition = gamePromise.competition;
+                let dateTime = gamePromise.dateTime;
+                let linesmen = gamePromise.linesmen;
+                let umpires = gamePromise.umpires;
+                let referee = gamePromise.referee;
+                let substituteReferee = gamePromise.substituteReferee;
+                let teamA = gamePromise.teamA;
+                let teamB = gamePromise.teamB;
+                let venue = gamePromise.venue;
+                const game = {
+                    id: id,
+                    competition: competition,
+                    dateTime: dateTime,
+                    linesmen: linesmen,
+                    umpires: umpires,
+                    referee: referee,
+                    substituteReferee,
+                    teamA: teamA,
+                    teamB: teamB,
+                    venue: venue
+                }
+                if (!games.includes(game)) {
+                    games = [...games, game];
+                }
+                if (games != null && games != undefined && i == (querySnapshotA.size - 1)) {
+                    teamOfficialUpcomingGames.set(games);
+                    console.log(`teamOfficialUpcoming Games set`);
+
+                }
+                i++;
+            });
+
+
+            const querySnapshotB = await gamesCollection
+                .where("teamB", "==", teamRef)
+                .where("dateTime", ">=", new Date())
+                .orderBy("dateTime")
+                .get();
+            querySnapshotB.forEach(async (gameDocB) => {
+                console.log(`Team: ${teamDoc.id} Game ${gameDocB.id}`);
+                const gamePromise = await createGame(gameDocB);
+                let id = gamePromise.gameId;
+                let competition = gamePromise.competition;
+                let dateTime = gamePromise.dateTime;
+                let linesmen = gamePromise.linesmen;
+                let umpires = gamePromise.umpires;
+                let referee = gamePromise.referee;
+                let substituteReferee = gamePromise.substituteReferee;
+                let teamA = gamePromise.teamA;
+                let teamB = gamePromise.teamB;
+                let venue = gamePromise.venue;
+                const game = {
+                    id: id,
+                    competition: competition,
+                    dateTime: dateTime,
+                    linesmen: linesmen,
+                    umpires: umpires,
+                    referee: referee,
+                    substituteReferee,
+                    teamA: teamA,
+                    teamB: teamB,
+                    venue: venue
+                }
+                if (!games.includes(game)) {
+                    games = [...games, game];
+                }
+                if (games != null && games != undefined && i == (querySnapshotB.size - 1)) {
+                    teamOfficialUpcomingGames.set(games);
+                    console.log(`teamOfficialUpcoming Games set`);
+                }
+                i++;
+            });
+        });
+    } catch (e) {
+        console.log("getTeamOfficialUpcomingGames exception: " + e);
+    }
+}
+/*
+Get members first name and last name
+*/
 export let getMemberName = async (id: string) => {
     try {
         const member = db.collection("Member").doc(id);
@@ -482,6 +616,10 @@ export let getMemberName = async (id: string) => {
     }
 }
 
+/*
+extract all details about a game from firestore and create a game
+in the svelte store will all the details
+*/
 export let createGame = async (doc) => {
     try {
         let gameId = doc.id;
@@ -673,6 +811,9 @@ export let createGame = async (doc) => {
         return
     }
 }
+/*
+Retrieve competition details from firestore
+*/
 export let getCompetition = async (compId: string) => {
     try {
         const compDoc = db.collection("Competition").doc(compId);
@@ -751,6 +892,9 @@ export let getCompetition = async (compId: string) => {
     }
 }
 
+/*
+Retrieve Team details from firestore 
+*/
 export let getTeam = async (gameId: string, teamId: string) => {
     try {
         const teamDoc = db.collection("Team").doc(teamId);
@@ -859,6 +1003,9 @@ export let getTeam = async (gameId: string, teamId: string) => {
     }
 }
 
+/*
+Retrieve grade details from firestore
+*/
 let getGrade = async (gradeId: string) => {
     try {
         const gradeDoc = db.collection("Grade").doc(gradeId);
@@ -885,6 +1032,9 @@ let getGrade = async (gradeId: string) => {
     }
 }
 
+/*
+Retrieve venue details from firestore
+*/
 let getVenue = async (venueId: string) => {
     try {
         const venueDoc = db.collection("Venue").doc(venueId);
@@ -934,6 +1084,9 @@ let getVenue = async (venueId: string) => {
     }
 }
 
+/*
+Retrieve Club details from firestore
+*/
 let getClubDetails = async (clubId: string) => {
     try {
         const club = db.collection("Club").doc(clubId);
@@ -944,7 +1097,6 @@ let getClubDetails = async (clubId: string) => {
             countyId = doc.data().county.id;
             club_crest = doc.data().crest;
             name = doc.data().name;
-            console.log(`County Id: ${countyId}, Crest: ${club_crest}, Name: ${name}`);
 
             if (countyId != null && countyId != undefined) {
                 try {
@@ -967,7 +1119,6 @@ let getClubDetails = async (clubId: string) => {
                     console.log(`clubName exception ${e}`);
                 }
             }
-            console.log(`County Id: ${countyId}, Crest: ${crest}, Name: ${name}`);
         }
         return true;
     } catch (e) {
@@ -976,7 +1127,9 @@ let getClubDetails = async (clubId: string) => {
     }
 }
 
-
+/*
+Retrieve County details from firestore
+*/
 let getCountyDetails = async (countyId: string) => {
     try {
         const county = db.collection("County").doc(countyId);
@@ -990,9 +1143,6 @@ let getCountyDetails = async (countyId: string) => {
             if (province != null && province != undefined) {
                 provinceName.set(province);
             }
-
-            console.log(`Province: ${province}, Crest: ${crest}`);
-
         }
         return true;
     } catch (e) {
@@ -1001,6 +1151,9 @@ let getCountyDetails = async (countyId: string) => {
     }
 }
 
+/**
+Retrieve Players details from firestore 
+ */
 let getPlayerDetails = async (gameId: string, teamId: string, playerId: string) => {
     try {
 
