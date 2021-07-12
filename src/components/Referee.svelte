@@ -16,4 +16,4 @@
 </script>
 
 <AccordionButton {buttonText} {redirectUrl} />
-<Card cardHeader="Upcoming Games" innerCard="upcoming" {games} />
+<Card cardHeader="Upcoming Games" {games} />

@@ -4,9 +4,20 @@
     import router from "page";
     import Heading1 from "../components/Heading1.svelte";
     import Footer from "../components/Footer.svelte";
+    import { onDestroy } from "svelte";
+    import Card from "../components/Card.svelte";
+    import {
+        secretaryOfProvince,
+        secProvinceUpcomingGames,
+        secProvincePastGames,
+    } from "../services/storeUser";
     let loginString = `You need to <a href='/login'>Login</a>`;
     let heading = "Secretary Of Province Dashboard";
     let isActive = "province";
+    let upcomingGames = [];
+    let pastGames = [];
+    let upcomingCardHeader = "Upcoming Games";
+    let pastCardHeader = "Past Games";
     interface User {
         email: String;
         uid: String;
@@ -16,6 +27,26 @@
     $: {
         if (user === null) router.redirect("/login");
     }
+
+    let isSecretary: boolean = false;
+    const unsubscribeSecretary = secretaryOfProvince.subscribe((value) => {
+        isSecretary = value;
+    });
+    onDestroy(unsubscribeSecretary);
+
+    if (isSecretary) {
+        const unsubscribeUpcomingGames = secProvinceUpcomingGames.subscribe(
+            (value) => {
+                upcomingGames = value;
+            }
+        );
+        onDestroy(unsubscribeUpcomingGames);
+
+        const unsubscibePastGames = secProvincePastGames.subscribe((value) => {
+            pastGames = value;
+        });
+        onDestroy(unsubscibePastGames);
+    }
 </script>
 
 <div class="page-container">
@@ -24,8 +55,12 @@
             <i class="fas fa-spinner w3-spin fa-3x" />
         {:else if user}
             <Nav {isActive} />
-            <Heading1 {heading} />
-            <div class="container padding-for-footer" />
+            <div class="container padding-for-footer">
+                <Heading1 {heading} />
+                <Card cardHeader={upcomingCardHeader} games={upcomingGames} />
+                <br /><br />
+                <Card cardHeader={pastCardHeader} games={pastGames} />
+            </div>
             <Footer />
         {:else}
             <h2>{@html loginString}</h2>

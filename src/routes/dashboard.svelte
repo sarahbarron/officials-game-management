@@ -100,7 +100,7 @@
             <i class="fas fa-spinner w3-spin fa-3x" />
         {:else if user}
             <Nav {isActive} />
-            <div class="container padding-for-footer">
+            <div class="padding-for-footer">
                 <Heading1 {heading} />
 
                 <DashboardAccordion

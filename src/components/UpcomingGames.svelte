@@ -1,7 +1,7 @@
 <script lang="ts">
     export let games = [];
 
-    import UpcomingGameListItem from "./UpcomingGameListItem.svelte";
+    import UpcomingGameListItem from "./GamesListItem.svelte";
     $: games;
 </script>
 

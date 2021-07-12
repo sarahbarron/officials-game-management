@@ -1,9 +1,7 @@
 <script lang="ts">
-    export let heading: string = "Upcoming Games";
     export let games = [];
 </script>
 
-<h3>{heading}</h3>
 <hr />
 {#each games as game (game.id)}
     <div class="row">

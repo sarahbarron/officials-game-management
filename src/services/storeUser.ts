@@ -1,12 +1,25 @@
 import { localStore } from './localStore';
 
 export const refUpcomingGames = localStore("refCountyUpcomingGames", []);
+export const refPastGames = localStore("refPastGames", []);
+
 export const secClubUpcomingGames = localStore("secClubUpcomingGames", []);
-export const secCountyUpcomingGames = localStore("secCountyUpcomingGames", []);
+export const secClubPastGames = localStore("secClubPastGames", []);
+
+export const secCountyUpcomingClubGames = localStore("secCountyUpcomingGames", []);
+export const secCountyPastClubGames = localStore("secCountyPastGames", []);
+
 export const secCountyUpcomingCountyGames = localStore("secCountyUpcomingCountyGames", []);
+export const secCountyPastCountyGames = localStore("secCountyPastCountyGames", []);
+
 export const secProvinceUpcomingGames = localStore("secProvinceUpcomingGames", []);
+export const secProvincePastGames = localStore("secProvincePastGames", []);
+
 export const secCouncilUpcomingGames = localStore("secCouncilUpcomingGames", []);
+export const secCouncilPastGames = localStore("secCouncilPastGames", []);
+
 export const teamOfficialUpcomingGames = localStore("teamOfficialUpcomingGames", []);
+export const teamOfficialPastGames = localStore("teamOfficialPastGames", []);
 
 // Members Id
 export const memberDocument = localStore("memberDocument", "");

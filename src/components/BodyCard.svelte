@@ -1,12 +1,8 @@
 <script lang="ts">
-    import UpcomingGames from "./UpcomingGames.svelte";
-    export let innerCard: string = "";
-    // export let userType: string = "";
+    import GamesListItem from "./GamesListItem.svelte";
     export let games = [];
 </script>
 
 <div class="card-body">
-    {#if innerCard === "upcoming"}
-        <UpcomingGames {games} />
-    {/if}
+    <GamesListItem {games} />
 </div>

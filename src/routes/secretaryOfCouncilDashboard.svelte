@@ -4,6 +4,18 @@
     import router from "page";
     import Heading1 from "../components/Heading1.svelte";
     import Footer from "../components/Footer.svelte";
+    import Card from "../components/Card.svelte";
+    import {
+        secCouncilPastGames,
+        secCouncilUpcomingGames,
+        secretaryOfCouncil,
+    } from "../services/storeUser";
+    import { onDestroy } from "svelte";
+    let upcomingGames = [];
+    let pastGames = [];
+
+    let upcomingCardHeader = "Upcoming Games";
+    let pastCardHeader = "Past Games";
     let loginString = `You need to <a href='/login'>Login</a>`;
     let heading = "Secretary Of Council Dashboard";
     let isActive = "council";
@@ -16,16 +28,41 @@
     $: {
         if (user === null) router.redirect("/login");
     }
+
+    let isSecretary: boolean = false;
+    const unsubscribeSecretary = secretaryOfCouncil.subscribe((value) => {
+        isSecretary = value;
+    });
+    onDestroy(unsubscribeSecretary);
+
+    if (isSecretary) {
+        const unsubscribeUpcomingGames = secCouncilUpcomingGames.subscribe(
+            (value) => {
+                upcomingGames = value;
+            }
+        );
+        onDestroy(unsubscribeUpcomingGames);
+
+        const unsubscibePastGames = secCouncilPastGames.subscribe((value) => {
+            pastGames = value;
+        });
+        onDestroy(unsubscibePastGames);
+    }
 </script>
 
 <div class="page-container">
     <div class="container-fluid">
         {#if typeof user === "undefined"}
             <i class="fas fa-spinner w3-spin fa-3x" />
-        {:else if user}
+        {:else if user && isSecretary}
             <Nav {isActive} />
-            <Heading1 {heading} />
+            <div class="container padding-for-footer">
+                <Heading1 {heading} />
 
+                <Card cardHeader={upcomingCardHeader} games={upcomingGames} />
+                <br /><br />
+                <Card cardHeader={pastCardHeader} games={pastGames} />
+            </div>
             <Footer />
         {:else}
             <h2>{@html loginString}</h2>
