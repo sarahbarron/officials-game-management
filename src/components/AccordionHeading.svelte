@@ -20,13 +20,14 @@
 <style>
     .accordion-button {
         color: #005e82 !important;
-        background-color: white !important;
+        background-color: #f8f9fa !important;
         font-family: "Neuton", serif;
         font-size: 20px;
     }
+
     @media (min-width: 768px) {
         .accordion-button {
-            font-size: 25px;
+            font-size: 35px;
         }
     }
 </style>
