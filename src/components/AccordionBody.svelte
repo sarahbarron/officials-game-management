@@ -14,7 +14,7 @@
 
 <div
     id={bodyId}
-    class="accordion-collapse collapse"
+    class="accordion-collapse collapse show"
     aria-labelledby={headingId}
     data-bs-parent="#accordionExample"
 >

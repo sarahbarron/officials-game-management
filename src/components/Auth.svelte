@@ -74,66 +74,68 @@
     }
 </script>
 
-<div id="login-card" class="card mb-50 center">
-    <div class="card-body">
-        {#if !isAuthenticated}
-            <div>
-                <h2>GAA Officials Login</h2>
-            </div>
-            <div>
-                <form on:submit|preventDefault={login}>
-                    {#if err}
-                        <div>
-                            <ErrorAlert message={err} />
-                        </div>
-                    {/if}
+<div id="auth-div" class="col-12 col-lg-7">
+    <div id="login-card" class="card mb-50 center">
+        <div class="card-body">
+            {#if !isAuthenticated}
+                <div>
+                    <h2>GAA Officials Login</h2>
+                </div>
+                <div>
+                    <form on:submit|preventDefault={login}>
+                        {#if err}
+                            <div>
+                                <ErrorAlert message={err} />
+                            </div>
+                        {/if}
 
-                    <div class="form-group">
-                        <label for="l-email">Email</label>
+                        <div class="form-group">
+                            <label for="l-email">Email</label>
 
-                        <input
-                            type="email"
-                            class="form-control"
-                            placeholder="Enter your email"
-                            id="l-email"
-                            aria-describedby="emailHelp"
-                        />
-                    </div>
-                    <div class="form-group">
-                        <label for="l-password">Password</label>
-                        <input
-                            type="password"
-                            class="form-control"
-                            placeholder="Enter your password"
-                            id="l-password"
-                        />
-                    </div>
+                            <input
+                                type="email"
+                                class="form-control"
+                                placeholder="Enter your email"
+                                id="l-email"
+                                aria-describedby="emailHelp"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="l-password">Password</label>
+                            <input
+                                type="password"
+                                class="form-control"
+                                placeholder="Enter your password"
+                                id="l-password"
+                            />
+                        </div>
 
-                    <div class="row">
-                        <div class="col-12 col-lg-6 center-btn">
-                            <button type="submit" class="btn btn-primary"
-                                >Login</button
-                            >
+                        <div class="row">
+                            <div class="col-12 col-lg-6 center-btn">
+                                <button type="submit" class="btn btn-primary"
+                                    >Login</button
+                                >
+                            </div>
+                            <div class="col-12 col-lg-6 ">
+                                <button
+                                    class="btn btn-primary center-btn"
+                                    on:click={google}
+                                    ><i class="fa fa-google font-icons" />
+                                    Sign in with Google
+                                </button>
+                            </div>
                         </div>
-                        <div class="col-12 col-lg-6 ">
-                            <button
-                                class="btn btn-primary center-btn"
-                                on:click={google}
-                                ><i class="fa fa-google font-icons" />
-                                Sign in with Google
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        {:else}
-            <div class="col-12">
-                <h2>Logged in</h2>
-            </div>
-            <div class="col-12 center-btn">
-                <Logout />
-            </div>
-        {/if}
+                    </form>
+                </div>
+            {:else}
+                <div class="col-12">
+                    <h2>Logged in</h2>
+                </div>
+                <div class="col-12 center-btn">
+                    <Logout />
+                </div>
+            {/if}
+        </div>
     </div>
 </div>
 
@@ -162,6 +164,12 @@
     }
 
     @media (min-width: 768px) {
+        #login-card {
+            width: 100%;
+        }
+        #auth-div {
+            margin: 100px 10px;
+        }
         h2 {
             font-size: xx-large;
             text-align: center;

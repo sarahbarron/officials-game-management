@@ -58,3 +58,9 @@
         />
     {/if}
 </div>
+
+<style>
+    #accordionExample {
+        margin-bottom: 100px;
+    }
+</style>

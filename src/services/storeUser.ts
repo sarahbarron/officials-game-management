@@ -8,6 +8,7 @@ export const secProvinceUpcomingGames = localStore("secProvinceUpcomingGames", [
 export const secCouncilUpcomingGames = localStore("secCouncilUpcomingGames", []);
 export const teamOfficialUpcomingGames = localStore("teamOfficialUpcomingGames", []);
 
+// Members Id
 export const memberDocument = localStore("memberDocument", "");
 export const userEmail = localStore("userEmail", "");
 export const refereeOfClub = localStore("refereeOfClub", false);

@@ -2,6 +2,9 @@
     import Card from "./Card.svelte";
     import { teamOfficialUpcomingGames } from "../services/storeUser";
     import { onDestroy } from "svelte";
+    import AccordionButton from "./RedirectToDashboardButton.svelte";
+    let buttonText: string = "Go To Team Official Dashboard";
+    let redirectUrl: string = "team-official";
     let games = [];
     let cardHeader: string = "Upcoming Games";
     const unsubscribeTeamOfficial = teamOfficialUpcomingGames.subscribe(
@@ -15,4 +18,5 @@
     onDestroy(unsubscribeTeamOfficial);
 </script>
 
+<AccordionButton {buttonText} {redirectUrl} />
 <Card {cardHeader} {games} innerCard="upcoming" />

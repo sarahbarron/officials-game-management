@@ -4,11 +4,9 @@
 
 <!-- Footer -->
 <footer class="page-footer">
-    <!-- Copyright -->
     <div class="footer-copyright text-center py-3 font-weight-bold">
         © <span id="copyright-year">{year}</span> Copyright: Sarah Barron
     </div>
-    <!-- Copyright -->
 </footer>
 
 <!-- Footer -->
@@ -16,6 +14,10 @@
     footer {
         background-color: #005e82;
         padding: 5px;
+        margin-top: 50px;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
     }
     footer > div {
         color: aliceblue;

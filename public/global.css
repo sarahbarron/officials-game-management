@@ -2,6 +2,9 @@ html, body {
 	position: relative;
 	width: 100%;
 	height: 100%;
+	margin:0;
+	padding:0;
+	overflow-x: hidden;
 }
 
 body {
@@ -67,9 +70,6 @@ h4, h5{
 	color: #005e82;
 }
 
-p{
-	font-size: 20px;
-}
 
 h1{
 	text-align: center;
@@ -85,9 +85,21 @@ div>h1{
 	margin-bottom: 50px !important;
 }
 
+.full-height-of-vh{
+	min-height: 100vh;
+}
 .title-lighter{
 	font-weight: lighter;
 }
+
+.page-container{
+	position:relative;
+	min-height: 100vh;
+}
+.padding-for-footer{
+padding-bottom: 130px;
+}
+
 @media (min-width: 768px) {
 	.heading {
 		font-size: 60px;
@@ -97,6 +109,9 @@ div>h1{
 
 	ul>button{
 		font-size: 24px !important;
+	}
+	p{
+		font-size: 20px;
 	}
 
 }

@@ -3,6 +3,7 @@
     import router from "page";
     import Nav from "../components/NavBar.svelte";
     import { onDestroy } from "svelte";
+    import Footer from "../components/Footer.svelte";
     import {
         firstName,
         lastName,
@@ -90,26 +91,30 @@
     if (referee_of_club || referee_of_county) {
         referee = true;
     }
+    let isActive = "home";
 </script>
 
-<div class="container-fluid">
-    {#if typeof user === "undefined"}
-        <i class="fas fa-spinner w3-spin fa-3x" />
-    {:else if user}
-        <Nav />
-        <div class="container">
-            <Heading1 {heading} />
+<div class="page-container">
+    <div class="container-fluid">
+        {#if typeof user === "undefined"}
+            <i class="fas fa-spinner w3-spin fa-3x" />
+        {:else if user}
+            <Nav {isActive} />
+            <div class="container padding-for-footer">
+                <Heading1 {heading} />
 
-            <DashboardAccordion
-                {referee}
-                {team_official}
-                {secretary_of_council}
-                {secretary_of_province}
-                {secretary_of_county}
-                {secretary_of_club}
-            />
-        </div>
-    {:else}
-        <h2>{@html loginString}</h2>
-    {/if}
+                <DashboardAccordion
+                    {referee}
+                    {team_official}
+                    {secretary_of_council}
+                    {secretary_of_province}
+                    {secretary_of_county}
+                    {secretary_of_club}
+                />
+            </div>
+            <Footer />
+        {:else}
+            <h2>{@html loginString}</h2>
+        {/if}
+    </div>
 </div>
