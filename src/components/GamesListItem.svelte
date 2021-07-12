@@ -1,4 +1,5 @@
 <script lang="ts">
+    import GameViewButton from "../components/GameViewButton.svelte";
     export let games = [];
 </script>
 
@@ -41,6 +42,9 @@
                 {game.referee.firstName}
                 {game.referee.lastName}
             </p>
+        </div>
+        <div class="col-12">
+            <GameViewButton gameId={game.id} />
         </div>
     </div>
     <hr />

@@ -11,6 +11,7 @@
 	import SecretaryOfCouncil from "./routes/secretaryOfCouncilDashboard.svelte";
 	import Referee from "./routes/refereeDashboard.svelte";
 	import TeamOfficial from "./routes/teamOfficialDashboard.svelte";
+	import SingleGame from "./routes/singleGame.svelte";
 
 	let page;
 	let params = {};
@@ -41,7 +42,14 @@
 	router("/secretary-of-council", () => (page = SecretaryOfCouncil));
 	router("/referee", () => (page = Referee));
 	router("/team-official", () => (page = TeamOfficial));
-
+	router(
+		"/game/:gameId",
+		(ctx: { params: { gameId }; querystring: string }, next) => {
+			params = ctx.params;
+			next();
+		},
+		() => (page = SingleGame)
+	);
 	router("/*", () => (page = NotFound));
 	router.start();
 </script>
