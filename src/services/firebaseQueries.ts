@@ -9,16 +9,15 @@ import {
     secClubUpcomingGames, secClubPastGames,
     secProvinceUpcomingGames, secProvincePastGames,
     secCouncilUpcomingGames, secCouncilPastGames,
-    teamOfficialUpcomingGames, teamOfficialPastGames
+    teamOfficialUpcomingGames, teamOfficialPastGames, allGames
 } from './storeUser';
 import { db } from "./firebase";
-import { missing_component } from 'svelte/internal';
 
 const member = db.collection('Member');
 
-
 let clubId: string;
 let countyId: string;
+let allgames = [];
 
 /* Retrieve member details, club details and county details
 */
@@ -172,9 +171,11 @@ let getSecretaryOfClubUpcomingGames = async (clubId: string) => {
 
             if (!games.includes(game)) {
                 games = [...games, game];
+                allgames = [...allgames, game];
             }
             if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
                 secClubUpcomingGames.set(games);
+                allGames.set(allgames);
                 console.log(`secClubUpcomingGames set`);
             }
             i++;
@@ -227,9 +228,11 @@ let getSecretaryOfClubPastGames = async (clubId: string) => {
 
             if (!games.includes(game)) {
                 games = [...games, game];
+                allgames = [...allgames, game];
             }
             if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
                 secClubPastGames.set(games);
+                allGames.set(allgames);
                 console.log(`secClubPastGames set`);
             }
             i++;
@@ -284,9 +287,12 @@ let getSecretaryOfCountyUpcomingCountyGames = async (clubId: string) => {
 
             if (!games.includes(game)) {
                 games = [...games, game];
+                allgames = [...allgames, game];
+
             }
             if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
                 secCountyUpcomingCountyGames.set(games);
+                allGames.set(allgames);
                 console.log(`secCountyUpcomingCountyGames set`);
             }
             i++;
@@ -339,9 +345,12 @@ let getSecretaryOfCountyPastCountyGames = async (clubId: string) => {
 
             if (!games.includes(game)) {
                 games = [...games, game];
+                allgames = [...allgames, game];
+
             }
             if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
                 secCountyPastCountyGames.set(games);
+                allGames.set(allgames);
                 console.log(`secCountyPastCountyGames set`);
             }
             i++;
@@ -400,9 +409,12 @@ let getSecretaryOfCountyUpcomingClubGames = async (clubId: string) => {
 
                 if (!games.includes(game)) {
                     games = [...games, game];
+                    allgames = [...allgames, game];
+
                 }
                 if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
                     secCountyUpcomingClubGames.set(games);
+                    allGames.set(allgames);
                     console.log(`secCountyUpcomingClubGames set`);
                 }
                 i++;
@@ -464,9 +476,12 @@ let getSecretaryOfCountyPastClubGames = async (clubId: string) => {
 
                 if (!games.includes(game)) {
                     games = [...games, game];
+                    allgames = [...allgames, game];
+
                 }
                 if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
                     secCountyPastClubGames.set(games);
+                    allGames.set(allgames);
                     console.log(`secCountyPastClubGames set`);
                 }
                 i++;
@@ -534,9 +549,12 @@ let getSecretaryOfProvinceUpcomingGames = async (clubId: string) => {
 
                 if (!games.includes(game)) {
                     games = [...games, game];
+                    allgames = [...allgames, game];
+
                 }
                 if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
                     secProvinceUpcomingGames.set(games);
+                    allGames.set(allgames);
                     console.log(`secProvinceUpcomingGames set`);
                 }
                 i++;
@@ -603,9 +621,12 @@ let getSecretaryOfProvincePastGames = async (clubId: string) => {
 
                 if (!games.includes(game)) {
                     games = [...games, game];
+                    allgames = [...allgames, game];
+
                 }
                 if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
                     secProvincePastGames.set(games);
+                    allGames.set(allgames);
                     console.log(`secProvincePastGames set`);
                 }
                 i++;
@@ -666,9 +687,12 @@ let getSecretaryOfCouncilUpcomingGames = async () => {
 
                 if (!games.includes(game)) {
                     games = [...games, game];
+                    allgames = [...allgames, game];
+
                 }
                 if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
                     secCouncilUpcomingGames.set(games);
+                    allGames.set(allgames);
                     console.log(`secCouncilUpcomingGames set`);
                 }
                 i++;
@@ -727,9 +751,12 @@ let getSecretaryOfCouncilPastGames = async () => {
 
                 if (!games.includes(game)) {
                     games = [...games, game];
+                    allgames = [...allgames, game];
+
                 }
                 if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
                     secCouncilPastGames.set(games);
+                    allGames.set(allgames);
                     console.log(`secCouncilPastGames set`);
                 }
                 i++;
@@ -783,9 +810,12 @@ let getRefereeUpcomingGames = async (memberId: string) => {
             }
             if (!games.includes(game)) {
                 games = [...games, game];
+                allgames = [...allgames, game];
+
             }
             if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
                 refUpcomingGames.set(games);
+                allGames.set(allgames);
             }
             i++;
         });
@@ -836,9 +866,12 @@ let getRefereePastGames = async (memberId: string) => {
             }
             if (!games.includes(game)) {
                 games = [...games, game];
+                allgames = [...allgames, game];
+
             }
             if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
                 refPastGames.set(games);
+                allGames.set(allgames);
             }
             i++;
         });
@@ -896,9 +929,12 @@ export let getTeamOfficialUpcomingGames = async (memberId: string) => {
                 }
                 if (!games.includes(game)) {
                     games = [...games, game];
+                    allgames = [...allgames, game];
+
                 }
                 if (games != null && games != undefined && i == (querySnapshotA.size - 1)) {
                     teamOfficialUpcomingGames.set(games);
+                    allGames.set(allgames);
                     console.log(`teamOfficialUpcoming Games set`);
 
                 }
@@ -938,9 +974,12 @@ export let getTeamOfficialUpcomingGames = async (memberId: string) => {
                 }
                 if (!games.includes(game)) {
                     games = [...games, game];
+                    allgames = [...allgames, game];
+
                 }
                 if (games != null && games != undefined && i == (querySnapshotB.size - 1)) {
                     teamOfficialUpcomingGames.set(games);
+                    allGames.set(allgames);
                     console.log(`teamOfficialUpcoming Games set`);
                 }
                 i++;
@@ -996,9 +1035,12 @@ export let getTeamOfficialPastGames = async (memberId: string) => {
                 }
                 if (!games.includes(game)) {
                     games = [...games, game];
+                    allgames = [...allgames, game];
+
                 }
                 if (games != null && games != undefined && i == (querySnapshotA.size - 1)) {
                     teamOfficialPastGames.set(games);
+                    allGames.set(allgames);
                     console.log(`teamOfficialPastGames set`);
 
                 }
@@ -1038,9 +1080,12 @@ export let getTeamOfficialPastGames = async (memberId: string) => {
                 }
                 if (!games.includes(game)) {
                     games = [...games, game];
+                    allgames = [...allgames, game];
+
                 }
                 if (games != null && games != undefined && i == (querySnapshotB.size - 1)) {
                     teamOfficialPastGames.set(games);
+                    allGames.set(allgames);
                     console.log(`teamOfficialPastGames set`);
                 }
                 i++;
@@ -1273,6 +1318,20 @@ export let createGame = async (doc) => {
     } catch (e) {
         console.log("createGame exception: " + e);
         return
+    }
+}
+
+export let getGame = async (gameId: string) => {
+    try {
+        const gameDoc = await db.collection("Game").doc(gameId).get();
+        if (gameDoc.exists) {
+            const game = await createGame(gameDoc);
+            return game;
+        }
+        return null;
+
+    } catch (e) {
+        console.log("getGame exception: " + e);
     }
 }
 /*

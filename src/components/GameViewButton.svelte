@@ -3,7 +3,7 @@
     let buttonText: string = "View Game";
     export let gameId: string = "";
     function clickEvent() {
-        router.redirect(`/game/${gameId}`);
+        router.redirect(`/game${gameId}`);
     }
 </script>
 

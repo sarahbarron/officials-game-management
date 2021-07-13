@@ -11,20 +11,26 @@
 </script>
 
 <div id="page-container">
-    <!-- <div class="full-height-of-vh"> -->
-    <Heading1 {heading} />
-    <!-- <h1 class="w3-center w3-jumbo">GAA Game Management Login</h1> -->
-    <div class="row no-gutters">
-        <Logo />
-
-        <Auth on:auth={() => router.redirect("/home")} />
+    <div class="container-fluid">
+        <div class="padding-for-footer">
+            <Heading1 {heading} />
+            <!-- <h1 class="w3-center w3-jumbo">GAA Game Management Login</h1> -->
+            <div class="row no-gutters">
+                <Logo />
+                <Auth on:auth={() => router.redirect("/home")} />
+            </div>
+        </div>
+        <div id="auth-footer">
+            <Footer />
+        </div>
     </div>
-    <!-- </div> -->
-    <Footer />
 </div>
 
 <style>
     .row {
         margin-top: 50px;
+    }
+    #auth-footer {
+        position: relative;
     }
 </style>

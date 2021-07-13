@@ -21,6 +21,7 @@ export const secCouncilPastGames = localStore("secCouncilPastGames", []);
 export const teamOfficialUpcomingGames = localStore("teamOfficialUpcomingGames", []);
 export const teamOfficialPastGames = localStore("teamOfficialPastGames", []);
 
+export const allGames = localStore("allGames", []);
 // Members Id
 export const memberDocument = localStore("memberDocument", "");
 export const userEmail = localStore("userEmail", "");
@@ -138,7 +139,7 @@ export const resetStore = () => {
         } catch (e) {
             console.log(`Logout resetStore secClubUpcomingGames ${e}`);
         } try {
-            secCountyUpcomingGames.set([]);
+            secCountyUpcomingCountyGames.set([]);
         } catch (e) {
             console.log(`Logout resetStore secCountyUpcomingGames ${e}`);
         } try {

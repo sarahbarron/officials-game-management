@@ -43,8 +43,8 @@
 	router("/referee", () => (page = Referee));
 	router("/team-official", () => (page = TeamOfficial));
 	router(
-		"/game/:gameId",
-		(ctx: { params: { gameId }; querystring: string }, next) => {
+		"/game:gameId",
+		(ctx: { params: { gameId } }, next) => {
 			params = ctx.params;
 			next();
 		},
