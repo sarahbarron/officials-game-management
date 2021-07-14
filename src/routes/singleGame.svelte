@@ -3,13 +3,21 @@
     import Nav from "../components/NavBar.svelte";
     import { auth } from "../services/firebase";
     import router from "page";
-    import Heading1 from "../components/Heading1.svelte";
     import Footer from "../components/Footer.svelte";
-    import { allGames } from "../services/storeUser";
+    import {
+        allGames,
+        games,
+        lastName,
+        teamOfficial,
+    } from "../services/storeUser";
     import { onDestroy } from "svelte";
-    import { getGame } from "../services/firebaseQueries";
+    import { getCompetition, getGame } from "../services/firebaseQueries";
+    import GameDetails from "../components/GameDetails.svelte";
+    import TeamOfficialDashboard from "./teamOfficialDashboard.svelte";
+    import GameOfficialsDetails from "../components/GameOfficialsDetails.svelte";
+    import Referee from "../components/Referee.svelte";
     let loginString = `You need to <a href='/login'>Login</a>`;
-    let heading = "View Game";
+    let heading = "View Game Details";
     let all_games = [];
     $: noGame = true;
     let game;
@@ -47,6 +55,7 @@
     };
 
     $: game;
+    $: referee = `${game.referee.firstName} ${game.referee.lastName}`;
 </script>
 
 <div class="page-container">
@@ -59,8 +68,22 @@
                 <p>No game with this Id can be found</p>
             {:else}
                 <div class="container padding-for-footer">
-                    <Heading1 {heading} />
-                    <h2>{game.id}</h2>
+                    <h1>{heading}</h1>
+                    <div class="row">
+                        <div class="col-12 col-lg-6">
+                            <GameDetails
+                                date={game.date}
+                                time={game.time}
+                                venue={game.venue.name}
+                                competition={game.competition.name}
+                                teamA={game.teamA.name}
+                                teamB={game.teamB.name}
+                            />
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <GameOfficialsDetails {referee} />
+                        </div>
+                    </div>
                 </div>
             {/if}
             <Footer />

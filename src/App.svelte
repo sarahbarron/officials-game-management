@@ -12,6 +12,7 @@
 	import Referee from "./routes/refereeDashboard.svelte";
 	import TeamOfficial from "./routes/teamOfficialDashboard.svelte";
 	import SingleGame from "./routes/singleGame.svelte";
+	import Logout from "./routes/logout.svelte";
 
 	let page;
 	let params = {};
@@ -42,6 +43,7 @@
 	router("/secretary-of-council", () => (page = SecretaryOfCouncil));
 	router("/referee", () => (page = Referee));
 	router("/team-official", () => (page = TeamOfficial));
+	router("/logout", () => (page = Logout));
 	router(
 		"/game:gameId",
 		(ctx: { params: { gameId } }, next) => {

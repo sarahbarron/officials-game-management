@@ -2,7 +2,6 @@
     import Nav from "../components/NavBar.svelte";
     import { auth } from "../services/firebase";
     import router from "page";
-    import Heading1 from "../components/Heading1.svelte";
     import Footer from "../components/Footer.svelte";
     import Card from "../components/Card.svelte";
     import {
@@ -57,8 +56,7 @@
         {:else if user && isSecretary}
             <Nav {isActive} />
             <div class="container padding-for-footer">
-                <Heading1 {heading} />
-
+                <h1>{heading}</h1>
                 <Card cardHeader={upcomingCardHeader} games={upcomingGames} />
                 <br /><br />
                 <Card cardHeader={pastCardHeader} games={pastGames} />

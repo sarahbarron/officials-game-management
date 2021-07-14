@@ -11,10 +11,10 @@
     </div>
     <div class="row">
         <div class="col-3">
-            <p><span class="title-lighter">Date</span></p>
+            <p><span class="title-lighter">Date and Time</span></p>
         </div>
         <div class="col-9">
-            <p>{game.dateTime}</p>
+            <p>{game.date} @ {game.time}</p>
         </div>
     </div>
     <div class="row">

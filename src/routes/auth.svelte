@@ -3,7 +3,6 @@
     import Logo from "../components/Logo.svelte";
     import router from "page";
     import Footer from "../components/Footer.svelte";
-    import Heading1 from "../components/Heading1.svelte";
     export let qs;
     let heading: string = "GAA Game Management Login";
     qs.action = qs.action || "login";
@@ -13,7 +12,7 @@
 <div id="page-container">
     <div class="container-fluid">
         <div class="padding-for-footer">
-            <Heading1 {heading} />
+            <h1>{heading}</h1>
             <!-- <h1 class="w3-center w3-jumbo">GAA Game Management Login</h1> -->
             <div class="row no-gutters">
                 <Logo />

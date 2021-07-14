@@ -18,7 +18,6 @@
                 });
         }
     }
-
     export let logoutBtnColors: string = "btn-primary";
 </script>
 

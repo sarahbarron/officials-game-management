@@ -148,7 +148,9 @@ let getSecretaryOfClubUpcomingGames = async (clubId: string) => {
             const gamePromise = await createGame(doc);
             let id = gamePromise.gameId;
             let competition = gamePromise.competition;
-            let dateTime = gamePromise.dateTime;
+            // let dateTime = gamePromise.dateTime;
+            let date = gamePromise.date;
+            let time = gamePromise.time;
             let linesmen = gamePromise.linesmen;
             let umpires = gamePromise.umpires;
             let referee = gamePromise.referee;
@@ -159,7 +161,9 @@ let getSecretaryOfClubUpcomingGames = async (clubId: string) => {
             const game = {
                 id: id,
                 competition: competition,
-                dateTime: dateTime,
+                // dateTime: dateTime,
+                date: date,
+                time: time,
                 linesmen: linesmen,
                 umpires: umpires,
                 referee: referee,
@@ -168,7 +172,6 @@ let getSecretaryOfClubUpcomingGames = async (clubId: string) => {
                 teamB: teamB,
                 venue: venue
             }
-
             if (!games.includes(game)) {
                 games = [...games, game];
                 allgames = [...allgames, game];
@@ -205,7 +208,9 @@ let getSecretaryOfClubPastGames = async (clubId: string) => {
             const gamePromise = await createGame(doc);
             let id = gamePromise.gameId;
             let competition = gamePromise.competition;
-            let dateTime = gamePromise.dateTime;
+            // let dateTime = gamePromise.dateTime;
+            let date = gamePromise.date;
+            let time = gamePromise.time;
             let linesmen = gamePromise.linesmen;
             let umpires = gamePromise.umpires;
             let referee = gamePromise.referee;
@@ -216,7 +221,9 @@ let getSecretaryOfClubPastGames = async (clubId: string) => {
             const game = {
                 id: id,
                 competition: competition,
-                dateTime: dateTime,
+                // dateTime: dateTime,
+                date: date,
+                time: time,
                 linesmen: linesmen,
                 umpires: umpires,
                 referee: referee,
@@ -225,6 +232,7 @@ let getSecretaryOfClubPastGames = async (clubId: string) => {
                 teamB: teamB,
                 venue: venue
             }
+
 
             if (!games.includes(game)) {
                 games = [...games, game];
@@ -264,7 +272,9 @@ let getSecretaryOfCountyUpcomingCountyGames = async (clubId: string) => {
             const gamePromise = await createGame(doc);
             let id = gamePromise.gameId;
             let competition = gamePromise.competition;
-            let dateTime = gamePromise.dateTime;
+            // let dateTime = gamePromise.dateTime;
+            let date = gamePromise.date;
+            let time = gamePromise.time;
             let linesmen = gamePromise.linesmen;
             let umpires = gamePromise.umpires;
             let referee = gamePromise.referee;
@@ -275,7 +285,9 @@ let getSecretaryOfCountyUpcomingCountyGames = async (clubId: string) => {
             const game = {
                 id: id,
                 competition: competition,
-                dateTime: dateTime,
+                // dateTime: dateTime,
+                date: date,
+                time: time,
                 linesmen: linesmen,
                 umpires: umpires,
                 referee: referee,
@@ -284,6 +296,7 @@ let getSecretaryOfCountyUpcomingCountyGames = async (clubId: string) => {
                 teamB: teamB,
                 venue: venue
             }
+
 
             if (!games.includes(game)) {
                 games = [...games, game];
@@ -322,7 +335,9 @@ let getSecretaryOfCountyPastCountyGames = async (clubId: string) => {
             const gamePromise = await createGame(doc);
             let id = gamePromise.gameId;
             let competition = gamePromise.competition;
-            let dateTime = gamePromise.dateTime;
+            // let dateTime = gamePromise.dateTime;
+            let date = gamePromise.date;
+            let time = gamePromise.time;
             let linesmen = gamePromise.linesmen;
             let umpires = gamePromise.umpires;
             let referee = gamePromise.referee;
@@ -333,7 +348,9 @@ let getSecretaryOfCountyPastCountyGames = async (clubId: string) => {
             const game = {
                 id: id,
                 competition: competition,
-                dateTime: dateTime,
+                // dateTime: dateTime,
+                date: date,
+                time: time,
                 linesmen: linesmen,
                 umpires: umpires,
                 referee: referee,
@@ -342,6 +359,7 @@ let getSecretaryOfCountyPastCountyGames = async (clubId: string) => {
                 teamB: teamB,
                 venue: venue
             }
+
 
             if (!games.includes(game)) {
                 games = [...games, game];
@@ -386,7 +404,9 @@ let getSecretaryOfCountyUpcomingClubGames = async (clubId: string) => {
                 const gamePromise = await createGame(doc);
                 let id = gamePromise.gameId;
                 let competition = gamePromise.competition;
-                let dateTime = gamePromise.dateTime;
+                // let dateTime = gamePromise.dateTime;
+                let date = gamePromise.date;
+                let time = gamePromise.time;
                 let linesmen = gamePromise.linesmen;
                 let umpires = gamePromise.umpires;
                 let referee = gamePromise.referee;
@@ -397,7 +417,9 @@ let getSecretaryOfCountyUpcomingClubGames = async (clubId: string) => {
                 const game = {
                     id: id,
                     competition: competition,
-                    dateTime: dateTime,
+                    // dateTime: dateTime,
+                    date: date,
+                    time: time,
                     linesmen: linesmen,
                     umpires: umpires,
                     referee: referee,
@@ -406,6 +428,8 @@ let getSecretaryOfCountyUpcomingClubGames = async (clubId: string) => {
                     teamB: teamB,
                     venue: venue
                 }
+                // const game = convertPromiseToGameObject(gamePromise);
+
 
                 if (!games.includes(game)) {
                     games = [...games, game];
@@ -453,7 +477,9 @@ let getSecretaryOfCountyPastClubGames = async (clubId: string) => {
                 const gamePromise = await createGame(doc);
                 let id = gamePromise.gameId;
                 let competition = gamePromise.competition;
-                let dateTime = gamePromise.dateTime;
+                // let dateTime = gamePromise.dateTime;
+                let date = gamePromise.date;
+                let time = gamePromise.time;
                 let linesmen = gamePromise.linesmen;
                 let umpires = gamePromise.umpires;
                 let referee = gamePromise.referee;
@@ -464,7 +490,9 @@ let getSecretaryOfCountyPastClubGames = async (clubId: string) => {
                 const game = {
                     id: id,
                     competition: competition,
-                    dateTime: dateTime,
+                    // dateTime: dateTime,
+                    date: date,
+                    time: time,
                     linesmen: linesmen,
                     umpires: umpires,
                     referee: referee,
@@ -473,6 +501,8 @@ let getSecretaryOfCountyPastClubGames = async (clubId: string) => {
                     teamB: teamB,
                     venue: venue
                 }
+                // const game = convertPromiseToGameObject(gamePromise);
+
 
                 if (!games.includes(game)) {
                     games = [...games, game];
@@ -526,7 +556,9 @@ let getSecretaryOfProvinceUpcomingGames = async (clubId: string) => {
                 const gamePromise = await createGame(doc);
                 let id = gamePromise.gameId;
                 let competition = gamePromise.competition;
-                let dateTime = gamePromise.dateTime;
+                // let dateTime = gamePromise.dateTime;
+                let date = gamePromise.date;
+                let time = gamePromise.time;
                 let linesmen = gamePromise.linesmen;
                 let umpires = gamePromise.umpires;
                 let referee = gamePromise.referee;
@@ -537,7 +569,9 @@ let getSecretaryOfProvinceUpcomingGames = async (clubId: string) => {
                 const game = {
                     id: id,
                     competition: competition,
-                    dateTime: dateTime,
+                    // dateTime: dateTime,
+                    date: date,
+                    time: time,
                     linesmen: linesmen,
                     umpires: umpires,
                     referee: referee,
@@ -546,6 +580,8 @@ let getSecretaryOfProvinceUpcomingGames = async (clubId: string) => {
                     teamB: teamB,
                     venue: venue
                 }
+                // const game = convertPromiseToGameObject(gamePromise);
+
 
                 if (!games.includes(game)) {
                     games = [...games, game];
@@ -598,7 +634,9 @@ let getSecretaryOfProvincePastGames = async (clubId: string) => {
                 const gamePromise = await createGame(doc);
                 let id = gamePromise.gameId;
                 let competition = gamePromise.competition;
-                let dateTime = gamePromise.dateTime;
+                // let dateTime = gamePromise.dateTime;
+                let date = gamePromise.date;
+                let time = gamePromise.time;
                 let linesmen = gamePromise.linesmen;
                 let umpires = gamePromise.umpires;
                 let referee = gamePromise.referee;
@@ -609,7 +647,9 @@ let getSecretaryOfProvincePastGames = async (clubId: string) => {
                 const game = {
                     id: id,
                     competition: competition,
-                    dateTime: dateTime,
+                    // dateTime: dateTime,
+                    date: date,
+                    time: time,
                     linesmen: linesmen,
                     umpires: umpires,
                     referee: referee,
@@ -618,6 +658,8 @@ let getSecretaryOfProvincePastGames = async (clubId: string) => {
                     teamB: teamB,
                     venue: venue
                 }
+                // const game = convertPromiseToGameObject(gamePromise);
+
 
                 if (!games.includes(game)) {
                     games = [...games, game];
@@ -664,7 +706,9 @@ let getSecretaryOfCouncilUpcomingGames = async () => {
                 const gamePromise = await createGame(doc);
                 let id = gamePromise.gameId;
                 let competition = gamePromise.competition;
-                let dateTime = gamePromise.dateTime;
+                // let dateTime = gamePromise.dateTime;
+                let date = gamePromise.date;
+                let time = gamePromise.time;
                 let linesmen = gamePromise.linesmen;
                 let umpires = gamePromise.umpires;
                 let referee = gamePromise.referee;
@@ -675,7 +719,9 @@ let getSecretaryOfCouncilUpcomingGames = async () => {
                 const game = {
                     id: id,
                     competition: competition,
-                    dateTime: dateTime,
+                    // dateTime: dateTime,
+                    date: date,
+                    time: time,
                     linesmen: linesmen,
                     umpires: umpires,
                     referee: referee,
@@ -684,6 +730,8 @@ let getSecretaryOfCouncilUpcomingGames = async () => {
                     teamB: teamB,
                     venue: venue
                 }
+                // const game = convertPromiseToGameObject(gamePromise);
+
 
                 if (!games.includes(game)) {
                     games = [...games, game];
@@ -728,7 +776,9 @@ let getSecretaryOfCouncilPastGames = async () => {
                 const gamePromise = await createGame(doc);
                 let id = gamePromise.gameId;
                 let competition = gamePromise.competition;
-                let dateTime = gamePromise.dateTime;
+                // let dateTime = gamePromise.dateTime;
+                let date = gamePromise.date;
+                let time = gamePromise.time;
                 let linesmen = gamePromise.linesmen;
                 let umpires = gamePromise.umpires;
                 let referee = gamePromise.referee;
@@ -739,7 +789,9 @@ let getSecretaryOfCouncilPastGames = async () => {
                 const game = {
                     id: id,
                     competition: competition,
-                    dateTime: dateTime,
+                    // dateTime: dateTime,
+                    date: date,
+                    time: time,
                     linesmen: linesmen,
                     umpires: umpires,
                     referee: referee,
@@ -748,6 +800,8 @@ let getSecretaryOfCouncilPastGames = async () => {
                     teamB: teamB,
                     venue: venue
                 }
+                // const game = convertPromiseToGameObject(gamePromise);
+
 
                 if (!games.includes(game)) {
                     games = [...games, game];
@@ -788,7 +842,9 @@ let getRefereeUpcomingGames = async (memberId: string) => {
             const gamePromise = await createGame(doc);
             let id = gamePromise.gameId;
             let competition = gamePromise.competition;
-            let dateTime = gamePromise.dateTime;
+            // let dateTime = gamePromise.dateTime;
+            let date = gamePromise.date;
+            let time = gamePromise.time;
             let linesmen = gamePromise.linesmen;
             let umpires = gamePromise.umpires;
             let referee = gamePromise.referee;
@@ -799,7 +855,9 @@ let getRefereeUpcomingGames = async (memberId: string) => {
             const game = {
                 id: id,
                 competition: competition,
-                dateTime: dateTime,
+                // dateTime: dateTime,
+                date: date,
+                time: time,
                 linesmen: linesmen,
                 umpires: umpires,
                 referee: referee,
@@ -808,6 +866,8 @@ let getRefereeUpcomingGames = async (memberId: string) => {
                 teamB: teamB,
                 venue: venue
             }
+            // const game = convertPromiseToGameObject(gamePromise);
+
             if (!games.includes(game)) {
                 games = [...games, game];
                 allgames = [...allgames, game];
@@ -844,7 +904,9 @@ let getRefereePastGames = async (memberId: string) => {
             const gamePromise = await createGame(doc);
             let id = gamePromise.gameId;
             let competition = gamePromise.competition;
-            let dateTime = gamePromise.dateTime;
+            // let dateTime = gamePromise.dateTime;
+            let date = gamePromise.date;
+            let time = gamePromise.time;
             let linesmen = gamePromise.linesmen;
             let umpires = gamePromise.umpires;
             let referee = gamePromise.referee;
@@ -855,7 +917,9 @@ let getRefereePastGames = async (memberId: string) => {
             const game = {
                 id: id,
                 competition: competition,
-                dateTime: dateTime,
+                // dateTime: dateTime,
+                date: date,
+                time: time,
                 linesmen: linesmen,
                 umpires: umpires,
                 referee: referee,
@@ -864,6 +928,8 @@ let getRefereePastGames = async (memberId: string) => {
                 teamB: teamB,
                 venue: venue
             }
+            // const game = convertPromiseToGameObject(gamePromise);
+
             if (!games.includes(game)) {
                 games = [...games, game];
                 allgames = [...allgames, game];
@@ -907,7 +973,9 @@ export let getTeamOfficialUpcomingGames = async (memberId: string) => {
                 const gamePromise = await createGame(gameDoc);
                 let id = gamePromise.gameId;
                 let competition = gamePromise.competition;
-                let dateTime = gamePromise.dateTime;
+                // let dateTime = gamePromise.dateTime;
+                let date = gamePromise.date;
+                let time = gamePromise.time;
                 let linesmen = gamePromise.linesmen;
                 let umpires = gamePromise.umpires;
                 let referee = gamePromise.referee;
@@ -918,7 +986,9 @@ export let getTeamOfficialUpcomingGames = async (memberId: string) => {
                 const game = {
                     id: id,
                     competition: competition,
-                    dateTime: dateTime,
+                    // dateTime: dateTime,
+                    date: date,
+                    time: time,
                     linesmen: linesmen,
                     umpires: umpires,
                     referee: referee,
@@ -927,6 +997,8 @@ export let getTeamOfficialUpcomingGames = async (memberId: string) => {
                     teamB: teamB,
                     venue: venue
                 }
+                // const game = convertPromiseToGameObject(gamePromise);
+
                 if (!games.includes(game)) {
                     games = [...games, game];
                     allgames = [...allgames, game];
@@ -952,7 +1024,9 @@ export let getTeamOfficialUpcomingGames = async (memberId: string) => {
                 const gamePromise = await createGame(gameDocB);
                 let id = gamePromise.gameId;
                 let competition = gamePromise.competition;
-                let dateTime = gamePromise.dateTime;
+                // let dateTime = gamePromise.dateTime;
+                let date = gamePromise.date;
+                let time = gamePromise.time;
                 let linesmen = gamePromise.linesmen;
                 let umpires = gamePromise.umpires;
                 let referee = gamePromise.referee;
@@ -963,7 +1037,9 @@ export let getTeamOfficialUpcomingGames = async (memberId: string) => {
                 const game = {
                     id: id,
                     competition: competition,
-                    dateTime: dateTime,
+                    // dateTime: dateTime,
+                    date: date,
+                    time: time,
                     linesmen: linesmen,
                     umpires: umpires,
                     referee: referee,
@@ -972,6 +1048,8 @@ export let getTeamOfficialUpcomingGames = async (memberId: string) => {
                     teamB: teamB,
                     venue: venue
                 }
+                // const game = convertPromiseToGameObject(gamePromise);
+
                 if (!games.includes(game)) {
                     games = [...games, game];
                     allgames = [...allgames, game];
@@ -1013,7 +1091,9 @@ export let getTeamOfficialPastGames = async (memberId: string) => {
                 const gamePromise = await createGame(gameDoc);
                 let id = gamePromise.gameId;
                 let competition = gamePromise.competition;
-                let dateTime = gamePromise.dateTime;
+                // let dateTime = gamePromise.dateTime;
+                let date = gamePromise.date;
+                let time = gamePromise.time;
                 let linesmen = gamePromise.linesmen;
                 let umpires = gamePromise.umpires;
                 let referee = gamePromise.referee;
@@ -1024,7 +1104,9 @@ export let getTeamOfficialPastGames = async (memberId: string) => {
                 const game = {
                     id: id,
                     competition: competition,
-                    dateTime: dateTime,
+                    // dateTime: dateTime,
+                    date: date,
+                    time: time,
                     linesmen: linesmen,
                     umpires: umpires,
                     referee: referee,
@@ -1033,6 +1115,8 @@ export let getTeamOfficialPastGames = async (memberId: string) => {
                     teamB: teamB,
                     venue: venue
                 }
+                // const game = convertPromiseToGameObject(gamePromise);
+
                 if (!games.includes(game)) {
                     games = [...games, game];
                     allgames = [...allgames, game];
@@ -1058,7 +1142,7 @@ export let getTeamOfficialPastGames = async (memberId: string) => {
                 const gamePromise = await createGame(gameDocB);
                 let id = gamePromise.gameId;
                 let competition = gamePromise.competition;
-                let dateTime = gamePromise.dateTime;
+                // let dateTime = gamePromise.dateTime;
                 let linesmen = gamePromise.linesmen;
                 let umpires = gamePromise.umpires;
                 let referee = gamePromise.referee;
@@ -1069,7 +1153,7 @@ export let getTeamOfficialPastGames = async (memberId: string) => {
                 const game = {
                     id: id,
                     competition: competition,
-                    dateTime: dateTime,
+                    // dateTime: dateTime,
                     linesmen: linesmen,
                     umpires: umpires,
                     referee: referee,
@@ -1078,6 +1162,8 @@ export let getTeamOfficialPastGames = async (memberId: string) => {
                     teamB: teamB,
                     venue: venue
                 }
+
+
                 if (!games.includes(game)) {
                     games = [...games, game];
                     allgames = [...allgames, game];
@@ -1147,6 +1233,8 @@ export let createGame = async (doc) => {
         let teamBId = doc.data().teamB;
         let venueId = doc.data().venue;
         let venue = {};
+        let time;
+        let date;
 
         if (competitionId != null && competitionId != undefined) {
             competitionId = competitionId.id
@@ -1177,6 +1265,12 @@ export let createGame = async (doc) => {
 
         if (dateTime == undefined) {
             dateTime = null;
+        }
+        else {
+            date = convertTimestampToDate(dateTime);
+            console.log(`Create Game ${date}`)
+            time = convertTimestampToTime(dateTime);
+            console.log(`Create Game ${time}`);
         }
         if (linesmen == undefined) {
             linesmen = null;
@@ -1305,6 +1399,8 @@ export let createGame = async (doc) => {
         const game = {
             gameId: gameId,
             competition: competition,
+            date: date,
+            time: time,
             dateTime: dateTime,
             linesmen: linesmen,
             referee: referee,
@@ -1722,3 +1818,38 @@ let getPlayerDetails = async (gameId: string, teamId: string, playerId: string) 
     }
 }
 
+let convertTimestampToDate = (timestamp) => {
+    try {
+        if (timestamp != null && timestamp != undefined) {
+            let date = timestamp.toDate();
+            date = date.toDateString();
+            return date;
+        }
+        else {
+            return "";
+        }
+    }
+    catch (e) {
+        console.log("convertTimestampToDate exception: " + e);
+    }
+}
+
+let convertTimestampToTime = (timestamp) => {
+    try {
+        if (timestamp != null && timestamp != undefined) {
+            const date = timestamp.toDate();
+            const hour = date.getHours();
+            let mins = date.getMinutes();
+            if (mins < 10) {
+                mins = `${mins}0`;
+            }
+            const time = `${hour}:${mins}`;
+            return time;
+        }
+        else {
+            return "";
+        }
+    } catch (e) {
+        console.log("convertTimestampToTime exception: " + e);
+    }
+}

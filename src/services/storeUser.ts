@@ -1,5 +1,6 @@
 import { localStore } from './localStore';
 
+// Arrays of games
 export const refUpcomingGames = localStore("refCountyUpcomingGames", []);
 export const refPastGames = localStore("refPastGames", []);
 
@@ -45,6 +46,12 @@ export const crest = localStore('crest', "");
 
 export const resetStore = () => {
     try {
+        try {
+            allGames.set([]);
+        }
+        catch (e) {
+            console.log(`Logout resetStore allGames exception: ${e}`);
+        }
         try {
             memberDocument.set("");
         } catch (e) {
@@ -109,11 +116,6 @@ export const resetStore = () => {
         } catch (e) {
             console.log(`Logout resetStore games ${e}`);
         }
-        // try {
-        //     clubCrest.set("");
-        // } catch (e) {
-        //     console.log(`Logout clubCrest ${e}`);
-        // }
         try {
             countyCrest.set("");
         } catch (e) {
@@ -134,35 +136,67 @@ export const resetStore = () => {
             refUpcomingGames.set([]);
         } catch (e) {
             console.log(`Logout resetStore refUpcomingGames ${e}`);
-        } try {
+        }
+        try {
+            refPastGames.set([]);
+        }
+        catch (e) {
+            console.log(`Logout resetStore refPastGames ${e}`);
+        }
+        try {
             secClubUpcomingGames.set([]);
         } catch (e) {
             console.log(`Logout resetStore secClubUpcomingGames ${e}`);
-        } try {
+        }
+        try {
+            secClubPastGames.set([]);
+        } catch (e) {
+            console.log(`Logout resetStore secClubPastGames ${e}`);
+        }
+        try {
             secCountyUpcomingCountyGames.set([]);
         } catch (e) {
             console.log(`Logout resetStore secCountyUpcomingGames ${e}`);
-        } try {
+        }
+        try {
+            secCountyPastCountyGames.set([]);
+        } catch (e) {
+            console.log(`Logout resetStore secCountyPastGames ${e}`);
+        }
+        try {
             secProvinceUpcomingGames.set([]);
         } catch (e) {
             console.log(`Logout resetStore secProvUpcomingGames ${e}`);
-        } try {
+        }
+        try {
+            secProvincePastGames.set([]);
+        } catch (e) {
+            console.log(`Logout resetStore secProvincePastGames ${e}`);
+        }
+        try {
             secCouncilUpcomingGames.set([]);
         } catch (e) {
             console.log(`Logout resetStore secCouncilUpcomingGames ${e}`);
-        } try {
+        }
+        try {
+            secCouncilPastGames.set([]);
+        } catch (e) {
+            console.log(`Logout resetStore secCouncilPastGames ${e}`);
+        }
+        try {
             teamOfficialUpcomingGames.set([]);
         } catch (e) {
             console.log(`Logout resetStore teamOfficialUpcomingGames ${e}`);
         }
         try {
+            teamOfficialPastGames.set([]);
+        } catch (e) {
+            console.log(`Logout resetStore teamOfficialPastGames ${e}`);
+        }
+        try {
             crest.set("");
         } catch (e) {
             console.log(`Logout resetStore crest ${e}`);
-        } try {
-            console.log("Store Reset");
-        } catch (e) {
-            console.log(`Logout resetStore exception ${e}`);
         }
     } catch (e) {
         console.log(`resetStore exception ${e}`);

@@ -15,7 +15,6 @@
         secretaryOfProvince,
         teamOfficial,
     } from "../services/storeUser";
-    import Heading1 from "../components/Heading1.svelte";
     import DashboardAccordion from "../components/DashboardAccordion.svelte";
     let loginString = `You need to <a href='/login'>Login</a>`;
     interface User {
@@ -101,8 +100,7 @@
         {:else if user}
             <Nav {isActive} />
             <div class="padding-for-footer">
-                <Heading1 {heading} />
-
+                <h1>{heading}</h1>
                 <DashboardAccordion
                     {referee}
                     {team_official}
