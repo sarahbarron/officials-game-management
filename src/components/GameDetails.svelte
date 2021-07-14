@@ -11,29 +11,29 @@
 <div class="container">
     <h1>{heading}</h1>
     <div class="row">
-        <div class="col-3 title-lighter"><p>Date:</p></div>
-        <div class="col-9"><p>{date}</p></div>
+        <div class="col-4 title-lighter"><p>Date:</p></div>
+        <div class="col-8"><p>{date}</p></div>
     </div>
 
     <div class="row">
-        <div class="col-3 title-lighter"><p>Time:</p></div>
-        <div class="col-9"><p>{time}</p></div>
+        <div class="col-4 title-lighter"><p>Time:</p></div>
+        <div class="col-8"><p>{time}</p></div>
     </div>
     <div class="row">
-        <div class="col-3 title-lighter"><p>Venue:</p></div>
-        <div class="col-9"><p>{venue}</p></div>
+        <div class="col-4 title-lighter"><p>Venue:</p></div>
+        <div class="col-8"><p>{venue}</p></div>
     </div>
     <div class="row">
-        <div class="col-3 title-lighter"><p>Competition:</p></div>
-        <div class="col-9"><p>{competition}</p></div>
+        <div class="col-4 title-lighter"><p>Competition:</p></div>
+        <div class="col-8"><p>{competition}</p></div>
     </div>
     <div class="row">
-        <div class="col-3 title-lighter"><p>Team A:</p></div>
-        <div class="col-9"><p>{teamA}</p></div>
+        <div class="col-4 title-lighter"><p>Team A:</p></div>
+        <div class="col-8"><p>{teamA}</p></div>
     </div>
     <div class="row">
-        <div class="col-3 title-lighter"><p>Team B:</p></div>
-        <div class="col-9"><p>{teamB}</p></div>
+        <div class="col-4 title-lighter"><p>Team B:</p></div>
+        <div class="col-8"><p>{teamB}</p></div>
     </div>
 </div>
 
