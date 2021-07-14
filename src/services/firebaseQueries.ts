@@ -335,7 +335,6 @@ let getSecretaryOfCountyPastCountyGames = async (clubId: string) => {
             const gamePromise = await createGame(doc);
             let id = gamePromise.gameId;
             let competition = gamePromise.competition;
-            // let dateTime = gamePromise.dateTime;
             let date = gamePromise.date;
             let time = gamePromise.time;
             let linesmen = gamePromise.linesmen;
@@ -348,7 +347,6 @@ let getSecretaryOfCountyPastCountyGames = async (clubId: string) => {
             const game = {
                 id: id,
                 competition: competition,
-                // dateTime: dateTime,
                 date: date,
                 time: time,
                 linesmen: linesmen,
@@ -591,7 +589,6 @@ let getSecretaryOfProvinceUpcomingGames = async (clubId: string) => {
                 if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
                     secProvinceUpcomingGames.set(games);
                     allGames.set(allgames);
-                    console.log(`secProvinceUpcomingGames set`);
                 }
                 i++;
             });
@@ -811,7 +808,6 @@ let getSecretaryOfCouncilPastGames = async () => {
                 if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
                     secCouncilPastGames.set(games);
                     allGames.set(allgames);
-                    console.log(`secCouncilPastGames set`);
                 }
                 i++;
             });
@@ -1268,9 +1264,7 @@ export let createGame = async (doc) => {
         }
         else {
             date = convertTimestampToDate(dateTime);
-            console.log(`Create Game ${date}`)
             time = convertTimestampToTime(dateTime);
-            console.log(`Create Game ${time}`);
         }
         if (linesmen == undefined) {
             linesmen = null;

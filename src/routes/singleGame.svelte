@@ -4,18 +4,11 @@
     import { auth } from "../services/firebase";
     import router from "page";
     import Footer from "../components/Footer.svelte";
-    import {
-        allGames,
-        games,
-        lastName,
-        teamOfficial,
-    } from "../services/storeUser";
+    import { allGames } from "../services/storeUser";
     import { onDestroy } from "svelte";
-    import { getCompetition, getGame } from "../services/firebaseQueries";
+    import { getGame } from "../services/firebaseQueries";
     import GameDetails from "../components/GameDetails.svelte";
-    import TeamOfficialDashboard from "./teamOfficialDashboard.svelte";
     import GameOfficialsDetails from "../components/GameOfficialsDetails.svelte";
-    import Referee from "../components/Referee.svelte";
     let loginString = `You need to <a href='/login'>Login</a>`;
     let heading = "View Game Details";
     let all_games = [];
@@ -41,9 +34,12 @@
         getThisGame(params.gameId);
     }
 
+    /**
+     Find the game in the locally stored games, if its not there 
+     retrieve it from firestore.
+     */
     let getThisGame = async (id) => {
         game = all_games.find(({ id }) => id === params.gameId);
-        console.log(game.id);
         if (game == null || game == undefined) {
             game = await getGame(id);
             if (game != null && game != undefined) {
@@ -56,6 +52,14 @@
 
     $: game;
     $: referee = `${game.referee.firstName} ${game.referee.lastName}`;
+    $: date = game.date;
+    $: time = game.time;
+    $: venue = game.venue.name;
+    $: competition = game.competition.name;
+    $: teamA = game.teamA.name;
+    $: teamB = game.teamA.name;
+    $: linesmen = game.linesmen;
+    $: umpires = game.umpires;
 </script>
 
 <div class="page-container">
@@ -72,16 +76,20 @@
                     <div class="row">
                         <div class="col-12 col-lg-6">
                             <GameDetails
-                                date={game.date}
-                                time={game.time}
-                                venue={game.venue.name}
-                                competition={game.competition.name}
-                                teamA={game.teamA.name}
-                                teamB={game.teamB.name}
+                                {date}
+                                {time}
+                                {venue}
+                                {competition}
+                                {teamA}
+                                {teamB}
                             />
                         </div>
                         <div class="col-12 col-lg-6">
-                            <GameOfficialsDetails {referee} />
+                            <GameOfficialsDetails
+                                {referee}
+                                {linesmen}
+                                {umpires}
+                            />
                         </div>
                     </div>
                 </div>

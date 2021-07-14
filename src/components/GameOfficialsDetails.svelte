@@ -1,11 +1,41 @@
 <script lang="ts">
     export let referee: string = "";
-    export let linesman1: string = "";
-    export let linesman2: string = "";
-    export let umpire1: string = "";
-    export let umpire2: string = "";
-    export let umpire3: string = "";
-    export let umpire4: string = "";
+    export let linesmen: ["", ""];
+    export let umpires: ["", "", "", ""];
+    // export let linesman1: string = "";
+    // export let linesman2: string = "";
+    // export let umpire1: string = "";
+    // export let umpire2: string = "";
+    // export let umpire3: string = "";
+    // export let umpire4: string = "";
+
+    $: linesman1 = "";
+    $: linesman2 = "";
+
+    $: umpire1 = "";
+    $: umpire2 = "";
+    $: umpire3 = "";
+    $: umpire4 = "";
+
+    $: if (linesmen.length > 0) {
+        linesman1 = linesmen[0];
+    }
+    $: if (linesmen.length > 1) {
+        linesman2 = linesmen[1];
+    }
+
+    $: if (umpires.length > 0) {
+        umpire1 = umpires[0];
+    }
+    $: if (umpires.length > 1) {
+        umpire2 = umpires[1];
+    }
+    $: if (umpires.length > 2) {
+        umpire3 = umpires[2];
+    }
+    $: if (umpires.length > 3) {
+        umpire4 = umpires[3];
+    }
     let heading: string = "Game Officials";
 </script>
 
