@@ -14,6 +14,7 @@
 	import SingleGame from "./routes/singleGame.svelte";
 	import Logout from "./routes/logout.svelte";
 	import MatchReport from "./routes/matchReport.svelte";
+	import Teamsheet from "./routes/teamsheet.svelte";
 	let page;
 	let params = {};
 	let qs = {};
@@ -45,7 +46,7 @@
 	router("/team-official", () => (page = TeamOfficial));
 	router("/logout", () => (page = Logout));
 	router(
-		"/game:gameId",
+		"/game/:gameId",
 		(ctx: { params: { gameId } }, next) => {
 			params = ctx.params;
 			next();
@@ -53,7 +54,7 @@
 		() => (page = SingleGame)
 	);
 	router(
-		"/matchreport:gameId",
+		"/matchreport/:gameId",
 		(ctx: { params: { gameId } }, next) => {
 			params = ctx.params;
 			next();
@@ -61,12 +62,12 @@
 		() => (page = MatchReport)
 	);
 	router(
-		"/teamsheet:gameId",
-		(ctx: { params: { gameId } }, next) => {
+		"/game/:gameId/team/:teamId",
+		(ctx: { params: { gameId; teamId } }, next) => {
 			params = ctx.params;
 			next();
 		},
-		() => (page = MatchReport)
+		() => (page = Teamsheet)
 	);
 	router("/*", () => (page = NotFound));
 	router.start();

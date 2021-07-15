@@ -1599,11 +1599,15 @@ export let getTeam = async (gameId: string, teamId: string) => {
                 teamName = null;
             }
             if (teamOfficialIds != null && teamOfficialIds != undefined) {
-
+                teamOfficialIds.forEach(doc => {
+                    let official = doc.id;
+                    teamOfficials = [...teamOfficials, official];
+                });
             }
             else {
                 teamOfficialIds = null;
             }
+            console.log(`queries: ${teamOfficials}`);
             let team = {
                 id: teamId,
                 clubId: clubId,

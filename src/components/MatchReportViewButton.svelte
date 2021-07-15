@@ -3,7 +3,7 @@
     let buttonText: string = "View Match Report";
     export let gameId: string = "";
     function clickEvent() {
-        router.redirect(`/matchreport${gameId}`);
+        router.redirect(`/matchreport/${gameId}`);
     }
 </script>
 

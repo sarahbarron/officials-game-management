@@ -1,9 +1,9 @@
 <script lang="ts">
-    let src = "images/logo.png";
+    let src = "/images/logo.png";
 </script>
 
 <div id="logo-img" class="col-12 col-lg-3">
-    <img class="img-fluid" {src} alt="Game Management Logo" />
+    <img class="img-fluid" {src} alt="Logo" />
 </div>
 
 <style>

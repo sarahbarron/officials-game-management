@@ -1,9 +1,10 @@
 <script lang="ts">
     import router from "page";
-    let buttonText: string = "View Teamsheet";
+    let buttonText: string = "Edit Teamsheet";
     export let gameId: string = "";
+    export let teamId: string = "";
     function clickEvent() {
-        router.redirect(`/teamsheet${gameId}`);
+        router.redirect(`/game/${gameId}/team/${teamId}`);
     }
 </script>
 

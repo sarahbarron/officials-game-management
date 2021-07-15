@@ -10,9 +10,7 @@
     const unsubscribeTeamOfficial = teamOfficialUpcomingGames.subscribe(
         (value) => {
             games = value;
-            for (let x = 0; x < games.length - 1; x++) {
-                console.log("teamOfficial component" + games[x].id);
-            }
+            for (let x = 0; x < games.length - 1; x++) {}
         }
     );
     onDestroy(unsubscribeTeamOfficial);

@@ -1,5 +1,5 @@
 <script lang="ts">
-    let src = "images/mini-logo.png";
+    let src = "/images/mini-logo.png";
 </script>
 
 <a class="navbar-brand" href="/">

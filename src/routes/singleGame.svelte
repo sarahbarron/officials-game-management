@@ -40,7 +40,7 @@
     onDestroy(unsubscribeMemberId);
 
     $: if (all_games.length > 0) {
-        getThisGame(params.gameId);
+        getThisGame(gameId);
     }
 
     /**
@@ -59,6 +59,23 @@
         }
     };
 
+    /**
+     * Find Team Officials teamId
+     */
+    let getOfficialsTeamId = (memId, game) => {
+        let teamAOfficials = game.teamA.teamOfficials;
+        let teamBOfficials = game.teamB.teamOfficials;
+        if (teamAOfficials.includes(memId)) {
+            console.log(`Team A ${game.teamA.id}`);
+            return game.teamA.id;
+        } else if (teamBOfficials.includes(memId)) {
+            console.log(`Team B ${game.teamB.id}`);
+            return game.teamB.id;
+        }
+        console.log(`NULL: ${memId} : ${game.id}`);
+
+        return null;
+    };
     $: game;
     $: referee = `${game.referee.firstName} ${game.referee.lastName}`;
     $: date = game.date;
@@ -75,11 +92,19 @@
     $: authorisedToViewMatchReport = false;
     $: if (secretaryId === memberId || refereeId === memberId) {
         authorisedToViewMatchReport = true;
-        console.log(authorisedToViewMatchReport);
     }
-    $: console.log(
-        `member ${memberId} secretary ${secretaryId} referee ${refereeId}`
-    );
+
+    $: teamAOfficials = game.teamA.teamOfficials;
+    $: teamBOfficials = game.teamB.teamOfficials;
+
+    $: console.log(`Team A Officials: ${teamAOfficials}`);
+    $: console.log(`Team B Officials ${teamBOfficials}`);
+    $: teamId = getOfficialsTeamId(memberId, game);
+
+    $: if (teamId != null && teamId != undefined) {
+        authorisedToSubmitTeamSheet = true;
+    }
+
     $: authorisedToSubmitTeamSheet = false;
 </script>
 
@@ -117,7 +142,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <MatchReportViewButton {gameId} />
-                                <TeamsheetViewButton {gameId} />
+                                <TeamsheetViewButton {gameId} {teamId} />
                             </div>
                         </div>
                     {:else if authorisedToViewMatchReport}
@@ -129,7 +154,7 @@
                     {:else if authorisedToSubmitTeamSheet}
                         <div class="row">
                             <div class="col-12">
-                                <TeamsheetViewButton {gameId} />
+                                <TeamsheetViewButton {gameId} {teamId} />
                             </div>
                         </div>
                     {/if}
