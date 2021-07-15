@@ -7,16 +7,16 @@
     import { allGames, memberDocument } from "../services/storeUser";
     import { onDestroy } from "svelte";
     import { getGame } from "../services/firebaseQueries";
-    import GameDetails from "../components/GameDetails.svelte";
-    import GameOfficialsDetails from "../components/GameOfficialsDetails.svelte";
 
     let loginString = `You need to <a href='/login'>Login</a>`;
-    let heading = "Match Report";
+    let heading = "Teamsheet";
     let memberId: string = "";
     let all_games = [];
     $: noGame = true;
     let game;
-    $: console.log(params.gameId + params.teamId);
+    let gameId = params.gameId;
+    let teamId = params.teamId;
+
     interface User {
         email: String;
         uid: String;
@@ -58,26 +58,43 @@
     };
 
     $: game;
-    $: secretaryId = game.secretaryId;
-    $: refereeId = game.referee.id;
-    $: referee = `${game.referee.firstName} ${game.referee.lastName}`;
-    $: date = game.date;
-    $: time = game.time;
-    $: venue = game.venue.name;
-    $: competition = game.competition.name;
-    $: teamA = game.teamA.name;
-    $: teamB = game.teamA.name;
-    $: linesmen = game.linesmen;
-    $: umpires = game.umpires;
 
     // The authorised member must be the secretary who creted the game or the
     // the referee of the game to view the match report.
-    $: authorised = false;
-    $: if (secretaryId === memberId || refereeId === memberId) {
-        authorised = true;
-    }
+    $: authorised = isAuthorisedUserATeamOfficialForTeam(
+        memberId,
+        game,
+        teamId
+    );
 
-    console.log(`${params.gameId} ${params.teamId}`);
+    /**
+     * Find Team Officials teamId
+     */
+    let isAuthorisedUserATeamOfficialForTeam = (memId, game, team) => {
+        if (team === game.teamA.id) {
+            let teamAOfficials = game.teamA.teamOfficials;
+
+            if (teamAOfficials.includes(memId)) {
+                let authUserForTeamId = game.teamA.id;
+                if (authUserForTeamId === team) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        } else if (team === game.teamB.id) {
+            let teamBOfficials = game.teamB.teamOfficials;
+            if (teamBOfficials.includes(memId)) {
+                let authUserForTeamId = game.teamB.id;
+                if (authUserForTeamId === team) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+        return false;
+    };
 </script>
 
 <div class="page-container">
@@ -85,47 +102,31 @@
         {#if typeof user === "undefined"}
             <i class="fas fa-spinner w3-spin fa-3x" />
         {:else if user}
+            <Nav />
             {#if authorised}
-                <Nav />
-                {#if noGame}
-                    <p>No game with this Id can be found</p>
-                {:else}
-                    <div class="container padding-for-footer">
-                        <h1>{heading}</h1>
-                        <div class="row">
-                            <div class="col-12 col-lg-6">
-                                <GameDetails
-                                    {date}
-                                    {time}
-                                    {venue}
-                                    {competition}
-                                    {teamA}
-                                    {teamB}
-                                />
-                            </div>
-                            <div class="col-12 col-lg-6">
-                                <GameOfficialsDetails
-                                    {referee}
-                                    {linesmen}
-                                    {umpires}
-                                />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12" />
-                    </div>
-                {/if}
-                <Footer />
+                <div class="container padding-for-footer">
+                    <h1>{heading}</h1>
+                </div>
             {:else}
-                <p>
-                    Unauthorised you are not the secretary or referee of this
-                    match report
-                </p>
-                <p>${loginString}</p>
+                <div class="row">
+                    <div class="col-12">
+                        <p id="unauthorised">
+                            You are not an authorised team offical for this
+                            team!
+                        </p>
+                    </div>
+                </div>
             {/if}
+
+            <Footer />
         {:else}
             <h2>{@html loginString}</h2>
         {/if}
     </div>
 </div>
+
+<style>
+    #unauthorised {
+        text-align: center;
+    }
+</style>
