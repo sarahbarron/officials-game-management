@@ -60,6 +60,14 @@
 		},
 		() => (page = MatchReport)
 	);
+	router(
+		"/teamsheet:gameId",
+		(ctx: { params: { gameId } }, next) => {
+			params = ctx.params;
+			next();
+		},
+		() => (page = MatchReport)
+	);
 	router("/*", () => (page = NotFound));
 	router.start();
 </script>

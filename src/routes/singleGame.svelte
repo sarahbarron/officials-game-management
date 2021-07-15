@@ -4,16 +4,20 @@
     import { auth } from "../services/firebase";
     import router from "page";
     import Footer from "../components/Footer.svelte";
-    import { allGames } from "../services/storeUser";
+    import { allGames, memberDocument } from "../services/storeUser";
     import { onDestroy } from "svelte";
     import { getGame } from "../services/firebaseQueries";
     import GameDetails from "../components/GameDetails.svelte";
     import GameOfficialsDetails from "../components/GameOfficialsDetails.svelte";
+    import MatchReportViewButton from "../components/MatchReportViewButton.svelte";
+    import TeamsheetViewButton from "../components/TeamsheetViewButton.svelte";
     let loginString = `You need to <a href='/login'>Login</a>`;
     let heading = "View Game Details";
     let all_games = [];
     $: noGame = true;
     let game;
+    let memberId: string = "";
+    let gameId = params.gameId;
 
     interface User {
         email: String;
@@ -29,6 +33,11 @@
         all_games = value;
     });
     onDestroy(unsubscribeAllGames);
+
+    let unsubscribeMemberId = memberDocument.subscribe((value) => {
+        memberId = value;
+    });
+    onDestroy(unsubscribeMemberId);
 
     $: if (all_games.length > 0) {
         getThisGame(params.gameId);
@@ -60,6 +69,18 @@
     $: teamB = game.teamA.name;
     $: linesmen = game.linesmen;
     $: umpires = game.umpires;
+
+    $: secretaryId = game.secretaryId;
+    $: refereeId = game.referee.id;
+    $: authorisedToViewMatchReport = false;
+    $: if (secretaryId === memberId || refereeId === memberId) {
+        authorisedToViewMatchReport = true;
+        console.log(authorisedToViewMatchReport);
+    }
+    $: console.log(
+        `member ${memberId} secretary ${secretaryId} referee ${refereeId}`
+    );
+    $: authorisedToSubmitTeamSheet = false;
 </script>
 
 <div class="page-container">
@@ -92,9 +113,26 @@
                             />
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-12" />
+                    {#if authorisedToViewMatchReport && authorisedToSubmitTeamSheet}
+                        <div class="row">
+                            <div class="col-12">
+                                <MatchReportViewButton {gameId} />
+                                <TeamsheetViewButton {gameId} />
+                            </div>
+                        </div>
+                    {:else if authorisedToViewMatchReport}
+                        <div class="row">
+                            <div class="col-12">
+                                <p><MatchReportViewButton {gameId} /></p>
+                            </div>
+                        </div>
+                    {:else if authorisedToSubmitTeamSheet}
+                        <div class="row">
+                            <div class="col-12">
+                                <TeamsheetViewButton {gameId} />
+                            </div>
+                        </div>
+                    {/if}
                 </div>
             {/if}
             <Footer />

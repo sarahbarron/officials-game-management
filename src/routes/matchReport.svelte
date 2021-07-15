@@ -33,9 +33,9 @@
 
     let unsubscribeMemberId = memberDocument.subscribe((value) => {
         memberId = value;
-        console.log(`member id : ${memberId}`);
     });
     onDestroy(unsubscribeMemberId);
+
     $: if (all_games.length > 0) {
         getThisGame(params.gameId);
     }
