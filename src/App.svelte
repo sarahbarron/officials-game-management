@@ -13,7 +13,7 @@
 	import TeamOfficial from "./routes/teamOfficialDashboard.svelte";
 	import SingleGame from "./routes/singleGame.svelte";
 	import Logout from "./routes/logout.svelte";
-
+	import MatchReport from "./routes/matchReport.svelte";
 	let page;
 	let params = {};
 	let qs = {};
@@ -51,6 +51,14 @@
 			next();
 		},
 		() => (page = SingleGame)
+	);
+	router(
+		"/matchreport:gameId",
+		(ctx: { params: { gameId } }, next) => {
+			params = ctx.params;
+			next();
+		},
+		() => (page = MatchReport)
 	);
 	router("/*", () => (page = NotFound));
 	router.start();

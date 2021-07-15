@@ -4,13 +4,14 @@
     import { auth } from "../services/firebase";
     import router from "page";
     import Footer from "../components/Footer.svelte";
-    import { allGames } from "../services/storeUser";
+    import { allGames, memberDocument } from "../services/storeUser";
     import { onDestroy } from "svelte";
     import { getGame } from "../services/firebaseQueries";
     import GameDetails from "../components/GameDetails.svelte";
     import GameOfficialsDetails from "../components/GameOfficialsDetails.svelte";
     let loginString = `You need to <a href='/login'>Login</a>`;
-    let heading = "View Game Details";
+    let heading = "Match Report";
+    let memberId: string = "";
     let all_games = [];
     $: noGame = true;
     let game;
@@ -30,6 +31,11 @@
     });
     onDestroy(unsubscribeAllGames);
 
+    let unsubscribeMemberId = memberDocument.subscribe((value) => {
+        memberId = value;
+        console.log(`member id : ${memberId}`);
+    });
+    onDestroy(unsubscribeMemberId);
     $: if (all_games.length > 0) {
         getThisGame(params.gameId);
     }
@@ -51,6 +57,8 @@
     };
 
     $: game;
+    $: secretaryId = game.secretaryId;
+    $: refereeId = game.referee.id;
     $: referee = `${game.referee.firstName} ${game.referee.lastName}`;
     $: date = game.date;
     $: time = game.time;
@@ -60,6 +68,13 @@
     $: teamB = game.teamA.name;
     $: linesmen = game.linesmen;
     $: umpires = game.umpires;
+
+    // The authorised member must be the secretary who creted the game or the
+    // the referee of the game to view the match report.
+    $: authorised = false;
+    $: if (secretaryId === memberId || refereeId === memberId) {
+        authorised = true;
+    }
 </script>
 
 <div class="page-container">
@@ -67,37 +82,45 @@
         {#if typeof user === "undefined"}
             <i class="fas fa-spinner w3-spin fa-3x" />
         {:else if user}
-            <Nav />
-            {#if noGame}
-                <p>No game with this Id can be found</p>
-            {:else}
-                <div class="container padding-for-footer">
-                    <h1>{heading}</h1>
-                    <div class="row">
-                        <div class="col-12 col-lg-6">
-                            <GameDetails
-                                {date}
-                                {time}
-                                {venue}
-                                {competition}
-                                {teamA}
-                                {teamB}
-                            />
-                        </div>
-                        <div class="col-12 col-lg-6">
-                            <GameOfficialsDetails
-                                {referee}
-                                {linesmen}
-                                {umpires}
-                            />
+            {#if authorised}
+                <Nav />
+                {#if noGame}
+                    <p>No game with this Id can be found</p>
+                {:else}
+                    <div class="container padding-for-footer">
+                        <h1>{heading}</h1>
+                        <div class="row">
+                            <div class="col-12 col-lg-6">
+                                <GameDetails
+                                    {date}
+                                    {time}
+                                    {venue}
+                                    {competition}
+                                    {teamA}
+                                    {teamB}
+                                />
+                            </div>
+                            <div class="col-12 col-lg-6">
+                                <GameOfficialsDetails
+                                    {referee}
+                                    {linesmen}
+                                    {umpires}
+                                />
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-12" />
-                </div>
+                    <div class="row">
+                        <div class="col-12" />
+                    </div>
+                {/if}
+                <Footer />
+            {:else}
+                <p>
+                    Unauthorised you are not the secretary or referee of this
+                    match report
+                </p>
+                <p>${loginString}</p>
             {/if}
-            <Footer />
         {:else}
             <h2>{@html loginString}</h2>
         {/if}
