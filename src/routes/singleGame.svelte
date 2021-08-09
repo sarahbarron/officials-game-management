@@ -83,7 +83,7 @@
     $: venue = game.venue.name;
     $: competition = game.competition.name;
     $: teamA = game.teamA.name;
-    $: teamB = game.teamA.name;
+    $: teamB = game.teamB.name;
     $: linesmen = game.linesmen;
     $: umpires = game.umpires;
 

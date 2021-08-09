@@ -156,12 +156,22 @@ export const resetStore = () => {
         try {
             secCountyUpcomingCountyGames.set([]);
         } catch (e) {
-            console.log(`Logout resetStore secCountyUpcomingGames ${e}`);
+            console.log(`Logout resetStore secCountyUpcomingCountyGames ${e}`);
         }
         try {
             secCountyPastCountyGames.set([]);
         } catch (e) {
-            console.log(`Logout resetStore secCountyPastGames ${e}`);
+            console.log(`Logout resetStore secCountyPastCountyGames ${e}`);
+        }
+        try {
+            secCountyUpcomingClubGames.set([]);
+        } catch (e) {
+            console.log(`Logout resetStore secCountyUpcomingClubGames ${e}`);
+        }
+        try {
+            secCountyPastClubGames.set([]);
+        } catch (e) {
+            console.log(`Logout resetStore secCountyPastClubGames ${e}`);
         }
         try {
             secProvinceUpcomingGames.set([]);

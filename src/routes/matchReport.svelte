@@ -7,8 +7,13 @@
     import { allGames, memberDocument } from "../services/storeUser";
     import { onDestroy } from "svelte";
     import { getGame } from "../services/firebaseQueries";
-    import GameDetails from "../components/GameDetails.svelte";
-    import GameOfficialsDetails from "../components/GameOfficialsDetails.svelte";
+    import MRGameDetails from "../components/MRGameDetails.svelte";
+    import RefereeDetails from "../components/RefereeDetails.svelte";
+    import RefereesAccount from "../components/RefereesAccount.svelte";
+    import Substitutes from "../components/Substitutes.svelte";
+    import MatchReportCardsOrderedFromField from "../components/MatchReportCardsOrderedFromField.svelte";
+    import MatchReportCautionedCards from "../components/MatchReportCautionedCards.svelte";
+
     let loginString = `You need to <a href='/login'>Login</a>`;
     let heading = "Match Report";
     let memberId: string = "";
@@ -60,15 +65,27 @@
     $: secretaryId = game.secretaryId;
     $: refereeId = game.referee.id;
     $: referee = `${game.referee.firstName} ${game.referee.lastName}`;
+    $: refereeAddressLine1 = game.referee.addressLine1;
+    $: refereeAddressLine2 = game.referee.addressLine2;
+    $: refereeTown = game.referee.town;
+    $: refereeCounty = game.referee.county;
+    $: refereeEircode = game.referee.eircode;
     $: date = game.date;
     $: time = game.time;
     $: venue = game.venue.name;
     $: competition = game.competition.name;
     $: teamA = game.teamA.name;
-    $: teamB = game.teamA.name;
+    $: teamB = game.teamB.name;
     $: linesmen = game.linesmen;
     $: umpires = game.umpires;
-
+    $: teamATookToTheField = game.teamATookToTheField;
+    $: teamBTookToTheField = game.teamBTookToTheField;
+    $: gameStartedAt = game.gameStartedAt;
+    $: gameEndedAt = game.gameEndedAt;
+    $: teamATotalGoals = game.teamATotalGoals;
+    $: teamBTotalGoals = game.teamBTotalGoals;
+    $: teamATotalPoints = game.teamATotalPoints;
+    $: teamBTotalPoints = game.teamBTotalPoints;
     // The authorised member must be the secretary who creted the game or the
     // the referee of the game to view the match report.
     $: authorised = false;
@@ -90,8 +107,21 @@
                     <div class="container padding-for-footer">
                         <h1>{heading}</h1>
                         <div class="row">
-                            <div class="col-12 col-lg-6">
-                                <GameDetails
+                            <div class="col-12">
+                                <RefereeDetails
+                                    {referee}
+                                    {refereeAddressLine1}
+                                    {refereeAddressLine2}
+                                    {refereeTown}
+                                    {refereeCounty}
+                                    {refereeEircode}
+                                />
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-12">
+                                <MRGameDetails
                                     {date}
                                     {time}
                                     {venue}
@@ -100,17 +130,44 @@
                                     {teamB}
                                 />
                             </div>
-                            <div class="col-12 col-lg-6">
-                                <GameOfficialsDetails
-                                    {referee}
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-12">
+                                <RefereesAccount
+                                    {teamA}
+                                    {teamB}
                                     {linesmen}
                                     {umpires}
+                                    {teamATookToTheField}
+                                    {teamBTookToTheField}
+                                    {gameStartedAt}
+                                    {gameEndedAt}
+                                    {teamATotalGoals}
+                                    {teamATotalPoints}
+                                    {teamBTotalGoals}
+                                    {teamBTotalPoints}
                                 />
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12" />
+                        <br />
+                        <div class="row">
+                            <div class="col-12">
+                                <Substitutes />
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-12">
+                                <MatchReportCardsOrderedFromField />
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-">
+                                <MatchReportCautionedCards />
+                            </div>
+                        </div>
                     </div>
                 {/if}
                 <Footer />

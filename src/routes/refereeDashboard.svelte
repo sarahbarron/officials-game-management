@@ -67,6 +67,7 @@
                         cardHeader={upcomingCardHeader}
                         games={upcomingGames}
                     />
+                    <br /><br />
                     <Card cardHeader={pastCardHeader} games={pastGames} />
                 </div>
                 <Footer />
