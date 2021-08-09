@@ -2020,6 +2020,50 @@ let getPlayerDetails = async (gameId: string, teamId: string, playerId: string) 
     }
 }
 
+export let getMatchSubstitutes = async (gameId: string) => {
+    // let allsubs = [];
+    // let i = 0;
+    const gameRef = db.collection("Game").doc(gameId);
+
+    const subs = await db.collection("Substitute")
+        .where("game", "==", gameRef).get();
+    return subs;
+    // if (subs.size > 0) {
+    //     subs.forEach(async (doc) => {
+    //         let id = doc.id;
+    //         let blackcard = doc.data().blackcard;
+    //         let bloodsub = doc.data().bloodsub;
+    //         let playerOffName = await getMemberName(doc.data().playerOff.id);
+    //         let playerOnName = await getMemberName(doc.data().playerOn.id);
+    //         let team = doc.data().team.id;
+
+    //         let sub = {
+    //             id: id,
+    //             blackcard: blackcard,
+    //             bloodsub: bloodsub,
+    //             playerOff: playerOffName,
+    //             playerOn: playerOnName,
+    //             team: team,
+    //         }
+    //         allsubs = [...allsubs, sub];
+
+    //         if (!allsubs.includes(sub)) {
+    //             allsubs = [...allsubs, sub];
+    //         }
+    //         if (i == (subs.size - 1)) {
+    //             console.log(allsubs);
+    //             return allsubs;
+    //         }
+    //         i++;
+
+    //     });
+    // }
+    // else {
+    //     console.log(allsubs);
+    //     return allsubs;
+    // }
+
+}
 let convertTimestampToDate = (timestamp) => {
     try {
         if (timestamp != null && timestamp != undefined) {
@@ -2055,3 +2099,4 @@ let convertTimestampToTime = (timestamp) => {
         console.log("convertTimestampToTime exception: " + e);
     }
 }
+

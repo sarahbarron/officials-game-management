@@ -1,7 +1,6 @@
 <script lang="ts">
 	import router from "page";
 	import Auth from "./routes/auth.svelte";
-	import Index from "./routes/index.svelte";
 	import NotFound from "./routes/notfound.svelte";
 	import Dashboard from "./routes/dashboard.svelte";
 	import { queryString } from "./services/util";

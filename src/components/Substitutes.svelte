@@ -1,7 +1,52 @@
 <script lang="ts">
-    export let teamA: string = "";
-    export let teamB: string = "";
+    import { subscribe } from "svelte/internal";
+    import {
+        getMatchSubstitutes,
+        getMemberName,
+    } from "../services/firebaseQueries";
+
     let heading: string = "Íonadaithe / Substitutes";
+    export let gameId = "";
+    $: allsubs = [];
+
+    $: if (gameId != "") {
+        getAllSubs(gameId);
+    }
+
+    let getAllSubs = async (gameId) => {
+        let subsPromise = await getMatchSubstitutes(gameId);
+        if (subsPromise != null || subsPromise != undefined) {
+            if (subsPromise.size > 0) {
+                subsPromise.forEach(async (doc) => {
+                    let id = doc.id;
+                    let blackcard = doc.data().blackcard;
+                    let bloodsub = doc.data().bloodsub;
+                    let playerOffName = await getMemberName(
+                        doc.data().playerOff.id
+                    );
+                    let playerOnName = await getMemberName(
+                        doc.data().playerOn.id
+                    );
+                    let team = doc.data().team.id;
+
+                    let sub = {
+                        id: id,
+                        blackcard: blackcard,
+                        bloodsub: bloodsub,
+                        playerOff: playerOffName,
+                        playerOn: playerOnName,
+                        team: team,
+                    };
+                    allsubs = [...allsubs, sub];
+
+                    if (!allsubs.includes(sub)) {
+                        allsubs = [...allsubs, sub];
+                    }
+                });
+            }
+        }
+    };
+    $: console.log(allsubs);
 </script>
 
 <div class="container">
@@ -17,24 +62,20 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-            </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-            </tr>
-            <tr>
-                <th scope="row">3</th>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>@twitter</td>
-            </tr>
+            {#each allsubs as sub}
+                <tr>
+                    <th scope="row"
+                        >{sub.playerOn.firstName} {sub.playerOn.lastName}</th
+                    >
+                    <td>{sub.playerOff.firstName} {sub.playerOff.lastName}</td>
+                    <td />
+                    {#if sub.bloodsub}
+                        <td>Yes</td>
+                    {:else}
+                        <td />
+                    {/if}
+                </tr>
+            {/each}
         </tbody>
     </table>
 </div>

@@ -1,9 +1,8 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th scope="col">Imreoirí / Player/th> </th><th scope="col"
-                >Contae/Club (County/ Club)</th
-            >
+            <th scope="col">Imreoirí / Player</th>
+            <th scope="col">Contae/Club (County/ Club)</th>
             <th scope="col">Mi-iompar / Infraction</th>
         </tr>
     </thead>

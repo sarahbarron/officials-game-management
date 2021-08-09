@@ -2,7 +2,7 @@
     import { auth, googleAuth } from "../services/firebase";
     import { createEventDispatcher, onDestroy } from "svelte";
     import ErrorAlert from "./ErrorAlert.svelte";
-    import { userEmail } from "../services/storeUser";
+    import { resetStore, userEmail } from "../services/storeUser";
     import { getMember } from "../services/firebaseQueries";
     import Logout from "./Logout.svelte";
 

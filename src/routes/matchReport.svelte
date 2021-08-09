@@ -13,6 +13,8 @@
     import Substitutes from "../components/Substitutes.svelte";
     import MatchReportCardsOrderedFromField from "../components/MatchReportCardsOrderedFromField.svelte";
     import MatchReportCautionedCards from "../components/MatchReportCautionedCards.svelte";
+    import MatchReportInjuredPlayers from "../components/MatchReportInjuredPlayers.svelte";
+    import MatchReportAdditionalComments from "../components/MatchReportAdditionalComments.svelte";
 
     let loginString = `You need to <a href='/login'>Login</a>`;
     let heading = "Match Report";
@@ -153,7 +155,7 @@
                         <br />
                         <div class="row">
                             <div class="col-12">
-                                <Substitutes />
+                                <Substitutes gameId={game.id} />
                             </div>
                         </div>
                         <br />
@@ -166,6 +168,18 @@
                         <div class="row">
                             <div class="col-">
                                 <MatchReportCautionedCards />
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-12">
+                                <MatchReportInjuredPlayers />
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-12">
+                                <MatchReportAdditionalComments />
                             </div>
                         </div>
                     </div>

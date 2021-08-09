@@ -44,7 +44,7 @@ export const countyName = localStore('countyName', "");
 export const provinceName = localStore('provinceName', "");
 export const crest = localStore('crest', "");
 
-export const resetStore = () => {
+export const resetStore = async () => {
     try {
         try {
             allGames.set([]);
