@@ -143,7 +143,6 @@
 
 <style>
     .circle {
-        /* min-height: 110px; */
         text-align: -webkit-center;
     }
 </style>
