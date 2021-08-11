@@ -1,8 +1,7 @@
 <script lang="ts">
-    import { getAdditionalComments } from "../services/firebaseQueries";
-
     let heading: string = "Additional Comments";
-    export let gameId = "";
+
+    export let additionalGameDetails = {};
     let delayInStart = "";
     $: matchProgramme = null;
     $: jerseyNumbered = null;
@@ -10,22 +9,18 @@
     $: pitchMarked = null;
     $: grassCut = null;
     $: extraComments = "";
-    $: if (gameId != "") {
-        getGameComments(gameId);
+    $: if (additionalGameDetails != {}) {
+        getGameComments(additionalGameDetails);
     }
 
-    let getGameComments = async (gameId) => {
-        let game = await getAdditionalComments(gameId);
-        if (game != null && game != undefined) {
-            delayInStart = game.delayInStart;
-            matchProgramme = game.matchProgramme;
-            jerseyNumbered = game.jerseyNumbered;
-            linesmenAttire = game.linesmenAttire;
-            pitchMarked = game.pitchMarked;
-            grassCut = game.grassCut;
-            extraComments = game.extraComments;
-        }
-        console.log(game);
+    let getGameComments = (additionalGameDetails) => {
+        delayInStart = additionalGameDetails.delayInStart;
+        matchProgramme = additionalGameDetails.matchProgramme;
+        jerseyNumbered = additionalGameDetails.jerseyNumbered;
+        linesmenAttire = additionalGameDetails.linesmenAttire;
+        pitchMarked = additionalGameDetails.pitchMarked;
+        grassCut = additionalGameDetails.grassCut;
+        extraComments = additionalGameDetails.extraComments;
     };
 </script>
 
@@ -34,8 +29,12 @@
     <p class="title-lighter">
         1. If there was any delay in starting what was the cause?
     </p>
-    <p class="bold">{delayInStart}</p>
+
+    {#if delayInStart != undefined && delayInStart != null}
+        <p class="bold">{delayInStart}</p>
+    {/if}
     <br />
+
     <p class="title-lighter col">
         2. Was a match programme provided? (Please check prior to the game)
         {#if matchProgramme != null && matchProgramme != undefined}
@@ -44,6 +43,7 @@
             </span>{/if}
     </p>
     <br />
+
     <p class="title-lighter">
         3. Were players jeresy numbered in accordance with number on programme?
         {#if jerseyNumbered != null && jerseyNumbered != undefined}
@@ -53,12 +53,16 @@
         {/if}
     </p>
     <br />
+
     <p class="title-lighter">
         4. Were linesmen properly attired? (if not please give details)
-        <span class="bold"> {linesmenAttire}</span>
+        {#if linesmenAttire != null && linesmenAttire != undefined}
+            <span class="bold"> {linesmenAttire}</span>
+        {/if}
     </p>
 
     <br />
+
     <p class="title-lighter">
         5. Was the pitch properly marked?
         {#if pitchMarked != null && pitchMarked != undefined}
@@ -68,6 +72,7 @@
         {/if}
     </p>
     <br />
+
     <p class="title-lighter">
         6. Was the grass cut short enough?
         {#if grassCut != null && grassCut != undefined}
@@ -82,7 +87,11 @@
         officials, or any other matter on presentation which you feel should be
         highlighted:
     </p>
-    <p class="bold">{extraComments}</p>
+    {#if extraComments != undefined && extraComments != null}
+        <p class="bold">
+            {extraComments}
+        </p>
+    {/if}
     <br />
 </div>
 

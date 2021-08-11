@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { convertTimestampToDate } from "../services/util";
+
     import FinalScore from "./FinalScore.svelte";
     import LinesmenDetails from "./LinesmenDetails.svelte";
     import UmpiresDetails from "./UmpiresDetails.svelte";
@@ -6,16 +8,33 @@
     export let teamB: string = "";
     export let linesmen: ["", ""];
     export let umpires: ["", "", "", ""];
-    export let teamATookToTheField: string = "";
-    export let teamBTookToTheField: string = "";
-    export let gameStartedAt: string = "";
-    export let gameEndedAt: string = "";
-    export let teamATotalGoals: number = 0;
-    export let teamBTotalGoals: number = 0;
-    export let teamATotalPoints: number = 0;
-    export let teamBTotalPoints: number = 0;
+    export let additionalGameDetails: {};
+
+    let teamATookToField: string = "";
+    let teamBTookToField: string = "";
+    let matchStarted: string = "";
+    let matchEnded: string = "";
+    let teamATotalGoals: number = 0;
+    let teamBTotalGoals: number = 0;
+    let teamATotalPoints: number = 0;
+    let teamBTotalPoints: number = 0;
     let heading: string = "Cúntas an Réiteora / Referees Account";
     let finalScoreHeading: string = "Final Score";
+
+    $: if (additionalGameDetails != {}) {
+        getGameDetails(additionalGameDetails);
+    }
+
+    let getGameDetails = async (game) => {
+        teamATookToField = game.teamATookToField;
+        teamBTookToField = game.teamBTookToField;
+        matchStarted = game.matchStarted;
+        matchEnded = game.matchEnded;
+        teamATotalPoints = game.teamATotalPoints;
+        teamBTotalPoints = game.teamBTotalPoints;
+        teamATotalGoals = game.teamATotalGoals;
+        teamBTotalGoals = game.teamBTotalGoals;
+    };
 </script>
 
 <div class="container">
@@ -27,7 +46,7 @@
         </div>
         <div class="col-2 col-lg-8">
             <p>
-                {#if teamATookToTheField != null || teamATookToTheField != undefined}{teamATookToTheField}{:else}hello{/if}
+                {#if teamATookToField != null || teamATookToField != undefined}{teamATookToField}{/if}
             </p>
         </div>
     </div>
@@ -37,7 +56,7 @@
         </div>
         <div class="col-2 col-lg-8">
             <p>
-                {#if teamBTookToTheField != null || teamBTookToTheField != undefined}{teamBTookToTheField}{:else}hello{/if}
+                {#if teamBTookToField != null || teamBTookToField != undefined}{teamBTookToField}{/if}
             </p>
         </div>
     </div>
@@ -48,7 +67,7 @@
         </div>
         <div class="col-2 col-lg-8">
             <p>
-                {#if gameStartedAt != null || gameStartedAt != undefined}{gameStartedAt}{:else}hello{/if}
+                {#if matchStarted != null || matchStarted != undefined}{matchStarted}{/if}
             </p>
         </div>
     </div>
@@ -56,7 +75,7 @@
         <div class="col-10 col-lg-4 title-lighter"><p>Match ended at:</p></div>
         <div class="col-2 col-lg-8">
             <p>
-                {#if gameEndedAt != null || gameEndedAt != undefined}{gameEndedAt}{:else}hello{/if}
+                {#if matchEnded != null || matchEnded != undefined}{matchEnded}{/if}
             </p>
         </div>
     </div>

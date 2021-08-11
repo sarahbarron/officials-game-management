@@ -2049,8 +2049,16 @@ export let getInjuries = async (gameId: string) => {
     return injuries;
 }
 
-export let getAdditionalComments = async (gameId: string) => {
-    const game = await db.collection("Game").doc(gameId).get();
+export let getMatchReportExtraDetails = async (gameId: string) => {
+    let game = await db.collection("Game").doc(gameId).get();
+    let teamATookToField = convertTimestampToTime(game.data().teamATookToField);
+    let teamBTookToField = convertTimestampToTime(game.data().teamBTookToField);
+    let matchStarted = convertTimestampToTime(game.data().matchStarted);
+    let matchEnded = convertTimestampToTime(game.data().matchEnded);
+    let teamATotalGoals = game.data().teamATotalGoals;
+    let teamBTotalGoals = game.data().teamBTotalGoals;
+    let teamATotalPoints = game.data().teamATotalPoints;
+    let teamBTotalPoints = game.data().teamBTotalPoints;
     let delayInStart = game.data().delayInStart;
     let matchProgramme = game.data().matchProgramme;
     let jerseyNumbered = game.data().jerseyNumbered;
@@ -2058,7 +2066,15 @@ export let getAdditionalComments = async (gameId: string) => {
     let pitchMarked = game.data().pitchMarked;
     let grassCut = game.data().grassCut;
     let extraComments = game.data().extraComments;
-    let additionalComments = {
+    let additionalGameDetails = {
+        teamATookToField: teamATookToField,
+        teamBTookToField: teamBTookToField,
+        teamATotalGoals: teamATotalGoals,
+        teamATotalPoints: teamATotalPoints,
+        teamBTotalGoals: teamBTotalGoals,
+        teamBTotalPoints: teamBTotalPoints,
+        matchStarted: matchStarted,
+        matchEnded: matchEnded,
         delayInStart: delayInStart,
         matchProgramme: matchProgramme,
         jerseyNumbered: jerseyNumbered,
@@ -2067,6 +2083,6 @@ export let getAdditionalComments = async (gameId: string) => {
         grassCut: grassCut,
         extraComments: extraComments
     }
-    return additionalComments;
+    return additionalGameDetails;
 
 }

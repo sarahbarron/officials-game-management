@@ -6,16 +6,17 @@
     import Footer from "../components/Footer.svelte";
     import { allGames, memberId } from "../services/storeUser";
     import { onDestroy } from "svelte";
-    import { getGame } from "../services/firebaseQueries";
+    import {
+        getGame,
+        getMatchReportExtraDetails,
+    } from "../services/firebaseQueries";
     import MRGameDetails from "../components/MRGameDetails.svelte";
     import RefereeDetails from "../components/RefereeDetails.svelte";
     import RefereesAccount from "../components/RefereesAccount.svelte";
     import Substitutes from "../components/Substitutes.svelte";
-    import MatchReportCardsOrderedFromField from "../components/MatchReportCardsOrderedFromField.svelte";
-    import MatchReportCautionedCards from "../components/MatchReportCautionedCards.svelte";
     import MatchReportInjuredPlayers from "../components/MatchReportInjuredPlayers.svelte";
-    import MatchReportAdditionalComments from "../components/MatchReportAdditionalComments.svelte";
     import MatchReportCards from "../components/matchReportCards.svelte";
+    import MatchReportAdditionalComments from "../components/MatchReportAdditionalComments.svelte";
 
     let loginString = `You need to <a href='/login'>Login</a>`;
     let heading = "Match Report";
@@ -48,6 +49,7 @@
         getThisGame(params.gameId);
     }
 
+    $: additionalGameDetails = {};
     /**
      Find the game in the locally stored games, if its not there 
      retrieve it from firestore.
@@ -62,6 +64,7 @@
         } else {
             noGame = false;
         }
+        additionalGameDetails = await getMatchReportExtraDetails(id);
     };
 
     $: game;
@@ -84,14 +87,7 @@
     $: teamBid = game.teamB.id;
     $: linesmen = game.linesmen;
     $: umpires = game.umpires;
-    $: teamATookToTheField = game.teamATookToTheField;
-    $: teamBTookToTheField = game.teamBTookToTheField;
-    $: gameStartedAt = game.gameStartedAt;
-    $: gameEndedAt = game.gameEndedAt;
-    $: teamATotalGoals = game.teamATotalGoals;
-    $: teamBTotalGoals = game.teamBTotalGoals;
-    $: teamATotalPoints = game.teamATotalPoints;
-    $: teamBTotalPoints = game.teamBTotalPoints;
+
     // The authorised member must be the secretary who creted the game or the
     // the referee of the game to view the match report.
     $: authorised = false;
@@ -145,14 +141,7 @@
                                     {teamB}
                                     {linesmen}
                                     {umpires}
-                                    {teamATookToTheField}
-                                    {teamBTookToTheField}
-                                    {gameStartedAt}
-                                    {gameEndedAt}
-                                    {teamATotalGoals}
-                                    {teamATotalPoints}
-                                    {teamBTotalGoals}
-                                    {teamBTotalPoints}
+                                    {additionalGameDetails}
                                 />
                             </div>
                         </div>
@@ -191,7 +180,9 @@
                         <br />
                         <div class="row">
                             <div class="col-12">
-                                <MatchReportAdditionalComments {gameId} />
+                                <MatchReportAdditionalComments
+                                    {additionalGameDetails}
+                                />
                             </div>
                         </div>
                     </div>
@@ -211,12 +202,12 @@
 </div>
 
 <style>
-    .container {
+    /* .container {
         border-style: solid;
         border-radius: 30px;
         border-color: #f8f9fa;
         padding-top: 30px;
         padding-right: 30px;
         padding-left: 30px;
-    }
+    } */
 </style>
