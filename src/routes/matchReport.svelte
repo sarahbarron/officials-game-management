@@ -49,7 +49,7 @@
         getThisGame(params.gameId);
     }
 
-    $: additionalGameDetails = {};
+    $: additionalGameDetails = { matchEnded: undefined };
     /**
      Find the game in the locally stored games, if its not there 
      retrieve it from firestore.
@@ -87,6 +87,7 @@
     $: teamBid = game.teamB.id;
     $: linesmen = game.linesmen;
     $: umpires = game.umpires;
+    $: matchEnded = additionalGameDetails.matchEnded;
 
     // The authorised member must be the secretary who creted the game or the
     // the referee of the game to view the match report.
@@ -107,7 +108,17 @@
                     <p>No game with this Id can be found</p>
                 {:else}
                     <h1>{heading}</h1>
+
                     <div class="padding-for-footer">
+                        {#if matchEnded == null || matchEnded == undefined || matchEnded == ""}
+                            <div class="container">
+                                <h2>
+                                    Note: Game may not be finished yet details
+                                    in this report may change in the future
+                                </h2>
+                            </div>
+                        {/if}
+
                         <div class="row">
                             <div class="col-12">
                                 <RefereeDetails
@@ -200,14 +211,3 @@
         {/if}
     </div>
 </div>
-
-<style>
-    /* .container {
-        border-style: solid;
-        border-radius: 30px;
-        border-color: #f8f9fa;
-        padding-top: 30px;
-        padding-right: 30px;
-        padding-left: 30px;
-    } */
-</style>
