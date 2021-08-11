@@ -87,7 +87,7 @@
     }
 
     let referee: boolean = false;
-    if (referee_of_club || referee_of_county) {
+    $: if (referee_of_club || referee_of_county) {
         referee = true;
     }
     let isActive = "home";

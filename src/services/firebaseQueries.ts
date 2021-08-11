@@ -1,5 +1,5 @@
 import {
-    userEmail, memberDocument,
+    userEmail, memberId,
     refereeOfClub, refereeOfCounty, secretaryOfClub, secretaryOfCounty, secretaryOfProvince,
     secretaryOfCouncil, teamOfficial, firstName, lastName, clubRef, clubName,
     crest, countyCrest, countyName, provinceName,
@@ -12,6 +12,7 @@ import {
     teamOfficialUpcomingGames, teamOfficialPastGames, allGames
 } from './storeUser';
 import { db } from "./firebase";
+import { convertTimestampToDate, convertTimestampToTime } from '../services/util';
 
 const member = db.collection('Member');
 
@@ -39,7 +40,7 @@ export let getMember = async (email: string) => {
 
 /* Retrieve a members details from firestore
 */
-let getMemberDetails = async (email: string) => {
+export let getMemberDetails = async (email: string) => {
     console.log(`getMemberDetails: ${email}`);
     try {
         const querySnapshot = await member.where("email", "==", email).get()
@@ -57,7 +58,7 @@ let getMemberDetails = async (email: string) => {
             clubId = doc.data().ownClub.id;
 
             if (memberDoc != undefined && memberDoc != null) {
-                memberDocument.set(memberDoc);
+                memberId.set(memberDoc);
             }
             if (email != undefined && email != null) {
                 userEmail.set(email);
@@ -132,7 +133,7 @@ let getMemberDetails = async (email: string) => {
 the date and time is in the future and order the documents 
 by date and time.
 */
-let getSecretaryOfClubUpcomingGames = async (clubId: string) => {
+export let getSecretaryOfClubUpcomingGames = async (clubId: string) => {
     try {
 
         let games = [];
@@ -198,7 +199,7 @@ let getSecretaryOfClubUpcomingGames = async (clubId: string) => {
 /**
  * Secretary of Club Past Games
  */
-let getSecretaryOfClubPastGames = async (clubId: string) => {
+export let getSecretaryOfClubPastGames = async (clubId: string) => {
     try {
 
         let games = [];
@@ -266,7 +267,7 @@ let getSecretaryOfClubPastGames = async (clubId: string) => {
 the date and time is in the future and order the documents 
 by date and time.
 */
-let getSecretaryOfCountyUpcomingCountyGames = async (clubId: string) => {
+export let getSecretaryOfCountyUpcomingCountyGames = async (clubId: string) => {
     try {
         let i = 0;
         let games = [];
@@ -333,7 +334,7 @@ let getSecretaryOfCountyUpcomingCountyGames = async (clubId: string) => {
 /**
  * Secretary of County past county games
  */
-let getSecretaryOfCountyPastCountyGames = async (clubId: string) => {
+export let getSecretaryOfCountyPastCountyGames = async (clubId: string) => {
     try {
         let i = 0;
         let games = [];
@@ -405,7 +406,7 @@ let getSecretaryOfCountyPastCountyGames = async (clubId: string) => {
 the date and time is in the future and order the documents 
 by date and time.
 */
-let getSecretaryOfCountyUpcomingClubGames = async (clubId: string) => {
+export let getSecretaryOfCountyUpcomingClubGames = async (clubId: string) => {
     try {
         let games = [];
         const club = await db.collection("Club").doc(clubId).get();
@@ -483,7 +484,7 @@ let getSecretaryOfCountyUpcomingClubGames = async (clubId: string) => {
 /**
  * Get Secretary of County past Club Games
  */
-let getSecretaryOfCountyPastClubGames = async (clubId: string) => {
+export let getSecretaryOfCountyPastClubGames = async (clubId: string) => {
     try {
         let games = [];
         const club = await db.collection("Club").doc(clubId).get();
@@ -566,7 +567,7 @@ let getSecretaryOfCountyPastClubGames = async (clubId: string) => {
 the date and time is in the future and order the documents 
 by date and time.
 */
-let getSecretaryOfProvinceUpcomingGames = async (clubId: string) => {
+export let getSecretaryOfProvinceUpcomingGames = async (clubId: string) => {
     try {
         let games = [];
         const club = await db.collection("Club").doc(clubId).get();
@@ -647,7 +648,7 @@ let getSecretaryOfProvinceUpcomingGames = async (clubId: string) => {
 /*
 Retrieve Secretary of Province past games
 */
-let getSecretaryOfProvincePastGames = async (clubId: string) => {
+export let getSecretaryOfProvincePastGames = async (clubId: string) => {
     try {
         let games = [];
         const club = await db.collection("Club").doc(clubId).get();
@@ -733,7 +734,7 @@ let getSecretaryOfProvincePastGames = async (clubId: string) => {
 games, the date and time is in the future and order the documents 
 by date and time.
 */
-let getSecretaryOfCouncilUpcomingGames = async () => {
+export let getSecretaryOfCouncilUpcomingGames = async () => {
     try {
 
         let games = [];
@@ -807,7 +808,7 @@ let getSecretaryOfCouncilUpcomingGames = async () => {
 /**
  * Get Secretary of Councils Past games
  */
-let getSecretaryOfCouncilPastGames = async () => {
+export let getSecretaryOfCouncilPastGames = async () => {
     try {
 
         let games = [];
@@ -887,7 +888,7 @@ let getSecretaryOfCouncilPastGames = async () => {
           in the future and order the documents by date and
           time.
       */
-let getRefereeUpcomingGames = async (memberId: string) => {
+export let getRefereeUpcomingGames = async (memberId: string) => {
     try {
         let i = 0;
         let games = [];
@@ -953,7 +954,7 @@ let getRefereeUpcomingGames = async (memberId: string) => {
 /*
 Get a referees past games
  */
-let getRefereePastGames = async (memberId: string) => {
+export let getRefereePastGames = async (memberId: string) => {
     try {
         let i = 0;
         let games = [];
@@ -2021,82 +2022,19 @@ let getPlayerDetails = async (gameId: string, teamId: string, playerId: string) 
 }
 
 export let getMatchSubstitutes = async (gameId: string) => {
-    // let allsubs = [];
-    // let i = 0;
+
     const gameRef = db.collection("Game").doc(gameId);
 
     const subs = await db.collection("Substitute")
         .where("game", "==", gameRef).get();
     return subs;
-    // if (subs.size > 0) {
-    //     subs.forEach(async (doc) => {
-    //         let id = doc.id;
-    //         let blackcard = doc.data().blackcard;
-    //         let bloodsub = doc.data().bloodsub;
-    //         let playerOffName = await getMemberName(doc.data().playerOff.id);
-    //         let playerOnName = await getMemberName(doc.data().playerOn.id);
-    //         let team = doc.data().team.id;
-
-    //         let sub = {
-    //             id: id,
-    //             blackcard: blackcard,
-    //             bloodsub: bloodsub,
-    //             playerOff: playerOffName,
-    //             playerOn: playerOnName,
-    //             team: team,
-    //         }
-    //         allsubs = [...allsubs, sub];
-
-    //         if (!allsubs.includes(sub)) {
-    //             allsubs = [...allsubs, sub];
-    //         }
-    //         if (i == (subs.size - 1)) {
-    //             console.log(allsubs);
-    //             return allsubs;
-    //         }
-    //         i++;
-
-    //     });
-    // }
-    // else {
-    //     console.log(allsubs);
-    //     return allsubs;
-    // }
-
-}
-let convertTimestampToDate = (timestamp) => {
-    try {
-        if (timestamp != null && timestamp != undefined) {
-            let date = timestamp.toDate();
-            date = date.toDateString();
-            return date;
-        }
-        else {
-            return "";
-        }
-    }
-    catch (e) {
-        console.log("convertTimestampToDate exception: " + e);
-    }
 }
 
-let convertTimestampToTime = (timestamp) => {
-    try {
-        if (timestamp != null && timestamp != undefined) {
-            const date = timestamp.toDate();
-            const hour = date.getHours();
-            let mins = date.getMinutes();
-            if (mins < 10) {
-                mins = `${mins}0`;
-            }
-            const time = `${hour}:${mins}`;
-            return time;
-        }
-        else {
-            return "";
-        }
-    } catch (e) {
-        console.log("convertTimestampToTime exception: " + e);
-    }
-}
 
+export let getMatchCards = async (gameId: string) => {
+    const gameRef = db.collection("Game").doc(gameId);
+
+    const cards = await db.collection("Cards")
+        .where("game", "==", gameRef).get();
+    return cards;
+}

@@ -29,5 +29,5 @@
 </script>
 
 <AccordionButton {buttonText} {redirectUrl} />
-<Card cardHeader={countyCardHeader} />
+<Card cardHeader={countyCardHeader} games={countyGames} />
 <Card cardHeader={clubCardHeader} games={clubGames} />

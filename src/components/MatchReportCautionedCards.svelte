@@ -1,6 +1,11 @@
 <script lang="ts">
     import MatchReportCardsTable from "./MatchReportCardsTable.svelte";
     let heading: string = "Ímreoirí a fuair rabhadh";
+    export let yellowCards = [];
+    export let teamA = "";
+    export let teamB = "";
+    export let teamAid = "";
+    export let teamBid = "";
 </script>
 
 <div class="container">
@@ -8,7 +13,13 @@
     <p>Details of players cautioned (Yellow Card)</p>
     <p>(A) Cautionable Foul / Infraction (A Yellow Card)</p>
     <br />
-    <MatchReportCardsTable />
+    <MatchReportCardsTable
+        cards={yellowCards}
+        {teamA}
+        {teamB}
+        {teamAid}
+        {teamBid}
+    />
     <br />
 </div>
 

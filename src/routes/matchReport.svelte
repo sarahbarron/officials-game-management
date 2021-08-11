@@ -4,7 +4,7 @@
     import { auth } from "../services/firebase";
     import router from "page";
     import Footer from "../components/Footer.svelte";
-    import { allGames, memberDocument } from "../services/storeUser";
+    import { allGames, memberId } from "../services/storeUser";
     import { onDestroy } from "svelte";
     import { getGame } from "../services/firebaseQueries";
     import MRGameDetails from "../components/MRGameDetails.svelte";
@@ -15,10 +15,11 @@
     import MatchReportCautionedCards from "../components/MatchReportCautionedCards.svelte";
     import MatchReportInjuredPlayers from "../components/MatchReportInjuredPlayers.svelte";
     import MatchReportAdditionalComments from "../components/MatchReportAdditionalComments.svelte";
+    import MatchReportCards from "../components/matchReportCards.svelte";
 
     let loginString = `You need to <a href='/login'>Login</a>`;
     let heading = "Match Report";
-    let memberId: string = "";
+    let member: string = "";
     let all_games = [];
     $: noGame = true;
     let game;
@@ -38,8 +39,8 @@
     });
     onDestroy(unsubscribeAllGames);
 
-    let unsubscribeMemberId = memberDocument.subscribe((value) => {
-        memberId = value;
+    let unsubscribeMemberId = memberId.subscribe((value) => {
+        member = value;
     });
     onDestroy(unsubscribeMemberId);
 
@@ -77,7 +78,9 @@
     $: venue = game.venue.name;
     $: competition = game.competition.name;
     $: teamA = game.teamA.name;
+    $: teamAid = game.teamA.id;
     $: teamB = game.teamB.name;
+    $: teamBid = game.teamB.id;
     $: linesmen = game.linesmen;
     $: umpires = game.umpires;
     $: teamATookToTheField = game.teamATookToTheField;
@@ -91,7 +94,7 @@
     // The authorised member must be the secretary who creted the game or the
     // the referee of the game to view the match report.
     $: authorised = false;
-    $: if (secretaryId === memberId || refereeId === memberId) {
+    $: if (secretaryId === member || refereeId === member) {
         authorised = true;
     }
 </script>
@@ -106,8 +109,8 @@
                 {#if noGame}
                     <p>No game with this Id can be found</p>
                 {:else}
-                    <div class="container padding-for-footer">
-                        <h1>{heading}</h1>
+                    <h1>{heading}</h1>
+                    <div class="padding-for-footer">
                         <div class="row">
                             <div class="col-12">
                                 <RefereeDetails
@@ -155,21 +158,23 @@
                         <br />
                         <div class="row">
                             <div class="col-12">
-                                <Substitutes gameId={game.id} />
+                                <Substitutes
+                                    gameId={game.id}
+                                    {teamA}
+                                    {teamB}
+                                    {teamAid}
+                                    {teamBid}
+                                />
                             </div>
                         </div>
                         <br />
-                        <div class="row">
-                            <div class="col-12">
-                                <MatchReportCardsOrderedFromField />
-                            </div>
-                        </div>
-                        <br />
-                        <div class="row">
-                            <div class="col-">
-                                <MatchReportCautionedCards />
-                            </div>
-                        </div>
+                        <MatchReportCards
+                            gameId={game.id}
+                            {teamA}
+                            {teamB}
+                            {teamAid}
+                            {teamBid}
+                        />
                         <br />
                         <div class="row">
                             <div class="col-12">
@@ -197,3 +202,14 @@
         {/if}
     </div>
 </div>
+
+<style>
+    .container {
+        border-style: solid;
+        border-radius: 30px;
+        border-color: #f8f9fa;
+        padding-top: 30px;
+        padding-right: 30px;
+        padding-left: 30px;
+    }
+</style>

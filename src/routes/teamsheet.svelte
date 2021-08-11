@@ -4,13 +4,13 @@
     import { auth } from "../services/firebase";
     import router from "page";
     import Footer from "../components/Footer.svelte";
-    import { allGames, memberDocument } from "../services/storeUser";
+    import { allGames, memberId } from "../services/storeUser";
     import { onDestroy } from "svelte";
     import { getGame } from "../services/firebaseQueries";
 
     let loginString = `You need to <a href='/login'>Login</a>`;
     let heading = "Teamsheet";
-    let memberId: string = "";
+    let member: string = "";
     let all_games = [];
     $: noGame = true;
     let game;
@@ -32,8 +32,8 @@
     });
     onDestroy(unsubscribeAllGames);
 
-    let unsubscribeMemberId = memberDocument.subscribe((value) => {
-        memberId = value;
+    let unsubscribeMemberId = memberId.subscribe((value) => {
+        member = value;
     });
     onDestroy(unsubscribeMemberId);
 
@@ -61,11 +61,7 @@
 
     // The authorised member must be the secretary who creted the game or the
     // the referee of the game to view the match report.
-    $: authorised = isAuthorisedUserATeamOfficialForTeam(
-        memberId,
-        game,
-        teamId
-    );
+    $: authorised = isAuthorisedUserATeamOfficialForTeam(member, game, teamId);
 
     /**
      * Find Team Officials teamId

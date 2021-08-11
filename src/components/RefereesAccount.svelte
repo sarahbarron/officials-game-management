@@ -22,20 +22,20 @@
     <h2>{heading}</h2>
 
     <div class="row">
-        <div class="col-4 title-lighter">
+        <div class="col-10 col-lg-4 title-lighter">
             <p>{teamA} took to the field at:</p>
         </div>
-        <div class="col-8">
+        <div class="col-2 col-lg-8">
             <p>
                 {#if teamATookToTheField != null || teamATookToTheField != undefined}{teamATookToTheField}{:else}hello{/if}
             </p>
         </div>
     </div>
     <div class="row">
-        <div class="col-4 title-lighter">
+        <div class="col-10 col-lg-4 title-lighter">
             <p>{teamB} took to the field at:</p>
         </div>
-        <div class="col-8">
+        <div class="col-2 col-lg-8">
             <p>
                 {#if teamBTookToTheField != null || teamBTookToTheField != undefined}{teamBTookToTheField}{:else}hello{/if}
             </p>
@@ -43,16 +43,18 @@
     </div>
 
     <div class="row">
-        <div class="col-4 title-lighter"><p>Match started at:</p></div>
-        <div class="col-8">
+        <div class="col-10 col-lg-4 title-lighter">
+            <p>Match started at:</p>
+        </div>
+        <div class="col-2 col-lg-8">
             <p>
                 {#if gameStartedAt != null || gameStartedAt != undefined}{gameStartedAt}{:else}hello{/if}
             </p>
         </div>
     </div>
     <div class="row">
-        <div class="col-4 title-lighter"><p>Match ended at:</p></div>
-        <div class="col-8">
+        <div class="col-10 col-lg-4 title-lighter"><p>Match ended at:</p></div>
+        <div class="col-2 col-lg-8">
             <p>
                 {#if gameEndedAt != null || gameEndedAt != undefined}{gameEndedAt}{:else}hello{/if}
             </p>

@@ -1,6 +1,13 @@
 <script lang="ts">
     import MatchReportCardsTable from "./MatchReportCardsTable.svelte";
     let heading: string = "Ímreoirí a ordaitear don bpáirc";
+    export let teamA = "";
+    export let teamAid = "";
+    export let teamB = "";
+    export let teamBid = "";
+    export let redCards = [];
+    export let blackCards = [];
+    export let twoCards = [];
 </script>
 
 <div class="container">
@@ -8,7 +15,13 @@
 
     <p>(A) Details of players ordered off the field (Red Card)</p>
     <br />
-    <MatchReportCardsTable />
+    <MatchReportCardsTable
+        cards={redCards}
+        {teamA}
+        {teamB}
+        {teamAid}
+        {teamBid}
+    />
     <br />
     <p>
         (B) Details of players ordered off on foot of either a second
@@ -24,10 +37,22 @@
     </p>
     <p>(A Yellow Card and a Black Card followed by a Red (Football Only))</p>
     <br />
-    <MatchReportCardsTable />
+    <MatchReportCardsTable
+        cards={twoCards}
+        {teamA}
+        {teamB}
+        {teamAid}
+        {teamBid}
+    />
     <br />
     <p>(C) Cynical Behaviour infraction (A Black Card)(Football Only)</p>
-    <MatchReportCardsTable />
+    <MatchReportCardsTable
+        cards={blackCards}
+        {teamA}
+        {teamB}
+        {teamAid}
+        {teamBid}
+    />
 </div>
 
 <style>

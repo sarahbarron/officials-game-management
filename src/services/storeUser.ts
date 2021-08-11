@@ -24,7 +24,7 @@ export const teamOfficialPastGames = localStore("teamOfficialPastGames", []);
 
 export const allGames = localStore("allGames", []);
 // Members Id
-export const memberDocument = localStore("memberDocument", "");
+export const memberId = localStore("memberId", "");
 export const userEmail = localStore("userEmail", "");
 export const refereeOfClub = localStore("refereeOfClub", false);
 export const refereeOfCounty = localStore("refereeOfCounty", false);
@@ -53,9 +53,9 @@ export const resetStore = async () => {
             console.log(`Logout resetStore allGames exception: ${e}`);
         }
         try {
-            memberDocument.set("");
+            memberId.set("");
         } catch (e) {
-            console.log(`Logout resetStore memberDocument ${e}`);
+            console.log(`Logout resetStore memberId ${e}`);
         }
         try {
             userEmail.set("");

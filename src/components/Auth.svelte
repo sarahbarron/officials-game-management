@@ -8,7 +8,7 @@
 
     let isAuthenticated = false;
     let err: string | null = null;
-
+    resetStore();
     const eventDispatch = createEventDispatcher();
 
     // Subscribe to user email
@@ -23,13 +23,13 @@
         console.log(`User Email ${user_email}`);
         getMember(user_email);
     }
-    // only authenticate the user if the user is not already authenticated
-    auth.onAuthStateChanged((user) => {
-        isAuthenticated = !!user;
-        if (user) {
-            eventDispatch("auth");
-        }
-    });
+    // // only authenticate the user if the user is not already authenticated
+    // auth.onAuthStateChanged((user) => {
+    //     isAuthenticated = !!user;
+    //     if (user) {
+    //         eventDispatch("auth");
+    //     }
+    // });
 
     // Login with email and password
     function login() {

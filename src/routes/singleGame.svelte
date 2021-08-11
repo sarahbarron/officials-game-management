@@ -4,7 +4,7 @@
     import { auth } from "../services/firebase";
     import router from "page";
     import Footer from "../components/Footer.svelte";
-    import { allGames, memberDocument } from "../services/storeUser";
+    import { allGames, memberId } from "../services/storeUser";
     import { onDestroy } from "svelte";
     import { getGame } from "../services/firebaseQueries";
     import GameDetails from "../components/GameDetails.svelte";
@@ -16,7 +16,7 @@
     let all_games = [];
     $: noGame = true;
     let game;
-    let memberId: string = "";
+    let member: string = "";
     let gameId = params.gameId;
 
     interface User {
@@ -34,8 +34,8 @@
     });
     onDestroy(unsubscribeAllGames);
 
-    let unsubscribeMemberId = memberDocument.subscribe((value) => {
-        memberId = value;
+    let unsubscribeMemberId = memberId.subscribe((value) => {
+        member = value;
     });
     onDestroy(unsubscribeMemberId);
 
@@ -90,7 +90,7 @@
     $: secretaryId = game.secretaryId;
     $: refereeId = game.referee.id;
     $: authorisedToViewMatchReport = false;
-    $: if (secretaryId === memberId || refereeId === memberId) {
+    $: if (secretaryId === member || refereeId === member) {
         authorisedToViewMatchReport = true;
     }
 
@@ -99,7 +99,7 @@
 
     $: console.log(`Team A Officials: ${teamAOfficials}`);
     $: console.log(`Team B Officials ${teamBOfficials}`);
-    $: teamId = getOfficialsTeamId(memberId, game);
+    $: teamId = getOfficialsTeamId(member, game);
 
     $: if (teamId != null && teamId != undefined) {
         authorisedToSubmitTeamSheet = true;

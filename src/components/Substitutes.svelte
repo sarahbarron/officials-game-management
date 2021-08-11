@@ -7,6 +7,11 @@
 
     let heading: string = "Íonadaithe / Substitutes";
     export let gameId = "";
+    export let teamA = "";
+    export let teamB = "";
+    export let teamAid = "";
+    export let teamBid = "";
+
     $: allsubs = [];
 
     $: if (gameId != "") {
@@ -15,7 +20,7 @@
 
     let getAllSubs = async (gameId) => {
         let subsPromise = await getMatchSubstitutes(gameId);
-        if (subsPromise != null || subsPromise != undefined) {
+        if (subsPromise != null && subsPromise != undefined) {
             if (subsPromise.size > 0) {
                 subsPromise.forEach(async (doc) => {
                     let id = doc.id;
@@ -37,7 +42,6 @@
                         playerOn: playerOnName,
                         team: team,
                     };
-                    allsubs = [...allsubs, sub];
 
                     if (!allsubs.includes(sub)) {
                         allsubs = [...allsubs, sub];
@@ -46,38 +50,48 @@
             }
         }
     };
-    $: console.log(allsubs);
 </script>
 
 <div class="container">
     <h2>{heading}</h2>
-
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th scope="col">Imreoirí / Player On</th>
-                <th scope="col">Imreoirí / Player Off</th>
-                <th scope="col">Contae/Club (County/ Club)</th>
-                <th scope="col">Bloodsub</th>
-            </tr>
-        </thead>
-        <tbody>
-            {#each allsubs as sub}
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    <th scope="row"
-                        >{sub.playerOn.firstName} {sub.playerOn.lastName}</th
-                    >
-                    <td>{sub.playerOff.firstName} {sub.playerOff.lastName}</td>
-                    <td />
-                    {#if sub.bloodsub}
-                        <td>Yes</td>
-                    {:else}
-                        <td />
-                    {/if}
+                    <th scope="col">Imreoirí / Player On</th>
+                    <th scope="col">Imreoirí / Player Off</th>
+                    <th scope="col">Contae/Club (County/ Club)</th>
+                    <th scope="col">Bloodsub</th>
                 </tr>
-            {/each}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {#each allsubs as sub}
+                    <tr>
+                        <th
+                            >{sub.playerOn.firstName}
+                            {sub.playerOn.lastName}</th
+                        >
+                        <td
+                            >{sub.playerOff.firstName}
+                            {sub.playerOff.lastName}</td
+                        >
+
+                        {#if sub.team == teamAid}
+                            <td>{teamA}</td>
+                        {:else if sub.team == teamBid}
+                            <td>{teamB}</td>
+                        {:else}<td />
+                        {/if}
+                        {#if sub.bloodsub}
+                            <td>Yes</td>
+                        {:else}
+                            <td>No</td>
+                        {/if}
+                    </tr>
+                {/each}
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <style>
