@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { subscribe } from "svelte/internal";
     import {
         getMatchSubstitutes,
         getMemberName,

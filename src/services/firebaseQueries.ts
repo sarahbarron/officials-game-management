@@ -2021,6 +2021,7 @@ let getPlayerDetails = async (gameId: string, teamId: string, playerId: string) 
     }
 }
 
+// Retrieve substitutes from a game for the match report
 export let getMatchSubstitutes = async (gameId: string) => {
 
     const gameRef = db.collection("Game").doc(gameId);
@@ -2030,11 +2031,42 @@ export let getMatchSubstitutes = async (gameId: string) => {
     return subs;
 }
 
-
+// Retrieve cards from a game for the match report
 export let getMatchCards = async (gameId: string) => {
     const gameRef = db.collection("Game").doc(gameId);
 
     const cards = await db.collection("Cards")
         .where("game", "==", gameRef).get();
     return cards;
+}
+
+// Retrieve injuries from a game for the match report
+
+export let getInjuries = async (gameId: string) => {
+    const gameRef = db.collection("Game").doc(gameId);
+    const injuries = db.collection("Injury")
+        .where("game", "==", gameRef).get();
+    return injuries;
+}
+
+export let getAdditionalComments = async (gameId: string) => {
+    const game = await db.collection("Game").doc(gameId).get();
+    let delayInStart = game.data().delayInStart;
+    let matchProgramme = game.data().matchProgramme;
+    let jerseyNumbered = game.data().jerseyNumbered;
+    let linesmenAttire = game.data().linesmenAttire;
+    let pitchMarked = game.data().pitchMarked;
+    let grassCut = game.data().grassCut;
+    let extraComments = game.data().extraComments;
+    let additionalComments = {
+        delayInStart: delayInStart,
+        matchProgramme: matchProgramme,
+        jerseyNumbered: jerseyNumbered,
+        linesmenAttire: linesmenAttire,
+        pitchMarked: pitchMarked,
+        grassCut: grassCut,
+        extraComments: extraComments
+    }
+    return additionalComments;
+
 }

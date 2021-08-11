@@ -65,6 +65,7 @@
     };
 
     $: game;
+    $: gameId = game.id;
     $: secretaryId = game.secretaryId;
     $: refereeId = game.referee.id;
     $: referee = `${game.referee.firstName} ${game.referee.lastName}`;
@@ -159,7 +160,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <Substitutes
-                                    gameId={game.id}
+                                    {gameId}
                                     {teamA}
                                     {teamB}
                                     {teamAid}
@@ -169,7 +170,7 @@
                         </div>
                         <br />
                         <MatchReportCards
-                            gameId={game.id}
+                            {gameId}
                             {teamA}
                             {teamB}
                             {teamAid}
@@ -178,13 +179,19 @@
                         <br />
                         <div class="row">
                             <div class="col-12">
-                                <MatchReportInjuredPlayers />
+                                <MatchReportInjuredPlayers
+                                    {gameId}
+                                    {teamA}
+                                    {teamB}
+                                    {teamAid}
+                                    {teamBid}
+                                />
                             </div>
                         </div>
                         <br />
                         <div class="row">
                             <div class="col-12">
-                                <MatchReportAdditionalComments />
+                                <MatchReportAdditionalComments {gameId} />
                             </div>
                         </div>
                     </div>
