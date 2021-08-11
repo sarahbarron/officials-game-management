@@ -7,7 +7,7 @@
         <form action="">
             <div class="row">
                 <!-- Game Details -->
-                <div class="col-12 col-md-6">
+                <div id="game-details" class="col-12 col-md-6">
                     <div class="row">
                         <!-- radio buttons for club or county -->
                         <div class="col-12 col-md-6">
@@ -53,15 +53,52 @@
                                 />
                             </div>
                             <!-- Time of match -->
-                            <div class="row">
+                            <div class="row pb-3">
                                 <label for="time">Time:</label>
                                 <input type="time" id="time" name="time" />
                             </div>
                         </div>
                     </div>
+                    <!-- Venue Select Menu -->
+                    <div class="row pb-3">
+                        <select class="venue-select">
+                            <option selected>Select Venue</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
+                    </div>
+                    <!-- Competition Select Menu -->
+                    <div class="row pb-3">
+                        <select class="competition-select">
+                            <option selected>Select Competition</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
+                    </div>
+                    <!-- Team A Select Menu -->
+                    <div class="row pb-3">
+                        <select class="teamA-select">
+                            <option selected>Select Team A</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
+                    </div>
+
+                    <!-- Team B Select Menu -->
+                    <div class="row pb-3">
+                        <select class="teamA-select">
+                            <option selected>Select Team B</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
+                    </div>
                 </div>
                 <!-- Referee / Linesmen / Umpires -->
-                <div class="col-12 col-md-6">Hellow</div>
+                <div id="ref-details" class="col-12 col-md-6">Hellow</div>
             </div>
             <button type="submit" class="btn btn-primary">Create Game</button>
         </form>
@@ -69,7 +106,16 @@
 </div>
 
 <style>
-    form {
+    #game-details,
+    #ref-details {
+        border-style: solid;
+        border-radius: 20px;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-color: #f8f9fa;
+    }
+    form,
+    button {
         font-size: 20px;
     }
     .card {
