@@ -10,6 +10,7 @@
         secretaryOfCouncil,
     } from "../services/storeUser";
     import { onDestroy } from "svelte";
+    import CouncilCreateGame from "../components/CouncilCreateGame.svelte";
     let upcomingGames = [];
     let pastGames = [];
 
@@ -57,6 +58,7 @@
             <Nav {isActive} />
             <div class="container padding-for-footer">
                 <h1>{heading}</h1>
+                <CouncilCreateGame />
                 <Card cardHeader={upcomingCardHeader} games={upcomingGames} />
                 <br /><br />
                 <Card cardHeader={pastCardHeader} games={pastGames} />

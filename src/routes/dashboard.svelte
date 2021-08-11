@@ -1,8 +1,9 @@
 <script lang="ts">
+    import { Circle3 } from "svelte-loading-spinners";
     import { auth } from "../services/firebase";
     import router from "page";
     import Nav from "../components/NavBar.svelte";
-    import { onDestroy } from "svelte";
+    import { onDestroy, onMount } from "svelte";
     import Footer from "../components/Footer.svelte";
     import {
         firstName,
@@ -91,6 +92,13 @@
         referee = true;
     }
     let isActive = "home";
+    let pause = true;
+    onMount(async () => {
+        setTimeout(() => {
+            pause = false;
+            console.log(pause);
+        }, 15000);
+    });
 </script>
 
 <div class="page-container">
@@ -101,6 +109,22 @@
             <Nav {isActive} />
             <div class="padding-for-footer">
                 <h1>{heading}</h1>
+
+                <div class="div circle">
+                    {#if pause}
+                        <Circle3
+                            size="60"
+                            ballTopLeft="#00ff11"
+                            ballTopRight="#005E82"
+                            ballBottomRight="#fcfc07"
+                            ballBottomLeft="#fa00ff"
+                            unit="px"
+                            duration="1s"
+                        />
+                        <h2>Loading .....</h2>
+                    {/if}
+                </div>
+
                 <DashboardAccordion
                     {referee}
                     {team_official}
@@ -116,3 +140,10 @@
         {/if}
     </div>
 </div>
+
+<style>
+    .circle {
+        /* min-height: 110px; */
+        text-align: -webkit-center;
+    }
+</style>

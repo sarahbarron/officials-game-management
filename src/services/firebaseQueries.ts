@@ -2086,3 +2086,47 @@ export let getMatchReportExtraDetails = async (gameId: string) => {
     return additionalGameDetails;
 
 }
+
+let GetMembersProvinceDetails = async (clubId) => {
+    const club = await db.collection("Club").doc(clubId).get();
+    const countyRef = club.data().county;
+    const county = await db.collection("County").doc(countyRef.id).get();
+    const provinceRef = county.data().province;
+    const province = await db.collection("Province").doc(provinceRef.id).get();
+    return province;
+
+}
+
+let getMembersCountyDetails = async (clubId) => {
+    const club = await db.collection("Club").doc(clubId).get();
+    const countyRef = club.data().county;
+    const county = await db.collection("County").doc(countyRef.id).get();
+    return county;
+}
+
+let getMembersClubDetails = async (clubId) => {
+    const club = await db.collection("Club").doc(clubId).get();
+    return club;
+}
+let getAllCounties = async () => {
+    let counties = await db.collection("County").get();
+    return counties;
+}
+
+let getNationalCompetitons = async () => {
+    let competitions = await db.collection("Competition").where("isNational", "==", true).get();
+    return competitions;
+}
+
+
+let getProvincialCompetitions = async (provinceId: string) => {
+    let provinceRef = db.collection("Province").doc(provinceId);
+    let competitions = await db.collection("Competition").where("province", "==", provinceRef).get()
+    return competitions
+}
+
+let getCountyCompetitions = async (countyId: string) => {
+    let countyRef = db.collection("County").doc(countyId);
+    let competitions = await db.collection("Competition").where("county", "==", countyRef).get()
+    return competitions
+}
