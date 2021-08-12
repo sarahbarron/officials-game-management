@@ -19,6 +19,7 @@
                                         id="club"
                                         name="customRadio"
                                         class="radio-btn custom-control-input"
+                                        required
                                     />
                                     <label
                                         class="custom-control-label"
@@ -47,41 +48,51 @@
                             <div class="row pb-3">
                                 <label for="datePicker">Date:</label>
                                 <input
+                                    class="form-control"
                                     type="date"
                                     id="datePicker"
                                     name="datePicker"
+                                    required
                                 />
                             </div>
                             <!-- Time of match -->
                             <div class="row pb-3">
                                 <label for="time">Time:</label>
-                                <input type="time" id="time" name="time" />
+                                <input
+                                    type="time"
+                                    id="time"
+                                    name="time"
+                                    required
+                                />
                             </div>
                         </div>
                     </div>
                     <!-- Venue Select Menu -->
                     <div class="row pb-3">
-                        <select class="venue-select">
-                            <option selected>Select Venue</option>
-                            <option value="1">One</option>
+                        <label for="venue-select">Select Venue</label>
+                        <select class="venue-select" required>
+                            <option selected value="1">One</option>
                             <option value="2">Two</option>
                             <option value="3">Three</option>
                         </select>
                     </div>
                     <!-- Competition Select Menu -->
                     <div class="row pb-3">
-                        <select class="competition-select">
-                            <option selected>Select Competition</option>
-                            <option value="1">One</option>
+                        <label for="competition-select"
+                            >Select Competition</label
+                        >
+
+                        <select class="competition-select" required>
+                            <option selected value="1">One</option>
                             <option value="2">Two</option>
                             <option value="3">Three</option>
                         </select>
                     </div>
                     <!-- Team A Select Menu -->
                     <div class="row pb-3">
-                        <select class="teamA-select">
-                            <option selected>Select Team A</option>
-                            <option value="1">One</option>
+                        <label for="teamA-select">Select Team A</label>
+                        <select class="teamA-select" required>
+                            <option selected value="1">One</option>
                             <option value="2">Two</option>
                             <option value="3">Three</option>
                         </select>
@@ -89,18 +100,90 @@
 
                     <!-- Team B Select Menu -->
                     <div class="row pb-3">
-                        <select class="teamA-select">
-                            <option selected>Select Team B</option>
-                            <option value="1">One</option>
+                        <label for="teamB-select">Select Team B</label>
+
+                        <select class="teamB-select" required>
+                            <option selected value="1">One</option>
                             <option value="2">Two</option>
                             <option value="3">Three</option>
                         </select>
                     </div>
                 </div>
                 <!-- Referee / Linesmen / Umpires -->
-                <div id="ref-details" class="col-12 col-md-6">Hellow</div>
+                <div id="ref-details" class="col-12 col-md-6">
+                    <!-- Referee Select Menu -->
+
+                    <div class="row pb-3">
+                        <label for="referee-select">Select Referee</label>
+
+                        <select class="referee-select" required>
+                            <option selected value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
+                    </div>
+                    <br />
+                    <div class="row pb-3">
+                        <label for="linesman1">Linesmen</label>
+
+                        <input
+                            id="linesman1"
+                            class="form-control-lg"
+                            type="text"
+                            placeholder="Linesman 1"
+                        />
+                    </div>
+                    <div class="row pb-3">
+                        <input
+                            id="linesman2"
+                            class="form-control-lg"
+                            type="text"
+                            placeholder="Linesman 2"
+                        />
+                    </div>
+                    <br />
+                    <div class="row pb-3">
+                        <label for="umpire1">Umpire</label>
+
+                        <input
+                            id="umpire1"
+                            class="form-control-lg"
+                            type="text"
+                            placeholder="Umpire 1"
+                        />
+                    </div>
+                    <div class="row pb-3">
+                        <input
+                            id="umpire2"
+                            class="form-control-lg"
+                            type="text"
+                            placeholder="Umpire 2"
+                        />
+                    </div>
+
+                    <div class="row pb-3">
+                        <input
+                            id="umpire3"
+                            class="form-control-lg"
+                            type="text"
+                            placeholder="Umpire 3"
+                        />
+                    </div>
+                    <div class="row pb-3">
+                        <input
+                            id="umpire4"
+                            class="form-control-lg"
+                            type="text"
+                            placeholder="Umpire 4"
+                        />
+                    </div>
+                </div>
             </div>
-            <button type="submit" class="btn btn-primary">Create Game</button>
+            <div class="d-flex align-items-end flex-column">
+                <button type="submit" class="btn btn-primary"
+                    >Create Game</button
+                >
+            </div>
         </form>
     </div>
 </div>
@@ -112,6 +195,7 @@
         border-radius: 20px;
         padding: 20px;
         margin-bottom: 20px;
+
         border-color: #f8f9fa;
     }
     form,
@@ -122,15 +206,22 @@
         margin-bottom: 20px;
     }
 
-    /* @media (min-width: 768px) { */
-    .custom-radio {
-        padding: 20px 10px;
+    @media (min-width: 769px) {
+        #game-details,
+        #ref-details {
+            padding: 100px;
+        }
     }
-    /* } */
     .radio-btn {
         width: 10%;
         height: 100%;
-        vertical-align: bottom;
+        vertical-align: middle;
     }
-    /* } */
+    .custom-radio {
+        padding: 20px 10px;
+    }
+
+    label {
+        margin-top: 20px;
+    }
 </style>
