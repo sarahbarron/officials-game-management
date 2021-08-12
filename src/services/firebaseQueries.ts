@@ -2273,64 +2273,68 @@ let getCountyCompetitions = async (countyId: string) => {
 export let createGameInFirestore = async (memberId, date, time, venueId, competitionId,
     teamAId, teamBId, refereeId, subReferee, linesman1, linesman2,
     umpire1, umpire2, umpire3, umpire4) => {
-    let referee = db.collection("Referee").doc(refereeId);
-    let secretary = db.collection("Member").doc(memberId);
-    let substituteReferee = null;
-    if (subReferee != "null") {
-        console.log(`Sub Ref: ${subReferee}`);
-        substituteReferee = db.collection("Member").doc(subReferee);
-    }
+    try {
+        let referee = db.collection("Referee").doc(refereeId);
+        let secretary = db.collection("Member").doc(memberId);
+        let substituteReferee = null;
+        if (subReferee != "null") {
+            console.log(`Sub Ref: ${subReferee}`);
+            substituteReferee = db.collection("Member").doc(subReferee);
+        }
 
-    let competition = db.collection("Competition").doc(competitionId);
-    let venue = db.collection("Venue").doc(venueId);
-    let teamA = db.collection("Team").doc(teamAId);
-    let teamB = db.collection("Team").doc(teamBId);
-    let clubOrCounties = [teamA, teamB];
-    let linesmen = [linesman1, linesman2];
-    let umpires = [umpire1, umpire2, umpire3, umpire4];
-    let delayInStart = " ";
-    let extraComments = " ";
-    let grassCut = null;
-    let jerseyNumbered = null;
-    let linesmenAttire = " ";
-    let matchEnded = null;
-    let matchStarted = null;
-    let pitchMarked = null;
-    let teamATotalGoals = 0;
-    let teamATotalPoints = 0;
-    let teamBTotalGoals = 0;
-    let teamBTotalPoints = 0;
-    let teamATookToField = null;
-    let teamBTookToField = null;
-    let dateTimeString = `${date} ${time}`;
-    const dateTime = new Date(dateTimeString);
-    let game = {
-        referee: referee,
-        secretary: secretary,
-        substituteReferee: substituteReferee,
-        competition: competition,
-        venue: venue,
-        teamA: teamA,
-        teamB: teamB,
-        clubsOrCounties: clubOrCounties,
-        linesmen: linesmen,
-        umpires: umpires,
-        delayInStart: delayInStart,
-        extraComments: extraComments,
-        grassCut: grassCut,
-        jerseyNumbered: jerseyNumbered,
-        linesmenAttire: linesmenAttire,
-        matchEnded: matchEnded,
-        matchStarted: matchStarted,
-        pitchMarked: pitchMarked,
-        teamATotalGoals: teamATotalGoals,
-        teamBTotalGoals: teamBTotalGoals,
-        teamATotalPoints: teamATotalPoints,
-        teamBTotalPoints: teamBTotalPoints,
-        teamATookToField: teamATookToField,
-        teamBTookToField: teamBTookToField,
-        dateTime: dateTime
+        let competition = db.collection("Competition").doc(competitionId);
+        let venue = db.collection("Venue").doc(venueId);
+        let teamA = db.collection("Team").doc(teamAId);
+        let teamB = db.collection("Team").doc(teamBId);
+        let clubOrCounties = [teamA, teamB];
+        let linesmen = [linesman1, linesman2];
+        let umpires = [umpire1, umpire2, umpire3, umpire4];
+        let delayInStart = " ";
+        let extraComments = " ";
+        let grassCut = null;
+        let jerseyNumbered = null;
+        let linesmenAttire = " ";
+        let matchEnded = null;
+        let matchStarted = null;
+        let pitchMarked = null;
+        let teamATotalGoals = 0;
+        let teamATotalPoints = 0;
+        let teamBTotalGoals = 0;
+        let teamBTotalPoints = 0;
+        let teamATookToField = null;
+        let teamBTookToField = null;
+        let dateTimeString = `${date} ${time}`;
+        const dateTime = new Date(dateTimeString);
+        let game = {
+            referee: referee,
+            secretary: secretary,
+            substituteReferee: substituteReferee,
+            competition: competition,
+            venue: venue,
+            teamA: teamA,
+            teamB: teamB,
+            clubsOrCounties: clubOrCounties,
+            linesmen: linesmen,
+            umpires: umpires,
+            delayInStart: delayInStart,
+            extraComments: extraComments,
+            grassCut: grassCut,
+            jerseyNumbered: jerseyNumbered,
+            linesmenAttire: linesmenAttire,
+            matchEnded: matchEnded,
+            matchStarted: matchStarted,
+            pitchMarked: pitchMarked,
+            teamATotalGoals: teamATotalGoals,
+            teamBTotalGoals: teamBTotalGoals,
+            teamATotalPoints: teamATotalPoints,
+            teamBTotalPoints: teamBTotalPoints,
+            teamATookToField: teamATookToField,
+            teamBTookToField: teamBTookToField,
+            dateTime: dateTime
+        }
+        let newGame = db.collection("Game").doc();
+        newGame.set(game);
+    } catch (e) {
+        console.error(`createGameInFirestore exception ${e}`);
     }
-    let newGame = db.collection("Game").doc();
-    newGame.set(game);
 }
