@@ -2087,6 +2087,149 @@ export let getMatchReportExtraDetails = async (gameId: string) => {
 
 }
 
+// Creating Games 
+
+// Get all national venues
+export let getNationalVenues = async () => {
+    try {
+        let venues = [];
+        const venueDocs = await db.collection("Venue").where("club", "==", null).get();
+        venueDocs.forEach((doc) => {
+            const id = doc.id;
+            const clubOrCountyId = doc.data().county.id;
+            const name = doc.data().name;
+            const lat = doc.data().lng;
+            const lng = doc.data().lng;
+            const venue = {
+                id: id,
+                clubOrCountyId: clubOrCountyId,
+                name: name,
+                lat: lat,
+                lng: lng,
+
+            }
+            venues = [...venues, venue];
+        });
+        return venues;
+    } catch (E) {
+        console.error(`getNationalTeams Exception: ${E}`);
+    }
+}
+
+// get all national competitions
+export let getNationalCompetitions = async () => {
+    try {
+        let competitions = [];
+        let competitionDocs = await db.collection("Competition").where("isNational", "==", true).get();
+        competitionDocs.forEach((doc) => {
+            let id = doc.id;
+            let countyId = doc.data().county;
+            if (countyId != null) {
+                countyId = countyId.id;
+            }
+            let gradeId = doc.data().grade.id;
+            let isNational = doc.data().isNational;
+            let name = doc.data().name;
+            let provinceId = doc.data().province;
+            if (provinceId != null) {
+                provinceId = provinceId.id;
+            }
+            let sportTypeId = doc.data().sportType.id;
+
+            let comp = {
+                id: id,
+                countyId: countyId,
+                gradeId: gradeId,
+                isNational: isNational,
+                name: name,
+                provinceId: provinceId,
+                sportTypeId: sportTypeId
+            }
+            competitions = [...competitions, comp];
+        });
+        return competitions;
+    } catch (e) {
+        console.log("getNationalCompetition exception " + e);
+    }
+}
+
+// Get all national counties
+export let getNationalTeams = async () => {
+    try {
+        let counties = []
+        let countyDocs = await db.collection("County").get();
+        countyDocs.forEach((doc) => {
+            let id = doc.id;
+            let name = doc.id;
+            let county = { id: id, name: name }
+            counties = [...counties, county];
+        });
+        return counties;
+    } catch (e) {
+        console.error(`getNationalTeams exception ${e}`);
+    }
+}
+
+// Get all national referees
+export let getNationalReferees = async () => {
+    try {
+
+        let referees = [];
+        let memberDocs = await db.collection("Member").where("refereeOfCounty", "==", true).get();
+
+
+        for (let i = 0; i < memberDocs.size; i++) {
+            let doc = memberDocs.docs[i];
+            let id = doc.id;
+            let name = `${doc.data().firstName} ${doc.data().lastName}`;
+            let clubId = doc.data().ownClub.id;
+            let clubDoc = await db.collection("Club").doc(clubId).get();
+            let countyId = clubDoc.data().county.id;
+
+            let ref = {
+                id: id,
+                name: name,
+                clubId: clubId,
+                countyId: countyId
+            };
+            referees = [...referees, ref];
+
+        }
+        return referees;
+
+    } catch (e) {
+        console.error(`getNationalReferees exception ${e}`);
+    }
+}
+export let getProvincialVenues = async (provinceId: string) => {
+    let venues = [];
+    let countyIds = [];
+    let provinceRef = db.collection("Province").doc(provinceId);
+    let countyDocs = await db.collection("County").where("province", "==", provinceRef).get();
+    countyDocs.forEach((doc) => {
+        const id = doc.id;
+        countyIds = [...countyIds, id];
+    });
+
+    let venueDocs = await db.collection("Venue").where("county", "in", countyIds).get();
+    venueDocs.forEach((doc) => {
+        const venueId = doc.id;
+        const clubOrCountyId = doc.data().county.id;
+        const name = doc.data().name;
+        const lat = doc.data().lng;
+        const lng = doc.data().lng;
+        const venue = {
+            venueId: venueId,
+            clubOrCountyId: clubOrCountyId,
+            name: name,
+            lat: lat,
+            lng: lng,
+
+        }
+        venues = [...venues, venue];
+    });
+    return venues;
+}
 let GetMembersProvinceDetails = async (clubId) => {
     const club = await db.collection("Club").doc(clubId).get();
     const countyRef = club.data().county;
@@ -2108,15 +2251,9 @@ let getMembersClubDetails = async (clubId) => {
     const club = await db.collection("Club").doc(clubId).get();
     return club;
 }
-let getAllCounties = async () => {
-    let counties = await db.collection("County").get();
-    return counties;
-}
 
-let getNationalCompetitons = async () => {
-    let competitions = await db.collection("Competition").where("isNational", "==", true).get();
-    return competitions;
-}
+
+
 
 
 let getProvincialCompetitions = async (provinceId: string) => {
@@ -2130,3 +2267,4 @@ let getCountyCompetitions = async (countyId: string) => {
     let competitions = await db.collection("Competition").where("county", "==", countyRef).get()
     return competitions
 }
+

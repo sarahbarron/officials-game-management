@@ -1,10 +1,57 @@
 <script lang="ts">
+    import FormSelect from "./FormSelect.svelte";
+
+    // Club / County Radio Buttons
+    $: cantBeCounty = false;
+    $: cantBeClub = false;
+
+    // Only allow dates from tomorrow onwards to be selected
+    let date = new Date();
+    date.setDate(date.getDate() + 1);
+    let year = `${date.getFullYear()}`;
+    let thisMonth = date.getMonth() + 1;
+    let day = `${date.getDate()}`;
+    let month = `${thisMonth}`;
+    let tomorrow: string = "";
+
+    $: if (month != undefined) {
+        if (month.length === 1) {
+            month = `0${month}`;
+        }
+    }
+
+    $: if (day != undefined) {
+        if (day.length === 1) {
+            day = `0${day}`;
+        }
+    }
+
+    $: tomorrow = `${year}-${month}-${day}`;
+    console.log(tomorrow);
+    // Venue options
+    export let venueOptions = [];
+    $: filteredVenues = venueOptions;
+    // Competition options
+    export let competitionOptions = [];
+    $: filteredCompetitions = competitionOptions;
+    // Team options
+    export let teamOptions = [];
+    $: filteredTeamsA = teamOptions;
+    $: filteredTeamsB = teamOptions;
+    // Referee
+    export let refereeOptions = [];
+    $: filteredReferees = refereeOptions;
+
+    $: console.log(`Venues: ${venueOptions}`);
+    $: console.log(`Competitins ${competitionOptions}`);
+    $: console.log(`Teams ${teamOptions}`);
+    $: console.log(`Referee ${refereeOptions}`);
 </script>
 
 <div class="card">
     <div class="card-header"><h2>Create Game</h2></div>
     <div class="card-body">
-        <form action="">
+        <form action="" class="needs-validation" data-toggle="validator">
             <div class="row">
                 <!-- Game Details -->
                 <div id="game-details" class="col-12 col-md-6">
@@ -14,13 +61,30 @@
                             <div class="row">
                                 <!-- Club Radio Button -->
                                 <div class="custom-control custom-radio">
-                                    <input
-                                        type="radio"
-                                        id="club"
-                                        name="customRadio"
-                                        class="radio-btn custom-control-input"
-                                        required
-                                    />
+                                    {#if cantBeClub}
+                                        <input
+                                            type="radio"
+                                            id="club"
+                                            name="customRadio"
+                                            class="radio-btn custom-control-input"
+                                            disabled
+                                        />
+                                    {:else if cantBeCounty}
+                                        <input
+                                            type="radio"
+                                            id="club"
+                                            name="customRadio"
+                                            class="radio-btn custom-control-input"
+                                            checked
+                                        />
+                                    {:else}
+                                        <input
+                                            type="radio"
+                                            id="club"
+                                            name="customRadio"
+                                            class="radio-btn custom-control-input"
+                                        />
+                                    {/if}
                                     <label
                                         class="custom-control-label"
                                         for="club">Club</label
@@ -30,21 +94,43 @@
                             <div class="row">
                                 <!-- County Radio Button -->
                                 <div class="custom-control custom-radio">
-                                    <input
-                                        type="radio"
-                                        id="county"
-                                        name="customRadio"
-                                        class="radio-btn custom-control-input"
-                                    />
+                                    {#if cantBeCounty}
+                                        <input
+                                            type="radio"
+                                            id="county"
+                                            name="customRadio"
+                                            class="radio-btn custom-control-input"
+                                            disabled
+                                        />
+                                    {:else if cantBeClub}
+                                        <input
+                                            type="radio"
+                                            id="county"
+                                            name="customRadio"
+                                            class="radio-btn custom-control-input"
+                                            checked
+                                        />
+                                    {:else}
+                                        <input
+                                            type="radio"
+                                            id="county"
+                                            name="customRadio"
+                                            class="radio-btn custom-control-input"
+                                        />
+                                    {/if}
                                     <label
                                         class="custom-control-label"
                                         for="county">County</label
                                     >
                                 </div>
+                                <div class="invalid-feedback">
+                                    Please choose club or county.
+                                </div>
                             </div>
                         </div>
                         <!-- date Of Match -->
                         <div class="col-12 col-md-6">
+                            {tomorrow}
                             <div class="row pb-3">
                                 <label for="datePicker">Date:</label>
                                 <input
@@ -52,6 +138,7 @@
                                     type="date"
                                     id="datePicker"
                                     name="datePicker"
+                                    min={tomorrow}
                                     required
                                 />
                             </div>
@@ -68,60 +155,45 @@
                         </div>
                     </div>
                     <!-- Venue Select Menu -->
-                    <div class="row pb-3">
-                        <label for="venue-select">Select Venue</label>
-                        <select class="venue-select" required>
-                            <option selected value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                        </select>
-                    </div>
-                    <!-- Competition Select Menu -->
-                    <div class="row pb-3">
-                        <label for="competition-select"
-                            >Select Competition</label
-                        >
-
-                        <select class="competition-select" required>
-                            <option selected value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                        </select>
-                    </div>
-                    <!-- Team A Select Menu -->
-                    <div class="row pb-3">
-                        <label for="teamA-select">Select Team A</label>
-                        <select class="teamA-select" required>
-                            <option selected value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                        </select>
-                    </div>
 
                     <!-- Team B Select Menu -->
-                    <div class="row pb-3">
-                        <label for="teamB-select">Select Team B</label>
+                    <FormSelect
+                        selectId="venue-select"
+                        labelText="Select Venue"
+                        values={filteredVenues}
+                    />
 
-                        <select class="teamB-select" required>
-                            <option selected value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                        </select>
-                    </div>
+                    <!-- Competition Select Menu -->
+                    <FormSelect
+                        selectId="competition-select"
+                        labelText="Select Competition"
+                        values={filteredCompetitions}
+                    />
+
+                    <!-- Team A Select Menu -->
+                    <FormSelect
+                        selectId="teamA-select"
+                        labelText="Select Team A"
+                        values={filteredTeamsA}
+                    />
+
+                    <!-- Team B Select Menu -->
+                    <FormSelect
+                        selectId="teamB-select"
+                        labelText="Select Team B"
+                        values={filteredTeamsB}
+                    />
                 </div>
                 <!-- Referee / Linesmen / Umpires -->
                 <div id="ref-details" class="col-12 col-md-6">
                     <!-- Referee Select Menu -->
 
-                    <div class="row pb-3">
-                        <label for="referee-select">Select Referee</label>
+                    <FormSelect
+                        selectId="referee-select"
+                        labelText="Select Referee"
+                        values={filteredReferees}
+                    />
 
-                        <select class="referee-select" required>
-                            <option selected value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                        </select>
-                    </div>
                     <br />
                     <div class="row pb-3">
                         <label for="linesman1">Linesmen</label>
