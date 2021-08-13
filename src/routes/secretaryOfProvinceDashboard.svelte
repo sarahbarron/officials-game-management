@@ -10,6 +10,7 @@
         secProvinceUpcomingGames,
         secProvincePastGames,
     } from "../services/storeUser";
+    import ProvinceCreateGame from "../components/ProvinceCreateGame.svelte";
     let loginString = `You need to <a href='/login'>Login</a>`;
     let heading = "Secretary Of Province Dashboard";
     let isActive = "province";
@@ -56,6 +57,7 @@
             <Nav {isActive} />
             <div class="container padding-for-footer">
                 <h1>{heading}</h1>
+                <ProvinceCreateGame />
                 <Card cardHeader={upcomingCardHeader} games={upcomingGames} />
                 <br /><br />
                 <Card cardHeader={pastCardHeader} games={pastGames} />

@@ -2201,45 +2201,77 @@ export let getNationalReferees = async () => {
         console.error(`getNationalReferees exception ${e}`);
     }
 }
-export let getProvincialVenues = async (provinceId: string) => {
-    let venues = [];
-    let countyIds = [];
-    let provinceRef = db.collection("Province").doc(provinceId);
-    let countyDocs = await db.collection("County").where("province", "==", provinceRef).get();
-    countyDocs.forEach((doc) => {
-        const id = doc.id;
-        countyIds = [...countyIds, id];
-    });
 
-    let venueDocs = await db.collection("Venue").where("county", "in", countyIds).get();
-    venueDocs.forEach((doc) => {
-        const venueId = doc.id;
-        const clubOrCountyId = doc.data().county.id;
-        const name = doc.data().name;
-        const lat = doc.data().lng;
-        const lng = doc.data().lng;
-        const venue = {
-            venueId: venueId,
-            clubOrCountyId: clubOrCountyId,
-            name: name,
-            lat: lat,
-            lng: lng,
+// Get a users Province Id
+export let getProvinceId = async (clubId: string) => {
+    try {
+        let clubDoc = await db.collection("Club").doc(clubId).get();
+        let countyDoc = await db.collection("County").doc(clubDoc.data().county.id).get();
+        let provinceId = countyDoc.data().province.id;
+        return provinceId;
+    } catch (e) {
+        console.error(`getProvinceId exception ${e}`);
+    }
+}
+//  get the  county Refs of a province
+export let getCountyRefsOfProvince = async (provinceId: string) => {
+    try {
+        let countyRefs = []
+        let provinceRef = db.collection("Province").doc(provinceId);
+        let countyDocs = await db.collection("County").where("province", "==", provinceRef).get();
+        countyDocs.forEach((doc) => {
+            let countyRef = db.collection("County").doc(doc.id);
+            countyRefs = [...countyRefs, countyRef];
+        });
+        return countyRefs;
+    } catch (e) {
+        console.error(`getCountyRefsOfProvince exception ${e}`);
+    }
+}
 
+// get the county venues within a province
+export let getProvincialVenues = async (countyIds: []) => {
+    try {
+        let venues = [];
+        let venueDocs = await db.collection("Venue").where("county", "in", countyIds).get();
+        venueDocs.forEach((doc) => {
+            const venueId = doc.id;
+            const clubOrCountyId = doc.data().county.id;
+            const name = doc.data().name;
+            const lat = doc.data().lng;
+            const lng = doc.data().lng;
+            const venue = {
+                venueId: venueId,
+                clubOrCountyId: clubOrCountyId,
+                name: name,
+                lat: lat,
+                lng: lng,
+
+            }
+            venues = [...venues, venue];
+        });
+
+        return venues;
+    } catch (e) {
+        console.error(`getProvincialVenue exception ${e}`);
+    }
+}
+
+export let getProvincialTeams = async (countyRefs: []) => {
+    try {
+        let teams = [];
+
+        for (let i = 0; i < countyRefs.length; i++) {
+            let teamDoc = await db.collection("County").doc(countyRefs[i].id).get();
+            let id = teamDoc.id;
+            let name = id;
+            let team = { id: id, name: name };
+            teams = [...teams, team];
         }
-        venues = [...venues, venue];
-    });
-    return venues;
-}
-let GetMembersProvinceDetails = async (clubId) => {
-    const club = await db.collection("Club").doc(clubId).get();
-    const countyRef = club.data().county;
-    const county = await db.collection("County").doc(countyRef.id).get();
-    const provinceRef = county.data().province;
-    const province = await db.collection("Province").doc(provinceRef.id).get();
-    return province;
 
+        return teams;
+    } catch (e) { console.error(`getProvincialTeams exception ${e}`); }
 }
-
 let getMembersCountyDetails = async (clubId) => {
     const club = await db.collection("Club").doc(clubId).get();
     const countyRef = club.data().county;
@@ -2255,16 +2287,47 @@ let getMembersClubDetails = async (clubId) => {
 
 
 
+// Get Competitions of A province
+export let getProvincialCompetitions = async (provinceId: string) => {
+    try {
+        let competitions = [];
+        if (provinceId != null && provinceId != undefined) {
+            let provinceRef = db.collection("Province").doc(provinceId);
+            let competitionDocs = await db.collection("Competition").where("isProvincial", "==", provinceRef).get()
+            competitionDocs.forEach((doc) => {
 
-let getProvincialCompetitions = async (provinceId: string) => {
-    let provinceRef = db.collection("Province").doc(provinceId);
-    let competitions = await db.collection("Competition").where("province", "==", provinceRef).get()
-    return competitions
+                let id = doc.id;
+                let countyId = doc.data().county;
+                if (countyId != null) {
+                    countyId = countyId.id;
+                }
+                let gradeId = doc.data().grade.id;
+                let isNational = doc.data().isNational;
+                let name = doc.data().name;
+                let sportTypeId = doc.data().sportType.id;
+
+                let comp = {
+                    id: id,
+                    countyId: countyId,
+                    gradeId: gradeId,
+                    isNational: isNational,
+                    name: name,
+                    provinceId: provinceId,
+                    sportTypeId: sportTypeId
+                }
+                competitions = [...competitions, comp];
+            });
+        }
+        return competitions;
+    } catch (e) {
+        console.error(`getProvincialCompetitions exception ${e}`);
+    }
 }
 
 let getCountyCompetitions = async (countyId: string) => {
     let countyRef = db.collection("County").doc(countyId);
-    let competitions = await db.collection("Competition").where("county", "==", countyRef).get()
+    let competitions = await db.collection("Competition").where("county", "==", countyRef).get();
+
     return competitions
 }
 
