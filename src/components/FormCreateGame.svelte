@@ -5,7 +5,6 @@
     import FormCreateMatchOfficials from "./FormCreateMatchOfficials.svelte";
     import { onDestroy } from "svelte";
     import { createGameInFirestore } from "../services/firebaseQueries";
-    import { flush } from "svelte/internal";
 
     // Club / County Radio Buttons
     $: cantBeCounty = false;
@@ -25,10 +24,10 @@
     export let refereeOptions = [];
     $: filteredReferees = refereeOptions;
 
-    $: console.log(`Venues: ${venueOptions}`);
-    $: console.log(`Competitins ${competitionOptions}`);
-    $: console.log(`Teams ${teamOptions}`);
-    $: console.log(`Referee ${refereeOptions}`);
+    // $: console.log(`Venues: ${venueOptions}`);
+    // $: console.log(`Competitins ${competitionOptions}`);
+    // $: console.log(`Teams ${teamOptions}`);
+    // $: console.log(`Referee ${refereeOptions}`);
 
     let member_Id: string;
     const unsubscribeMemberId = memberId.subscribe((value) => {
@@ -37,6 +36,7 @@
     onDestroy(unsubscribeMemberId);
     function createGame(event) {
         try {
+            console.log("create game: " + event.target);
             let memberId = member_Id;
             let date = event.target.datePicker.value;
             let time = event.target.time.value;
@@ -79,7 +79,7 @@
     <div class="card-header"><h2>Create Game</h2></div>
     <div class="card-body">
         <form
-            on:submit={createGame}
+            on:submit|preventDefault={createGame}
             action=""
             class="needs-validation"
             data-toggle="validator"

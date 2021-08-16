@@ -4,7 +4,9 @@
     import {
         getCountyRefsOfProvince,
         getProvinceId,
+        getProvincialClubReferences,
         getProvincialCompetitions,
+        getProvincialReferees,
         getProvincialTeams,
         getProvincialVenues,
     } from "../services/firebaseQueries";
@@ -30,44 +32,49 @@
         competitionOptions = await getProvincialCompetitions(provinceId);
     };
 
-    let getTeams = async (countyRefs) => {
+    let getTeams = async (countyRefs: any[]) => {
         teamOptions = await getProvincialTeams(countyRefs);
     };
-    let getReferees = async (countyRefs: []) => {
-        // refereeOptions = await getProvinceReferees(clubId);
+    let getReferees = async (clubReferences: any[]) => {
+        refereeOptions = await getProvincialReferees(clubReferences);
     };
 
     let getFormDetails = async () => {
-        let countyRefs = [];
+        let countyReferences = [];
+        let clubReferences = [];
         let provinceId = await getProvinceId(club_id);
 
         if (provinceId != null && provinceId != undefined) {
-            countyRefs = await getCountyRefsOfProvince(provinceId);
-            if (countyRefs != null && countyRefs != undefined) {
-                getVenues(countyRefs);
-                getTeams(countyRefs);
+            countyReferences = await getCountyRefsOfProvince(provinceId);
+            if (
+                countyReferences != null &&
+                countyReferences != undefined &&
+                countyReferences.length > 0
+            ) {
+                getVenues(countyReferences);
+                getTeams(countyReferences);
+                clubReferences = await getProvincialClubReferences(
+                    countyReferences
+                );
+            }
+            if (
+                clubReferences != null &&
+                clubReferences != undefined &&
+                clubReferences.length > 0
+            ) {
+                getReferees(clubReferences);
             }
             getCompetitions(provinceId);
         }
-
-        // let countyIds = getCountyIdsOfProvince(provinceId);
-        // if (provinceId != null && provinceId != undefined) {
-        //     getVenues(provinceId);
-        //     getCompetitions(provinceId);
-        //     getTeams(provinceId);
-        //     getReferees(provinceId);
-        // }
     };
 
     getFormDetails();
 </script>
 
-<FormCreateGame />
-<!-- 
 <FormCreateGame
     {venueOptions}
     {competitionOptions}
     {teamOptions}
     {refereeOptions}
-/> -->
+/>
 <br />
