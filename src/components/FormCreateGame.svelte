@@ -4,6 +4,8 @@
         memberId,
         refereeOfClub,
         refereeOfCounty,
+        refUpcomingGames,
+        secClubUpcomingGames,
         secCouncilUpcomingGames,
         secCountyUpcomingClubGames,
         secCountyUpcomingCountyGames,
@@ -13,6 +15,7 @@
         secretaryOfCounty,
         secretaryOfProvince,
         teamOfficial,
+        teamOfficialUpcomingGames,
     } from "../services/storeUser";
 
     import FormCreateGameDetails from "./FormCreateGameDetails.svelte";
@@ -21,8 +24,10 @@
     import {
         createGameInFirestore,
         createGame,
+        getSecretaryOfCountyUpcomingCountyGames,
     } from "../services/firebaseQueries";
     import { db } from "../services/firebase";
+    import UpcomingGames from "./UpcomingGames.svelte";
 
     // Club / County Radio Buttons
     $: cantBeCounty = false;
@@ -92,6 +97,118 @@
         }
     }
 
+    // Is the user secretary of council true/false
+    let secretary_of_council: boolean;
+    const unsubcribeSecOfCouncil = secretaryOfCouncil.subscribe((value) => {
+        secretary_of_council = value;
+    });
+    onDestroy(unsubcribeSecOfCouncil);
+
+    // get the council upcoming games
+    let council_games = [];
+    if (secretary_of_council) {
+        const unsubscribeSecOfCouncilUpcomingGame =
+            secCouncilUpcomingGames.subscribe((value) => {
+                council_games = value;
+            });
+        onDestroy(unsubscribeSecOfCouncilUpcomingGame);
+    }
+
+    //  Is the user secretary of province true/false
+    let secretary_of_province: boolean;
+    const unsubcribeSecOfProvince = secretaryOfProvince.subscribe((value) => {
+        secretary_of_province = value;
+    });
+    onDestroy(unsubcribeSecOfProvince);
+
+    // get the provincial upcoming games
+    let provincial_games = [];
+    if (secretary_of_province) {
+        const unsubscribeSecOfProvinceUpcomingGame =
+            secProvinceUpcomingGames.subscribe((value) => {
+                provincial_games = value;
+            });
+        onDestroy(unsubscribeSecOfProvinceUpcomingGame);
+    }
+    // Is the user a secretary of county true/false
+    let secretary_of_county: boolean;
+    const unsubcribeSecOfCounty = secretaryOfCounty.subscribe((value) => {
+        secretary_of_county = value;
+    });
+    onDestroy(unsubcribeSecOfCounty);
+
+    // get counties upcoming games
+    let county_games = [];
+    let county_club_games = [];
+    if (secretary_of_county) {
+        let unsubscribeSecOfCountyCountyGames =
+            secCountyUpcomingCountyGames.subscribe((value) => {
+                county_games = [];
+            });
+        onDestroy(unsubscribeSecOfCountyCountyGames);
+
+        // get counties upcoming club games
+        const unsubscribeSecOfCountyUpcomingGame =
+            secCountyUpcomingClubGames.subscribe((value) => {
+                county_club_games = value;
+            });
+        onDestroy(unsubscribeSecOfCountyUpcomingGame);
+    }
+    // Is the user secretary of club true/false
+    let secretary_of_club: boolean;
+    const unsubcribeSecOfClub = secretaryOfClub.subscribe((value) => {
+        secretary_of_club = value;
+    });
+    onDestroy(unsubcribeSecOfClub);
+
+    let club_games = [];
+    // get a clubs upcoming games
+    if (secretary_of_club) {
+        let unsubscribeSecOfClubUpcomingGames = secClubUpcomingGames.subscribe(
+            (value) => {
+                club_games = value;
+            }
+        );
+        onDestroy(unsubscribeSecOfClubUpcomingGames);
+    }
+    // get team officials upcoming games
+    let team_official: boolean;
+    const unsubcribeTeamOfficial = teamOfficial.subscribe((value) => {
+        team_official = value;
+    });
+    onDestroy(unsubcribeTeamOfficial);
+
+    // get team officials upcoming games
+    let team_games = [];
+    if (team_official) {
+        const unsubscribeTeamOfficialUpcomingGame =
+            teamOfficialUpcomingGames.subscribe((value) => {
+                team_games = value;
+            });
+        onDestroy(unsubscribeTeamOfficialUpcomingGame);
+    }
+
+    // is the user a referee of clubs
+    let referee_of_club: boolean;
+    let unsubscribeRefOfClub = refereeOfClub.subscribe((value) => {
+        referee_of_club = value;
+    });
+    onDestroy(unsubscribeRefOfClub);
+    // is the user a referee of county
+    let referee_of_county: boolean;
+    let unsubscribeRefOfCounty = refereeOfCounty.subscribe((value) => {
+        referee_of_county = value;
+    });
+    onDestroy(unsubscribeRefOfCounty);
+
+    let referee_games = [];
+    if (referee_of_club || referee_of_county) {
+        let unsubscribeRefereeGames = refUpcomingGames.subscribe((value) => {
+            referee_games = value;
+        });
+        onDestroy(unsubscribeRefereeGames);
+    }
+
     let firestoreCreateGame = async (
         memberId: string,
         date,
@@ -128,65 +245,34 @@
         );
 
         let gameDoc = await db.collection("Game").doc(game.id).get();
-        let createdGame = await createGame(gameDoc);
-        updateStoredGames(createdGame);
-    };
-
-    let updateStoredGames = async (game) => {
-        // If the user is secretary of council update the games
-        let secretary_of_council: boolean;
-        const unsubcribeSecOfCouncil = secretaryOfCouncil.subscribe((value) => {
-            secretary_of_council = value;
-        });
-        onDestroy(unsubcribeSecOfCouncil);
-
+        let created_game = await createGame(gameDoc);
+        console.log(created_game);
         if (secretary_of_council) {
-            let upcoming_games = [];
-            const unsubscribeSecOfCouncilUpcomingGame =
-                secCouncilUpcomingGames.subscribe((value) => {
-                    upcoming_games = value;
-                });
-            onDestroy(unsubscribeSecOfCouncilUpcomingGame);
-            upcoming_games = [...upcoming_games, game];
-            secCouncilUpcomingGames.set(upcoming_games);
+            council_games = [...council_games, created_game];
+            console.log(council_games);
+            secCouncilUpcomingGames.set(council_games);
         }
-
-        //  If the user is secretary of province update the games
-        let secretary_of_province: boolean;
-        const unsubcribeSecOfProvince = secretaryOfProvince.subscribe(
-            (value) => {
-                secretary_of_province = value;
-            }
-        );
-        onDestroy(unsubcribeSecOfProvince);
-
         if (secretary_of_province) {
-            let upcoming_games = [];
-            const unsubscribeSecOfProvinceUpcomingGame =
-                secProvinceUpcomingGames.subscribe((value) => {
-                    upcoming_games = value;
-                });
-            onDestroy(unsubscribeSecOfProvinceUpcomingGame);
-            upcoming_games = [...upcoming_games, game];
-            secProvinceUpcomingGames.set(upcoming_games);
+            provincial_games = [...provincial_games, created_game];
+            secProvinceUpcomingGames.set(provincial_games);
         }
-
-        // If the user is secretary of county update the games
-        let secretary_of_county: boolean;
-        const unsubcribeSecOfCounty = secretaryOfCounty.subscribe((value) => {
-            secretary_of_county = value;
-        });
-        onDestroy(unsubcribeSecOfCounty);
-
         if (secretary_of_county) {
-            let upcoming_games = [];
-            const unsubscribeSecOfCountyUpcomingGame =
-                secCountyUpcomingClubGames.subscribe((value) => {
-                    upcoming_games = value;
-                });
-            onDestroy(unsubscribeSecOfCountyUpcomingGame);
-            upcoming_games = [...upcoming_games, game];
-            secCountyUpcomingClubGames.set(upcoming_games);
+            county_club_games = [...county_club_games, created_game];
+            county_games = [...county_games, created_game];
+            secCountyUpcomingCountyGames.set(county_games);
+            secCountyUpcomingClubGames.set(county_club_games);
+        }
+        if (secretary_of_club) {
+            club_games = [...club_games, created_game];
+            secClubUpcomingGames.set(club_games);
+        }
+        if (team_official) {
+            team_games = [...team_games, created_game];
+            teamOfficialUpcomingGames.set(team_games);
+        }
+        if (referee_of_club || referee_of_county) {
+            referee_games = [...referee_games, created_game];
+            refUpcomingGames.set(referee_games);
         }
     };
 </script>
