@@ -46,10 +46,10 @@
     export let refereeOptions = [];
     $: filteredReferees = refereeOptions;
 
-    // $: console.log(`Venues: ${venueOptions}`);
-    // $: console.log(`Competitins ${competitionOptions}`);
-    // $: console.log(`Teams ${teamOptions}`);
-    // $: console.log(`Referee ${refereeOptions}`);
+    $: console.log(`Venues: ${venueOptions}`);
+    $: console.log(`Competitins ${competitionOptions}`);
+    $: console.log(`Teams ${teamOptions}`);
+    $: console.log(`Referee ${refereeOptions}`);
 
     let member_Id: string;
     const unsubscribeMemberId = memberId.subscribe((value) => {
@@ -60,12 +60,22 @@
     function createNewGame(event) {
         try {
             let memberId = member_Id;
+            console.log(`member id : ${memberId}`);
             let date = event.target.datePicker.value;
+            console.log(`date: ${date}`);
             let time = event.target.time.value;
+            console.log(`time ${time}`);
             let venueId = event.target.venueSelect.value;
+            console.log(`venueId ${venueId}`);
+
             let competitionId = event.target.competitionSelect.value;
+            console.log(`comp id ${competitionId}`);
+
             let teamAId = event.target.teamASelect.value;
+            console.log(`team A : ${teamAId}`);
+
             let teamBId = event.target.teamBSelect.value;
+
             let refereeId = event.target.refereeSelect.value;
             let subReferee = event.target.subRefereeSelect.value;
             let linesman1 = event.target.linesman1.value;

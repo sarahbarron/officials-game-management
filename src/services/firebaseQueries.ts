@@ -2287,7 +2287,7 @@ export let getProvincialVenues = async (countyIds: []) => {
             const lat = doc.data().lng;
             const lng = doc.data().lng;
             const venue = {
-                venueId: venueId,
+                id: venueId,
                 clubOrCountyId: clubOrCountyId,
                 name: name,
                 lat: lat,
@@ -2307,14 +2307,13 @@ export let getProvincialVenues = async (countyIds: []) => {
 export let getProvincialTeams = async (countyRefs: any[]) => {
     try {
         let teams = [];
-
-        for (let i = 0; i < countyRefs.length; i++) {
-            let teamDoc = await db.collection("County").doc(countyRefs[i].id).get();
-            let id = teamDoc.id;
-            let name = id;
+        let teamDocs = await db.collection("Team").where("county", "in", countyRefs).get();
+        teamDocs.forEach((doc) => {
+            let id = doc.id;
+            let name = doc.data().name;
             let team = { id: id, name: name };
             teams = [...teams, team];
-        }
+        });
 
         return teams;
     } catch (e) { console.error(`getProvincialTeams exception ${e}`); }
