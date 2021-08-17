@@ -1,10 +1,28 @@
 <script lang="ts">
-    import { memberId } from "../services/storeUser";
+    import {
+        clubRef,
+        memberId,
+        refereeOfClub,
+        refereeOfCounty,
+        secCouncilUpcomingGames,
+        secCountyUpcomingClubGames,
+        secCountyUpcomingCountyGames,
+        secProvinceUpcomingGames,
+        secretaryOfClub,
+        secretaryOfCouncil,
+        secretaryOfCounty,
+        secretaryOfProvince,
+        teamOfficial,
+    } from "../services/storeUser";
 
     import FormCreateGameDetails from "./FormCreateGameDetails.svelte";
     import FormCreateMatchOfficials from "./FormCreateMatchOfficials.svelte";
     import { onDestroy } from "svelte";
-    import { createGameInFirestore } from "../services/firebaseQueries";
+    import {
+        createGameInFirestore,
+        createGame,
+    } from "../services/firebaseQueries";
+    import { db } from "../services/firebase";
 
     // Club / County Radio Buttons
     $: cantBeCounty = false;
@@ -34,9 +52,9 @@
         member_Id = value;
     });
     onDestroy(unsubscribeMemberId);
-    function createGame(event) {
+
+    function createNewGame(event) {
         try {
-            console.log("create game: " + event.target);
             let memberId = member_Id;
             let date = event.target.datePicker.value;
             let time = event.target.time.value;
@@ -52,7 +70,7 @@
             let umpire2 = event.target.umpire2.value;
             let umpire3 = event.target.umpire3.value;
             let umpire4 = event.target.umpire4.value;
-            createGameInFirestore(
+            firestoreCreateGame(
                 memberId,
                 date,
                 time,
@@ -73,13 +91,111 @@
             console.error(`createGame exception ${e}`);
         }
     }
+
+    let firestoreCreateGame = async (
+        memberId: string,
+        date,
+        time,
+        venueId,
+        competitionId,
+        teamAId,
+        teamBId,
+        refereeId,
+        subReferee,
+        linesman1,
+        linesman2,
+        umpire1,
+        umpire2,
+        umpire3,
+        umpire4
+    ) => {
+        let game = await createGameInFirestore(
+            memberId,
+            date,
+            time,
+            venueId,
+            competitionId,
+            teamAId,
+            teamBId,
+            refereeId,
+            subReferee,
+            linesman1,
+            linesman2,
+            umpire1,
+            umpire2,
+            umpire3,
+            umpire4
+        );
+
+        let gameDoc = await db.collection("Game").doc(game.id).get();
+        let createdGame = await createGame(gameDoc);
+        updateStoredGames(createdGame);
+    };
+
+    let updateStoredGames = async (game) => {
+        // If the user is secretary of council update the games
+        let secretary_of_council: boolean;
+        const unsubcribeSecOfCouncil = secretaryOfCouncil.subscribe((value) => {
+            secretary_of_council = value;
+        });
+        onDestroy(unsubcribeSecOfCouncil);
+
+        if (secretary_of_council) {
+            let upcoming_games = [];
+            const unsubscribeSecOfCouncilUpcomingGame =
+                secCouncilUpcomingGames.subscribe((value) => {
+                    upcoming_games = value;
+                });
+            onDestroy(unsubscribeSecOfCouncilUpcomingGame);
+            upcoming_games = [...upcoming_games, game];
+            secCouncilUpcomingGames.set(upcoming_games);
+        }
+
+        //  If the user is secretary of province update the games
+        let secretary_of_province: boolean;
+        const unsubcribeSecOfProvince = secretaryOfProvince.subscribe(
+            (value) => {
+                secretary_of_province = value;
+            }
+        );
+        onDestroy(unsubcribeSecOfProvince);
+
+        if (secretary_of_province) {
+            let upcoming_games = [];
+            const unsubscribeSecOfProvinceUpcomingGame =
+                secProvinceUpcomingGames.subscribe((value) => {
+                    upcoming_games = value;
+                });
+            onDestroy(unsubscribeSecOfProvinceUpcomingGame);
+            upcoming_games = [...upcoming_games, game];
+            secProvinceUpcomingGames.set(upcoming_games);
+        }
+
+        // If the user is secretary of county update the games
+        let secretary_of_county: boolean;
+        const unsubcribeSecOfCounty = secretaryOfCounty.subscribe((value) => {
+            secretary_of_county = value;
+        });
+        onDestroy(unsubcribeSecOfCounty);
+
+        if (secretary_of_county) {
+            let upcoming_games = [];
+            const unsubscribeSecOfCountyUpcomingGame =
+                secCountyUpcomingClubGames.subscribe((value) => {
+                    upcoming_games = value;
+                });
+            onDestroy(unsubscribeSecOfCountyUpcomingGame);
+            upcoming_games = [...upcoming_games, game];
+            secCountyUpcomingClubGames.set(upcoming_games);
+        }
+    };
 </script>
 
 <div class="card">
     <div class="card-header"><h2>Create Game</h2></div>
     <div class="card-body">
         <form
-            on:submit|preventDefault={createGame}
+            on:submit|preventDefault={createNewGame}
             action=""
             class="needs-validation"
             data-toggle="validator"

@@ -1,8 +1,8 @@
 <script lang="ts">
     import FormSelect from "../components/FormSelect.svelte";
     export let filteredReferees = [];
-    let subFilteredReferees = [{ id: null, name: "none" }];
-    subFilteredReferees = [...subFilteredReferees, ...filteredReferees];
+    let none = [{ id: null, name: "No Substitute Referee" }];
+    $: subFilteredReferees = none.concat(filteredReferees);
 </script>
 
 <!-- Referee / Linesmen / Umpires -->

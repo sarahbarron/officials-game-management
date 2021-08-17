@@ -108,7 +108,7 @@
         active={homeActive}
         aria={homeAria}
     />
-    {#if refereeOfClub || refereeOfCounty}
+    {#if referee_of_club || referee_of_county}
         <NavLi
             id="referee-nav"
             href="/referee"

@@ -10,6 +10,7 @@
         lastName,
         refereeOfClub,
         refereeOfCounty,
+        resetStore,
         secretaryOfClub,
         secretaryOfCouncil,
         secretaryOfCounty,
@@ -17,7 +18,7 @@
         teamOfficial,
     } from "../services/storeUser";
     import DashboardAccordion from "../components/DashboardAccordion.svelte";
-    let loginString = `You need to <a href='/login'>Login</a>`;
+    let loginString = `You are not registered you need to <br><a href='/'>Login as a GAA Official</a>`;
     interface User {
         email: String;
         uid: String;
@@ -96,7 +97,6 @@
     onMount(async () => {
         setTimeout(() => {
             pause = false;
-            console.log(pause);
         }, 15000);
     });
 </script>
@@ -136,7 +136,9 @@
             </div>
             <Footer />
         {:else}
-            <h2>{@html loginString}</h2>
+            <div class="container login">
+                <h2>{@html loginString}</h2>
+            </div>
         {/if}
     </div>
 </div>
@@ -144,5 +146,14 @@
 <style>
     .circle {
         text-align: -webkit-center;
+    }
+
+    .login {
+        border-style: solid;
+        border-radius: 20px;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-color: #f8f9fa;
+        text-align: center;
     }
 </style>

@@ -18,14 +18,20 @@ export const localStore = (key, initial) => {                 // receives the ke
 
     const { subscribe, set, update } = writable(saved)          // create the underlying writable store
 
+
     return {
+
       subscribe,
       set: (value) => {
-        localStorage.setItem(key, toString(value))              // save also to local storage as a string
-        return set(value)
+        try {
+          localStorage.setItem(key, toString(value))              // save also to local storage as a string
+
+          return set(value)
+        } catch (e) { console.log("localStorage setItem " + e); }
       },
       update
     }
+
   } catch (e) {
     console.log("localStore exception: " + e);
     return

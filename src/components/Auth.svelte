@@ -1,9 +1,10 @@
 <script lang="ts">
-    import { auth, googleAuth } from "../services/firebase";
+    import { auth, db, googleAuth } from "../services/firebase";
     import { createEventDispatcher, onDestroy } from "svelte";
     import ErrorAlert from "./ErrorAlert.svelte";
     import { resetStore, userEmail } from "../services/storeUser";
     import { getMember } from "../services/firebaseQueries";
+    import router from "page";
     import Logout from "./Logout.svelte";
 
     let isAuthenticated = false;
@@ -20,8 +21,22 @@
 
     // If the user email is updated get the member details
     $: if (user_email != null && user_email != undefined && user_email != "") {
-        console.log(`User Email ${user_email}`);
         getMember(user_email);
+    }
+
+    function logout() {
+        if (auth.currentUser) {
+            auth.signOut()
+                .then(() => {
+                    resetStore();
+                    router("/", () => router.redirect("/"));
+                    eventDispatch("done");
+                    eventDispatch("logout");
+                })
+                .catch((e) => {
+                    throw new Error(e);
+                });
+        }
     }
     // // only authenticate the user if the user is not already authenticated
     // auth.onAuthStateChanged((user) => {
@@ -39,20 +54,24 @@
             document.getElementById("l-password") as HTMLInputElement
         ).value;
 
-        // basic form validation
-        if (!email || !password) {
-            err = "Fill out all fields!";
-            return;
-        }
-        err = "";
-
         // sign in using firebase
         auth.signInWithEmailAndPassword(email, password)
             .then((userCredential) => {
                 let email = userCredential.user.email;
-                userEmail.set(email);
-                eventDispatch("done");
-                eventDispatch("auth");
+                db.collection("Member")
+                    .where("email", "==", email)
+                    .get()
+                    .then((member) => {
+                        if (member.empty) {
+                            auth.signOut();
+                            err =
+                                "You must use your GAA official email and password to login";
+                        } else {
+                            userEmail.set(email);
+                            eventDispatch("done");
+                            eventDispatch("auth");
+                        }
+                    });
             })
             .catch((e) => {
                 err = `(${e.code}) ${e.message}`;
@@ -64,9 +83,21 @@
         auth.signInWithPopup(googleAuth)
             .then((result) => {
                 let email = result.user.email;
-                userEmail.set(email);
-                eventDispatch("auth");
-                eventDispatch("done");
+
+                db.collection("Member")
+                    .where("email", "==", email)
+                    .get()
+                    .then((member) => {
+                        if (member.empty) {
+                            auth.signOut();
+                            err =
+                                "You must use your GAA official email and password to login";
+                        } else {
+                            userEmail.set(email);
+                            eventDispatch("done");
+                            eventDispatch("auth");
+                        }
+                    });
             })
             .catch((e) => {
                 err = `(${e.code}) ${e.message} ${e.email} ${e.credential}`;
@@ -83,12 +114,6 @@
                 </div>
                 <div>
                     <form on:submit|preventDefault={login}>
-                        {#if err}
-                            <div>
-                                <ErrorAlert message={err} />
-                            </div>
-                        {/if}
-
                         <div class="form-group">
                             <label for="l-email">Email</label>
 
@@ -98,6 +123,7 @@
                                 placeholder="Enter your email"
                                 id="l-email"
                                 aria-describedby="emailHelp"
+                                required
                             />
                         </div>
                         <div class="form-group">
@@ -107,9 +133,15 @@
                                 class="form-control"
                                 placeholder="Enter your password"
                                 id="l-password"
+                                required
                             />
                         </div>
 
+                        {#if err}
+                            <div>
+                                <ErrorAlert message={err} />
+                            </div>
+                        {/if}
                         <div class="row">
                             <div class="col-12 col-lg-6 center-btn">
                                 <button type="submit" class="btn btn-primary"

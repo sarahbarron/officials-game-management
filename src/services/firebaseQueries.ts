@@ -11,9 +11,9 @@ import {
     secCouncilUpcomingGames, secCouncilPastGames,
     teamOfficialUpcomingGames, teamOfficialPastGames, allGames
 } from './storeUser';
-import { db } from "./firebase";
+import { db, auth } from "./firebase";
 import { convertTimestampToDate, convertTimestampToTime } from '../services/util';
-import type firebase from 'firebase';
+
 
 const member = db.collection('Member');
 
@@ -1113,7 +1113,6 @@ export let getTeamOfficialUpcomingGames = async (memberId: string) => {
                 .orderBy("dateTime")
                 .get();
             querySnapshotB.forEach(async (gameDocB) => {
-                console.log(`Team: ${teamDoc.id} Game ${gameDocB.id}`);
                 const gamePromise = await createGame(gameDocB);
                 let id = gamePromise.gameId;
                 let competition = gamePromise.competition;
@@ -1145,7 +1144,6 @@ export let getTeamOfficialUpcomingGames = async (memberId: string) => {
                     matchStarted: matchStarted,
                     matchEnded: matchEnded
                 }
-                // const game = convertPromiseToGameObject(gamePromise);
 
                 if (!games.includes(game)) {
                     games = [...games, game];
@@ -1243,7 +1241,6 @@ export let getTeamOfficialPastGames = async (memberId: string) => {
                 .orderBy("dateTime")
                 .get();
             querySnapshotB.forEach(async (gameDocB) => {
-                console.log(`Team: ${teamDoc.id} Game ${gameDocB.id}`);
                 const gamePromise = await createGame(gameDocB);
                 let id = gamePromise.gameId;
                 let competition = gamePromise.competition;
@@ -1732,12 +1729,8 @@ Retrieve Team details from firestore
 */
 export let getTeam = async (gameId: string, teamId: string) => {
     try {
-        console.log(`getTeam gameId: ${gameId}, teamId: ${teamId}`);
         const teamDoc = db.collection("Team").doc(teamId);
         const doc = await teamDoc.get();
-
-        console.log(`getTeam doc ${doc.id} `);
-
         if (doc.exists) {
 
             let clubId = doc.data().club;
@@ -2433,22 +2426,40 @@ export let createGameInFirestore = async (memberId: string, date: any, time: any
             venue = db.collection("Venue").doc(venueId);
         }
         let teamA = null;
+        let clubOrCountyA = null;
+
         if (teamAId != undefined && teamAId != null) {
             teamA = db.collection("Team").doc(teamAId);
+            let teamADoc = await teamA.get();
+            if (teamADoc.data().club != null && teamADoc.data() != undefined) {
+                clubOrCountyA = teamADoc.data().club;
+            }
+            else if (teamADoc.data().county != null && teamADoc.data() != undefined) {
+                clubOrCountyA = teamADoc.data().county;
+            }
         }
         let teamB = null;
+        let clubOrCountyB = null;
         if (teamBId != undefined && teamBId != null) {
             teamB = db.collection("Team").doc(teamBId);
+            let teamBDoc = await teamB.get();
+            if (teamBDoc.data().club != null && teamBDoc.data() != undefined) {
+                clubOrCountyB = teamBDoc.data().club;
+            }
+            else if (teamBDoc.data().county != null && teamBDoc.data() != undefined) {
+                clubOrCountyB = teamBDoc.data().county;
+            }
         }
 
-        let clubOrCounties = [teamA, teamB];
+
+        let clubOrCounties = [clubOrCountyA, clubOrCountyB];
         let linesmen = [];
         if (linesman1 != "" || linesman2 != "") {
             linesmen = [linesman1, linesman2];
         }
         let umpires = []
         if (umpire1 != "" || umpire2 != "" || umpire3 != "" || umpire4 != "") {
-            let umpires = [umpire1, umpire2, umpire3, umpire4];
+            umpires = [umpire1, umpire2, umpire3, umpire4];
         }
 
         let delayInStart = "";
@@ -2494,9 +2505,8 @@ export let createGameInFirestore = async (memberId: string, date: any, time: any
             teamBTookToField: teamBTookToField,
             dateTime: dateTime
         }
-        console.log(game);
-        let newGame = db.collection("Game").doc();
-        newGame.set(game);
+        let doc = await db.collection("Game").add(game);
+        return doc
     } catch (e) {
         console.error(`createGameInFirestore exception ${e}`);
     }
@@ -2504,328 +2514,3 @@ export let createGameInFirestore = async (memberId: string, date: any, time: any
 
 
 
-// export let copyCreateGame = async (doc) => {
-//     try {
-//         let gameId = doc.id;
-//         console.log("id: " + doc.id)
-//         let secretaryDoc = doc.data().secretary;
-//         console.log("Sec Doc ID " + secretaryDoc.id);
-//         let competitionId = doc.data().competition;
-//         console.log("competition Id :" + competitionId.id)
-//         let competition = {};
-//         let dateTime = doc.data().dateTime;
-//         console.log("date time " + dateTime);
-//         let linesmen = doc.data().linesmen;
-//         console.log("linesmen: " + linesmen);
-//         let umpires = doc.data().umpires;
-//         console.log("umpires: " + umpires);
-//         let refereeId = doc.data().referee;
-//         console.log("referee Id" + refereeId);
-//         let referee: {};
-//         let substituteRefereeId = doc.data().substituteReferee;
-//         console.log("Sub Ref Id:L " + substituteRefereeId)
-//         let substituteReferee: {};
-//         let teamAId = doc.data().teamA;
-//         console.log("teamAId " + teamAId.id);
-//         let teamA = {};
-//         let teamB = {};
-//         let teamBId = doc.data().teamB;
-//         console.log("TeamBId : " + teamBId.id);
-//         let venueId = doc.data().venue;
-//         console.log("venueId: " + venueId);
-
-//         let teamATookToField = doc.data().teamATookToFieldAt;
-//         console.log("teamATookToField: " + teamATookToField);
-//         let teamBTookToField = doc.data().teamBTookToFieldAt;
-//         console.log("teamBTookTo the Field: " + teamBTookToField)
-//         let matchStarted = doc.data().matchStarted;
-//         let matchEnded = doc.data.matchEnded;
-//         console.log("game started at : " + matchStarted);
-//         console.log("game ended at  " + matchEnded);
-//         let venue = {};
-//         let time: any;
-//         let date: any;
-//         let secretaryId: string = "";
-//         try {
-//             if (teamATookToField == null || teamATookToField == undefined) {
-//                 teamATookToField = "";
-//             }
-//             else {
-//                 teamATookToField = convertTimestampToTime(teamATookToField);
-//             }
-//         } catch (e) { console.log("teamATookToField exception " + e) };
-
-
-//         try {
-//             if (teamBTookToField == null || teamBTookToField == undefined) {
-//                 teamBTookToField = "";
-//             }
-//             else {
-//                 teamBTookToField = convertTimestampToTime(teamBTookToField);
-//             }
-//         } catch (e) {
-//             console.log("teamBTookToTheField Exception: " + e);
-//         }
-
-//         try {
-//             if (matchStarted == null || matchStarted == undefined) {
-//                 matchStarted = "";
-//             }
-//             else {
-//                 matchStarted = convertTimestampToTime(matchStarted);
-//             }
-//         } catch (e) {
-//             console.log("matchStarted exception" + e);
-//         }
-
-//         try {
-//             if (matchEnded == null || matchEnded == undefined) {
-//                 matchEnded = "";
-//             }
-//             else {
-//                 matchEnded = convertTimestampToTime(matchEnded);
-//             }
-//         } catch (e) {
-//             console.log("matchEnded Exception: " + e);
-//         }
-
-//         try {
-//             if (secretaryDoc != null && secretaryDoc != undefined) {
-//                 secretaryId = secretaryDoc.id;
-//             }
-//         } catch (e) {
-//             console.log("SecretaryDoc exception" + e);
-//         }
-//         try {
-//             if (competitionId != null && competitionId != undefined) {
-//                 competitionId = competitionId.id
-//                 const compPromise = await getCompetition(competitionId);
-//                 let id = compPromise.id;
-//                 const county = compPromise.county;
-//                 const province = compPromise.province;
-//                 const isNational = compPromise.isNational;
-//                 const name = compPromise.name;
-//                 const sport = compPromise.sport;
-//                 let gradeId = compPromise.gradeId;
-//                 let grade = compPromise.grade;
-//                 competition = {
-//                     id: id,
-//                     county: county,
-//                     province: province,
-//                     isNational: isNational,
-//                     name: name,
-//                     sport: sport,
-//                     gradeId: gradeId,
-//                     grade: grade
-//                 }
-//             }
-//             else {
-//                 competitionId = null;
-//                 competition = null;
-//             }
-//         } catch (e) {
-//             console.log("Competition exception" + e);
-//         }
-//         try {
-//             if (dateTime == undefined) {
-//                 dateTime = null;
-//             }
-//             else {
-//                 date = convertTimestampToDate(dateTime);
-//                 time = convertTimestampToTime(dateTime);
-//             }
-//         } catch (e) {
-//             console.log("dateTime exception" + e);
-//         }
-//         try {
-//             if (linesmen == undefined) {
-//                 linesmen = [];
-//             }
-//         } catch (e) {
-//             console.log("Linesmen exception " + e);
-//         }
-//         try {
-//             if (refereeId != null && refereeId != undefined) {
-//                 refereeId = refereeId.id;
-//                 console.log(`Referee Id ${refereeId}`);
-//                 const refPromise = await getRefereeNameAndAddress(refereeId);
-//                 let firstName = refPromise.firstName;
-//                 let lastName = refPromise.lastName;
-//                 let addressLine1 = refPromise.addressLine1;
-//                 let addressLine2 = refPromise.addressLine2;
-//                 let town = refPromise.town;
-//                 let county = refPromise.county;
-//                 let eircode = refPromise.eircode;
-//                 let id = refPromise.id;
-
-
-//                 referee = {
-//                     id: id,
-//                     firstName: firstName,
-//                     lastName: lastName,
-//                     addressLine1: addressLine1,
-//                     addressLine2: addressLine2,
-//                     town: town,
-//                     county: county,
-//                     eircode: eircode
-
-//                 };
-//             }
-//             else {
-//                 refereeId = null;
-//             }
-//         } catch (e) {
-//             console.log("refereeId exception" + e);
-//         }
-//         try {
-//             if (substituteRefereeId != null && substituteRefereeId != undefined) {
-//                 substituteRefereeId = substituteRefereeId.id;
-//                 const subRefPromise = await getMemberName(substituteRefereeId);
-//                 let firstName = subRefPromise.firstName;
-//                 let lastName = subRefPromise.lastName;
-//                 let id = subRefPromise.id
-//                 substituteReferee = {
-//                     id: id,
-//                     firstName: firstName,
-//                     lastName: lastName
-//                 };
-//             }
-//             else {
-//                 substituteRefereeId = null;
-//             }
-//         } catch (e) {
-//             console.log("Substitute Referee Id " + e);
-//         }
-
-//         try {
-//             if (teamAId != null && teamAId != undefined) {
-//                 teamAId = teamAId.id;
-//                 console.log(`TeamAId ${teamAId}`);
-//                 const teamAPromise = await getTeam(gameId, teamAId);
-//                 console.log(`TeamAPromise : ` + teamAPromise);
-
-//                 const id = teamAPromise.id;
-//                 const clubId = teamAPromise.clubId;
-//                 const county = teamAPromise.county;
-//                 const gradeId = teamAPromise.gradeId;
-//                 const grade = teamAPromise.grade;
-//                 const name = teamAPromise.name;
-//                 const players = teamAPromise.players;
-//                 const sport = teamAPromise.sport;
-//                 const teamName = teamAPromise.teamName;
-//                 const teamOfficialIds = teamAPromise.teamOfficialIds;
-//                 const teamOfficials = teamAPromise.teamOfficials;
-//                 teamA = {
-//                     id: id,
-//                     clubId: clubId,
-//                     county: county,
-//                     gradeId: gradeId,
-//                     grade: grade,
-//                     name: name,
-//                     players: players,
-//                     sport: sport,
-//                     teamName: teamName,
-//                     teamOfficialIds: teamOfficialIds,
-//                     teamOfficials: teamOfficials,
-//                 }
-//             }
-//             else {
-//                 teamAId = null;
-//             }
-//         } catch (e) {
-//             console.log("TeamAId exception" + e);
-//         }
-//         try {
-//             if (teamBId != null && teamBId != undefined) {
-//                 teamBId = teamBId.id;
-//                 console.log("teamBId: " + teamBId);
-//                 const teamBPromise = await getTeam(gameId, teamBId);
-//                 console.log(`teamAPromise ${teamBPromise}`);
-//                 const id = teamBPromise.id;
-//                 const clubId = teamBPromise.clubId;
-//                 const county = teamBPromise.county;
-//                 const gradeId = teamBPromise.gradeId;
-//                 const grade = teamBPromise.grade;
-//                 const name = teamBPromise.name;
-//                 const playerIds = teamBPromise.playerIds;
-//                 const players = teamBPromise.players;
-//                 const sport = teamBPromise.sport;
-//                 const teamName = teamBPromise.teamName;
-//                 const teamOfficialIds = teamBPromise.teamOfficialIds;
-//                 const teamOfficials = teamBPromise.teamOfficials;
-//                 teamB = {
-//                     id: id,
-//                     clubId: clubId,
-//                     county: county,
-//                     gradeId: gradeId,
-//                     grade: grade,
-//                     name: name,
-//                     playerIds: playerIds,
-//                     players: players,
-//                     sport: sport,
-//                     teamName: teamName,
-//                     teamOfficialIds: teamOfficialIds,
-//                     teamOfficials: teamOfficials,
-//                 }
-
-//             }
-//             else {
-//                 teamBId = null;
-//             }
-//         } catch (e) {
-//             console.log("teamBid exception" + e);
-//         }
-
-//         try {
-//             if (venueId != null && venueId != undefined) {
-//                 venueId = venueId.id;
-//                 const venuePromise = await getVenue(venueId);
-//                 const id = venuePromise.id;
-//                 const name = venuePromise.name;
-//                 const lat = venuePromise.lat;
-//                 const lng = venuePromise.lng;
-//                 let clubId = venuePromise.clubId;
-//                 const county = venuePromise.county;
-
-//                 venue = {
-//                     id: id,
-//                     name: name,
-//                     lat: lat,
-//                     lng: lng,
-//                     clubId: clubId,
-//                     county: county
-//                 }
-
-//             }
-//             else {
-//                 venueId = null
-//             }
-//         }
-//         catch (e) {
-//             console.log("VenueID exception " + e);
-//         }
-//         const game = {
-//             gameId: gameId,
-//             secretaryId: secretaryId,
-//             competition: competition,
-//             date: date,
-//             time: time,
-//             dateTime: dateTime,
-//             linesmen: linesmen,
-//             referee: referee,
-//             substituteReferee: substituteReferee,
-//             teamA: teamA,
-//             teamB: teamB,
-//             umpires: umpires,
-//             venue: venue,
-//             teamATookToField: teamATookToField,
-//             teamBTookToField: teamBTookToField,
-//             matchStarted: matchStarted,
-//             matchEnded: matchEnded
-//         }
-//         return game;
-//     } catch (e) {
-//         console.log("createGame exception: " + e);
-//         return
-//     }
-// }
