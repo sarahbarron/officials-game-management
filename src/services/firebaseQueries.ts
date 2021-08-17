@@ -2280,6 +2280,7 @@ export let getProvincialVenues = async (countyIds: []) => {
     }
 }
 
+// Get teams of a province
 export let getProvincialTeams = async (countyRefs: any[]) => {
     try {
         let teams = [];
@@ -2296,24 +2297,33 @@ export let getProvincialTeams = async (countyRefs: any[]) => {
     } catch (e) { console.error(`getProvincialTeams exception ${e}`); }
 }
 
+
+// get clubs of a province
 export let getProvincialClubReferences = async (countyReferences: any[]) => {
     try {
         let clubReferences = [];
-        for (let i = 0; i < countyReferences.length; i++) {
-            let clubDoc = await db.collection("Club").doc(countyReferences[i].id).get();
-            let clubReference = db.collection("Club").doc(clubDoc.id);
+
+        let clubDocs = await db.collection("Club").where("county", "in", countyReferences).get();
+
+        clubDocs.forEach(doc => {
+            let clubReference = db.collection("Club").doc(doc.id);
             clubReferences = [...clubReferences, clubReference];
-        }
+        });
+
         return (clubReferences);
     } catch (e) {
         console.log(`getProvincialClubReferences exception ${e}`)
     }
 }
+
+//  Get Referees for a province
 export let getProvincialReferees = async (clubReferences: any[]) => {
     try {
         let referees = [];
 
         if (clubReferences.length > 0) {
+            clubReferences.forEach(doc => {
+            });
             let memberDocs = await db.collection("Member").where("ownClub", "in", clubReferences).where("refereeOfCounty", "==", true).get();
             for (let i = 0; i < memberDocs.size; i++) {
                 let doc = memberDocs.docs[i];
@@ -2339,20 +2349,6 @@ export let getProvincialReferees = async (clubReferences: any[]) => {
         console.error(`getProvincialReferees exception ${e}`);
     }
 }
-let getMembersCountyDetails = async (clubId: string) => {
-    const club = await db.collection("Club").doc(clubId).get();
-    const countyRef = club.data().county;
-    const county = await db.collection("County").doc(countyRef.id).get();
-    return county;
-}
-
-let getMembersClubDetails = async (clubId: string) => {
-    const club = await db.collection("Club").doc(clubId).get();
-    return club;
-}
-
-
-
 
 // Get Competitions of A province
 export let getProvincialCompetitions = async (provinceId: string) => {
