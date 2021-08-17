@@ -146,7 +146,7 @@ export let getSecretaryOfClubUpcomingGames = async (clubId: string) => {
             .get();
         querySnapshot.forEach(async (doc) => {
             const gamePromise = await createGame(doc);
-            let id = gamePromise.gameId;
+            let id = gamePromise.id;
             let competition = gamePromise.competition;
             let secretaryId = gamePromise.secretaryId;
             let date = gamePromise.date;
@@ -180,6 +180,8 @@ export let getSecretaryOfClubUpcomingGames = async (clubId: string) => {
 
             if (!games.includes(game)) {
                 games = [...games, game];
+            }
+            if (!allgames.includes(game)) {
                 allgames = [...allgames, game];
             }
             if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
@@ -212,7 +214,7 @@ export let getSecretaryOfClubPastGames = async (clubId: string) => {
             .get();
         querySnapshot.forEach(async (doc) => {
             const gamePromise = await createGame(doc);
-            let id = gamePromise.gameId;
+            let id = gamePromise.id;
             let competition = gamePromise.competition;
             let secretaryId = gamePromise.secretaryId;
             let date = gamePromise.date;
@@ -247,6 +249,8 @@ export let getSecretaryOfClubPastGames = async (clubId: string) => {
 
             if (!games.includes(game)) {
                 games = [...games, game];
+            }
+            if (!allgames.includes(game)) {
                 allgames = [...allgames, game];
             }
             if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
@@ -281,7 +285,7 @@ export let getSecretaryOfCountyUpcomingCountyGames = async (clubId: string) => {
             .get();
         querySnapshot.forEach(async (doc) => {
             const gamePromise = await createGame(doc);
-            let id = gamePromise.gameId;
+            let id = gamePromise.id;
             let competition = gamePromise.competition;
             let secretaryId = gamePromise.secretaryId;
             let date = gamePromise.date;
@@ -315,6 +319,9 @@ export let getSecretaryOfCountyUpcomingCountyGames = async (clubId: string) => {
 
             if (!games.includes(game)) {
                 games = [...games, game];
+            }
+            if (!allgames.includes(game)) {
+
                 allgames = [...allgames, game];
 
             }
@@ -348,7 +355,7 @@ export let getSecretaryOfCountyPastCountyGames = async (clubId: string) => {
             .get();
         querySnapshot.forEach(async (doc) => {
             const gamePromise = await createGame(doc);
-            let id = gamePromise.gameId;
+            let id = gamePromise.id;
             let competition = gamePromise.competition;
             let secretaryId = gamePromise.secretaryId;
             let date = gamePromise.date;
@@ -386,6 +393,9 @@ export let getSecretaryOfCountyPastCountyGames = async (clubId: string) => {
 
             if (!games.includes(game)) {
                 games = [...games, game];
+            }
+            if (!allgames.includes(game)) {
+
                 allgames = [...allgames, game];
 
             }
@@ -425,7 +435,7 @@ export let getSecretaryOfCountyUpcomingClubGames = async (clubId: string) => {
                 .get()
             querySnapshot.forEach(async (doc) => {
                 const gamePromise = await createGame(doc);
-                let id = gamePromise.gameId;
+                let id = gamePromise.id;
                 let competition = gamePromise.competition;
                 let secretaryId = gamePromise.secretaryId;
                 let date = gamePromise.date;
@@ -461,8 +471,9 @@ export let getSecretaryOfCountyUpcomingClubGames = async (clubId: string) => {
 
                 if (!games.includes(game)) {
                     games = [...games, game];
+                }
+                if (!allgames.includes(game)) {
                     allgames = [...allgames, game];
-
                 }
                 if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
                     secCountyUpcomingClubGames.set(games);
@@ -503,7 +514,7 @@ export let getSecretaryOfCountyPastClubGames = async (clubId: string) => {
                 .get()
             querySnapshot.forEach(async (doc) => {
                 const gamePromise = await createGame(doc);
-                let id = gamePromise.gameId;
+                let id = gamePromise.id;
                 let competition = gamePromise.competition;
                 let secretaryId = gamePromise.secretaryId;
                 let date = gamePromise.date;
@@ -543,8 +554,9 @@ export let getSecretaryOfCountyPastClubGames = async (clubId: string) => {
 
                 if (!games.includes(game)) {
                     games = [...games, game];
+                }
+                if (!allgames.includes(game)) {
                     allgames = [...allgames, game];
-
                 }
                 if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
                     secCountyPastClubGames.set(games);
@@ -591,7 +603,7 @@ export let getSecretaryOfProvinceUpcomingGames = async (clubId: string) => {
                 .get()
             querySnapshot.forEach(async (doc) => {
                 const gamePromise = await createGame(doc);
-                let id = gamePromise.gameId;
+                let id = gamePromise.id;
                 let competition = gamePromise.competition;
                 let secretaryId = gamePromise.secretaryId;
                 let date = gamePromise.date;
@@ -626,8 +638,9 @@ export let getSecretaryOfProvinceUpcomingGames = async (clubId: string) => {
 
                 if (!games.includes(game)) {
                     games = [...games, game];
+                }
+                if (!allgames.includes(game)) {
                     allgames = [...allgames, game];
-
                 }
                 if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
                     secProvinceUpcomingGames.set(games);
@@ -672,7 +685,7 @@ export let getSecretaryOfProvincePastGames = async (clubId: string) => {
                 .get()
             querySnapshot.forEach(async (doc) => {
                 const gamePromise = await createGame(doc);
-                let id = gamePromise.gameId;
+                let id = gamePromise.id;
                 let competition = gamePromise.competition;
                 let secretaryId = gamePromise.secretaryId;
                 let date = gamePromise.date;
@@ -711,8 +724,9 @@ export let getSecretaryOfProvincePastGames = async (clubId: string) => {
 
                 if (!games.includes(game)) {
                     games = [...games, game];
+                }
+                if (!allgames.includes(game)) {
                     allgames = [...allgames, game];
-
                 }
                 if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
                     secProvincePastGames.set(games);
@@ -787,8 +801,9 @@ export let getSecretaryOfCouncilUpcomingGames = async () => {
                     }
                     if (!games.includes(game)) {
                         games = [...games, game];
+                    }
+                    if (!allgames.includes(game)) {
                         allgames = [...allgames, game];
-
                     }
                 }
                 else {
@@ -876,8 +891,9 @@ export let getSecretaryOfCouncilPastGames = async () => {
 
                     if (!games.includes(game)) {
                         games = [...games, game];
+                    }
+                    if (!allgames.includes(game)) {
                         allgames = [...allgames, game];
-
                     }
                 } else {
                     console.log(`${doc.id} ${gamePromise}`);
@@ -949,8 +965,9 @@ export let getRefereeUpcomingGames = async (memberId: string) => {
 
                 if (!games.includes(game)) {
                     games = [...games, game];
+                }
+                if (!allgames.includes(game)) {
                     allgames = [...allgames, game];
-
                 }
             }
             else (console.log("Doc Id " + doc.id + "gamePromise " + gamePromise));
@@ -983,7 +1000,7 @@ export let getRefereePastGames = async (memberId: string) => {
             .get()
         querySnapshot.forEach(async (doc) => {
             const gamePromise = await createGame(doc);
-            let id = gamePromise.gameId;
+            let id = gamePromise.id;
             let competition = gamePromise.competition;
             let secretaryId = gamePromise.secretaryId;
             let date = gamePromise.date;
@@ -1021,8 +1038,9 @@ export let getRefereePastGames = async (memberId: string) => {
 
             if (!games.includes(game)) {
                 games = [...games, game];
+            }
+            if (!allgames.includes(game)) {
                 allgames = [...allgames, game];
-
             }
             if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
                 refPastGames.set(games);
@@ -1060,7 +1078,7 @@ export let getTeamOfficialUpcomingGames = async (memberId: string) => {
                 .get();
             querySnapshotA.forEach(async (gameDoc) => {
                 const gamePromise = await createGame(gameDoc);
-                let id = gamePromise.gameId;
+                let id = gamePromise.id;
                 let competition = gamePromise.competition;
                 let secretaryId = gamePromise.secretaryId;
                 let date = gamePromise.date;
@@ -1090,13 +1108,15 @@ export let getTeamOfficialUpcomingGames = async (memberId: string) => {
                     matchStarted: matchStarted,
                     matchEnded: matchEnded
                 }
-                // const game = convertPromiseToGameObject(gamePromise);
+
 
                 if (!games.includes(game)) {
                     games = [...games, game];
-                    allgames = [...allgames, game];
-
                 }
+                if (!allgames.includes(game)) {
+                    allgames = [...allgames, game];
+                }
+                else { console.log(`all games already includes ${game}`); }
                 if (games != null && games != undefined && i == (querySnapshotA.size - 1)) {
                     teamOfficialUpcomingGames.set(games);
                     allGames.set(allgames);
@@ -1114,7 +1134,7 @@ export let getTeamOfficialUpcomingGames = async (memberId: string) => {
                 .get();
             querySnapshotB.forEach(async (gameDocB) => {
                 const gamePromise = await createGame(gameDocB);
-                let id = gamePromise.gameId;
+                let id = gamePromise.id;
                 let competition = gamePromise.competition;
                 let secretaryId = gamePromise.secretaryId;
                 let date = gamePromise.date;
@@ -1147,8 +1167,9 @@ export let getTeamOfficialUpcomingGames = async (memberId: string) => {
 
                 if (!games.includes(game)) {
                     games = [...games, game];
+                }
+                if (!allgames.includes(game)) {
                     allgames = [...allgames, game];
-
                 }
                 if (games != null && games != undefined && i == (querySnapshotB.size - 1)) {
                     teamOfficialUpcomingGames.set(games);
@@ -1184,7 +1205,7 @@ export let getTeamOfficialPastGames = async (memberId: string) => {
                 .get();
             querySnapshotA.forEach(async (gameDoc) => {
                 const gamePromise = await createGame(gameDoc);
-                let id = gamePromise.gameId;
+                let id = gamePromise.id;
                 let competition = gamePromise.competition;
                 let secretaryId = gamePromise.secretaryId;
                 let date = gamePromise.date;
@@ -1222,8 +1243,9 @@ export let getTeamOfficialPastGames = async (memberId: string) => {
 
                 if (!games.includes(game)) {
                     games = [...games, game];
+                }
+                if (!allgames.includes(game)) {
                     allgames = [...allgames, game];
-
                 }
                 if (games != null && games != undefined && i == (querySnapshotA.size - 1)) {
                     teamOfficialPastGames.set(games);
@@ -1242,7 +1264,7 @@ export let getTeamOfficialPastGames = async (memberId: string) => {
                 .get();
             querySnapshotB.forEach(async (gameDocB) => {
                 const gamePromise = await createGame(gameDocB);
-                let id = gamePromise.gameId;
+                let id = gamePromise.id;
                 let competition = gamePromise.competition;
                 let secretaryId = gamePromise.secretaryId;
                 let linesmen = gamePromise.linesmen;
@@ -1276,8 +1298,9 @@ export let getTeamOfficialPastGames = async (memberId: string) => {
 
                 if (!games.includes(game)) {
                     games = [...games, game];
+                }
+                if (!allgames.includes(game)) {
                     allgames = [...allgames, game];
-
                 }
                 if (games != null && games != undefined && i == (querySnapshotB.size - 1)) {
                     teamOfficialPastGames.set(games);
@@ -1604,7 +1627,7 @@ export let createGame = async (doc) => {
         }
 
         const game = {
-            gameId: gameId,
+            id: gameId,
             secretaryId: secretaryId,
             competition: competition,
             date: date,

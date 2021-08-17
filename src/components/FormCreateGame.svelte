@@ -1,5 +1,6 @@
 <script lang="ts">
     import {
+        allGames,
         clubRef,
         memberId,
         refereeOfClub,
@@ -24,10 +25,8 @@
     import {
         createGameInFirestore,
         createGame,
-        getSecretaryOfCountyUpcomingCountyGames,
     } from "../services/firebaseQueries";
     import { db } from "../services/firebase";
-    import UpcomingGames from "./UpcomingGames.svelte";
 
     // Club / County Radio Buttons
     $: cantBeCounty = false;
@@ -96,6 +95,13 @@
             console.error(`createGame exception ${e}`);
         }
     }
+
+    // retrieve all games of the user
+    let all_games = [];
+    let unsubscribeAllGames = allGames.subscribe((value) => {
+        all_games = value;
+    });
+    onDestroy(unsubscribeAllGames);
 
     // Is the user secretary of council true/false
     let secretary_of_council: boolean;
@@ -246,10 +252,10 @@
 
         let gameDoc = await db.collection("Game").doc(game.id).get();
         let created_game = await createGame(gameDoc);
-        console.log(created_game);
+        all_games = [...all_games, created_game];
+        allGames.set(all_games);
         if (secretary_of_council) {
             council_games = [...council_games, created_game];
-            console.log(council_games);
             secCouncilUpcomingGames.set(council_games);
         }
         if (secretary_of_province) {

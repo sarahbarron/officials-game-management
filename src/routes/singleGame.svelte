@@ -66,10 +66,8 @@
         let teamAOfficials = game.teamA.teamOfficials;
         let teamBOfficials = game.teamB.teamOfficials;
         if (teamAOfficials.includes(memId)) {
-            console.log(`Team A ${game.teamA.id}`);
             return game.teamA.id;
         } else if (teamBOfficials.includes(memId)) {
-            console.log(`Team B ${game.teamB.id}`);
             return game.teamB.id;
         }
         console.log(`NULL: ${memId} : ${game.id}`);
@@ -97,8 +95,6 @@
     $: teamAOfficials = game.teamA.teamOfficials;
     $: teamBOfficials = game.teamB.teamOfficials;
 
-    $: console.log(`Team A Officials: ${teamAOfficials}`);
-    $: console.log(`Team B Officials ${teamBOfficials}`);
     $: teamId = getOfficialsTeamId(member, game);
 
     $: if (teamId != null && teamId != undefined) {

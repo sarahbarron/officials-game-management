@@ -24,14 +24,7 @@ export const localStore = (key, initial) => {                 // receives the ke
       subscribe,
       set: (value) => {
         try {
-          // remove any keys that are already stored under the same key locally and 
-          // set it again with the new value in order not to exceed the memory quota
-          if (localStorage.getItem != null) {
-            localStorage.removeItem(key);
-          }
-          localStorage.setItem(key, toString(initial));
           localStorage.setItem(key, toString(value))              // save also to local storage as a string
-
           return set(value)
         } catch (e) { console.log("localStorage setItem " + e); }
       },

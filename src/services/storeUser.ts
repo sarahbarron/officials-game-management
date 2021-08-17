@@ -1,48 +1,49 @@
-import { localStore } from './localStore';
+//import { writable } from './writable';
+import { writable } from "svelte-local-storage-store";
 
 // Arrays of games
-export const refUpcomingGames = localStore("refCountyUpcomingGames", []);
-export const refPastGames = localStore("refPastGames", []);
+export const refUpcomingGames = writable("refCountyUpcomingGames", []);
+export const refPastGames = writable("refPastGames", []);
 
-export const secClubUpcomingGames = localStore("secClubUpcomingGames", []);
-export const secClubPastGames = localStore("secClubPastGames", []);
+export const secClubUpcomingGames = writable("secClubUpcomingGames", []);
+export const secClubPastGames = writable("secClubPastGames", []);
 
-export const secCountyUpcomingClubGames = localStore("secCountyUpcomingGames", []);
-export const secCountyPastClubGames = localStore("secCountyPastGames", []);
+export const secCountyUpcomingClubGames = writable("secCountyUpcomingGames", []);
+export const secCountyPastClubGames = writable("secCountyPastGames", []);
 
-export const secCountyUpcomingCountyGames = localStore("secCountyUpcomingCountyGames", []);
-export const secCountyPastCountyGames = localStore("secCountyPastCountyGames", []);
+export const secCountyUpcomingCountyGames = writable("secCountyUpcomingCountyGames", []);
+export const secCountyPastCountyGames = writable("secCountyPastCountyGames", []);
 
-export const secProvinceUpcomingGames = localStore("secProvinceUpcomingGames", []);
-export const secProvincePastGames = localStore("secProvincePastGames", []);
+export const secProvinceUpcomingGames = writable("secProvinceUpcomingGames", []);
+export const secProvincePastGames = writable("secProvincePastGames", []);
 
-export const secCouncilUpcomingGames = localStore("secCouncilUpcomingGames", []);
-export const secCouncilPastGames = localStore("secCouncilPastGames", []);
+export const secCouncilUpcomingGames = writable("secCouncilUpcomingGames", []);
+export const secCouncilPastGames = writable("secCouncilPastGames", []);
 
-export const teamOfficialUpcomingGames = localStore("teamOfficialUpcomingGames", []);
-export const teamOfficialPastGames = localStore("teamOfficialPastGames", []);
+export const teamOfficialUpcomingGames = writable("teamOfficialUpcomingGames", []);
+export const teamOfficialPastGames = writable("teamOfficialPastGames", []);
 
-export const allGames = localStore("allGames", []);
+export const allGames = writable("allGames", []);
 // Members Id
-export const memberId = localStore("memberId", "");
-export const userEmail = localStore("userEmail", "");
-export const refereeOfClub = localStore("refereeOfClub", false);
-export const refereeOfCounty = localStore("refereeOfCounty", false);
-export const secretaryOfClub = localStore("secretaryOfClub", false);
-export const secretaryOfCounty = localStore("secretaryOfCounty", false);
-export const secretaryOfProvince = localStore('secretaryOfProvince', false);
-export const secretaryOfCouncil = localStore('secretaryOfCouncil', false);
-export const teamOfficial = localStore('teamOfficial', false);
-export const firstName = localStore('firstName', "");
-export const lastName = localStore('lastName', "");
-export const clubRef = localStore('clubRef', "");
-export const teams = localStore('teams', []);
-export const games = localStore('games', []);
-export const countyCrest = localStore('countyCrest', "");
-export const clubName = localStore('clubName', "");
-export const countyName = localStore('countyName', "");
-export const provinceName = localStore('provinceName', "");
-export const crest = localStore('crest', "");
+export const memberId = writable("memberId", "");
+export const userEmail = writable("userEmail", "");
+export const refereeOfClub = writable("refereeOfClub", false);
+export const refereeOfCounty = writable("refereeOfCounty", false);
+export const secretaryOfClub = writable("secretaryOfClub", false);
+export const secretaryOfCounty = writable("secretaryOfCounty", false);
+export const secretaryOfProvince = writable('secretaryOfProvince', false);
+export const secretaryOfCouncil = writable('secretaryOfCouncil', false);
+export const teamOfficial = writable('teamOfficial', false);
+export const firstName = writable('firstName', "");
+export const lastName = writable('lastName', "");
+export const clubRef = writable('clubRef', "");
+export const teams = writable('teams', []);
+export const games = writable('games', []);
+export const countyCrest = writable('countyCrest', "");
+export const clubName = writable('clubName', "");
+export const countyName = writable('countyName', "");
+export const provinceName = writable('provinceName', "");
+export const crest = writable('crest', "");
 
 export const resetStore = async () => {
     try {
