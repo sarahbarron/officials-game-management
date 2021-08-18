@@ -3,7 +3,7 @@
 
     import FormCreateGameDetails from "./FormCreateGameDetails.svelte";
     import FormCreateMatchOfficials from "./FormCreateMatchOfficials.svelte";
-    import { onDestroy, tick } from "svelte";
+    import { onDestroy } from "svelte";
     import {
         createGameInFirestore,
         createGame,
@@ -13,7 +13,6 @@
 
     // spinner when a game is created
     $: showSpinner = false;
-    $: showGameCreated = false;
     // Club / County Radio Buttons
     $: cantBeCounty = false;
     $: cantBeClub = false;
@@ -48,7 +47,6 @@
             showSpinner = true;
             setTimeout(() => {
                 showSpinner = false;
-                showGameCreated = true;
             }, 15000);
             let memberId = member_Id;
             let date = event.target.datePicker.value;
@@ -82,7 +80,6 @@
                 umpire3,
                 umpire4
             );
-            await tick();
         } catch (e) {
             console.error(`createGame exception ${e}`);
         }
@@ -164,9 +161,6 @@
                         duration="1s"
                     />
                     <h3>Creating Game .....</h3>
-                {/if}
-                {#if showGameCreated}
-                    <h3>Game Created</h3>
                 {/if}
             </div>
         </form>

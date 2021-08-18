@@ -52,11 +52,6 @@ export let removeDuplicateObjectsFromArray = (games) =>{
         let reduced_games = games.filter(
             (obj) => !check.has(obj.id) && check.add(obj.id)
         );
-        console.log("[");
-        reduced_games.forEach(game => {
-            console.log(game.id);
-        });
-        console.log("];");
         return reduced_games;
     }catch(e){console.log("removeDuplicateObjects exception: "+e)}
 }
