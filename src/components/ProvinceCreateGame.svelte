@@ -11,7 +11,7 @@
         getProvincialVenues,
     } from "../services/firebaseQueries";
 
-    import { clubRef, provinceName } from "../services/storeUser";
+    import { clubRef } from "../services/storeUser";
 
     $: venueOptions = [];
     $: competitionOptions = [];
