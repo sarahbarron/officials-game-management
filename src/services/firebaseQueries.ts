@@ -12,7 +12,7 @@ import {
     teamOfficialUpcomingGames, teamOfficialPastGames, allGames
 } from './storeUser';
 import { db, auth } from "./firebase";
-import { convertTimestampToDate, convertTimestampToTime } from '../services/util';
+import { convertTimestampToDate, convertTimestampToTime, removeDuplicateObjectsFromArray } from '../services/util';
 
 
 const member = db.collection('Member');
@@ -83,8 +83,8 @@ export let getMemberDetails = async (email: string) => {
             if (teamOf != null && teamOf != undefined) {
                 teamOfficial.set(teamOf);
                 if (teamOf) {
-                    getTeamOfficialUpcomingGames(memberDoc);
-                    getTeamOfficialPastGames(memberDoc);
+                    // getTeamOfficialUpcomingGames(memberDoc);
+                    // getTeamOfficialPastGames(memberDoc);
                 }
             }
             if (fName != null && fName != undefined) {
@@ -96,30 +96,35 @@ export let getMemberDetails = async (email: string) => {
             if (clubId != null && clubId != undefined) {
                 clubRef.set(clubId);
                 if (secOfClub) {
-                    getSecretaryOfClubUpcomingGames(clubId);
-                    getSecretaryOfClubPastGames(clubId);
+                    // getSecretaryOfClubUpcomingGames(clubId);
+                    // getSecretaryOfClubPastGames(clubId);
                 }
                 if (secOfCounty) {
-                    getSecretaryOfCountyUpcomingClubGames(clubId);
-                    getSecretaryOfCountyUpcomingCountyGames(clubId);
-                    getSecretaryOfCountyPastClubGames(clubId);
-                    getSecretaryOfCountyPastCountyGames(clubId);
+                    // getSecretaryOfCountyUpcomingClubGames(clubId);
+                    // getSecretaryOfCountyUpcomingCountyGames(clubId);
+                    // getSecretaryOfCountyPastClubGames(clubId);
+                    // getSecretaryOfCountyPastCountyGames(clubId);
                 }
                 if (secOfProvince) {
-                    getSecretaryOfProvinceUpcomingGames(clubId);
-                    getSecretaryOfProvincePastGames(clubId);
+                    // getSecretaryOfProvinceUpcomingGames(clubId);
+                    // getSecretaryOfProvincePastGames(clubId);
                 }
                 if (secOfCouncil) {
-                    getSecretaryOfCouncilUpcomingGames();
-                    getSecretaryOfCouncilPastGames();
+                    // getSecretaryOfCouncilUpcomingGames();
+                    // getSecretaryOfCouncilPastGames();
                 }
             }
 
             if (refOfClub || refOfCounty) {
-                getRefereeUpcomingGames(memberDoc);
-                getRefereePastGames(memberDoc);
+                // getRefereeUpcomingGames(memberDoc);
+                // getRefereePastGames(memberDoc);
             }
 
+            listenForGameUpdatesInFirebase(clubId, memberDoc, teamOf, secOfClub, secOfCounty,
+                secOfProvince, secOfCouncil, refOfClub, refOfCounty);
+
+            getPastGames(clubId, memberDoc, teamOf, secOfClub, secOfCounty,
+                secOfProvince, secOfCouncil, refOfClub, refOfCounty);
         });
         return true;
     } catch (e) {
@@ -181,13 +186,18 @@ export let getSecretaryOfClubUpcomingGames = async (clubId: string) => {
             if (!games.includes(game)) {
                 games = [...games, game];
             }
-            if (!allgames.includes(game)) {
-                allgames = [...allgames, game];
-            }
+            allgames = [...allgames, game];
+
             if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
+                if (games.length > 0) {
+                    games = removeDuplicateObjectsFromArray(games);
+                }
                 secClubUpcomingGames.set(games);
+
+                if (allgames.length > 0) {
+                    allgames = removeDuplicateObjectsFromArray(allgames);
+                }
                 allGames.set(allgames);
-                console.log(`secClubUpcomingGames set`);
             }
             i++;
         });
@@ -250,13 +260,18 @@ export let getSecretaryOfClubPastGames = async (clubId: string) => {
             if (!games.includes(game)) {
                 games = [...games, game];
             }
-            if (!allgames.includes(game)) {
-                allgames = [...allgames, game];
-            }
+            allgames = [...allgames, game];
+
             if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
+                if (games.length > 0) {
+                    games = removeDuplicateObjectsFromArray(games);
+                }
                 secClubPastGames.set(games);
+
+                if (allgames.length > 0) {
+                    allgames = removeDuplicateObjectsFromArray(allgames);
+                }
                 allGames.set(allgames);
-                console.log(`secClubPastGames set`);
             }
             i++;
         });
@@ -320,15 +335,18 @@ export let getSecretaryOfCountyUpcomingCountyGames = async (clubId: string) => {
             if (!games.includes(game)) {
                 games = [...games, game];
             }
-            if (!allgames.includes(game)) {
+            allgames = [...allgames, game];
 
-                allgames = [...allgames, game];
-
-            }
             if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
+                if (games.length > 0) {
+                    games = removeDuplicateObjectsFromArray(games);
+                }
                 secCountyUpcomingCountyGames.set(games);
+
+                if (allgames.length > 0) {
+                    allgames = removeDuplicateObjectsFromArray(allgames);
+                }
                 allGames.set(allgames);
-                console.log(`secCountyUpcomingCountyGames set`);
             }
             i++;
         });
@@ -394,15 +412,19 @@ export let getSecretaryOfCountyPastCountyGames = async (clubId: string) => {
             if (!games.includes(game)) {
                 games = [...games, game];
             }
-            if (!allgames.includes(game)) {
+            allgames = [...allgames, game];
 
-                allgames = [...allgames, game];
 
-            }
             if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
+                if (games.length > 0) {
+                    games = removeDuplicateObjectsFromArray(games);
+                }
                 secCountyPastCountyGames.set(games);
+
+                if (allgames.length > 0) {
+                    allgames = removeDuplicateObjectsFromArray(allgames);
+                }
                 allGames.set(allgames);
-                console.log(`secCountyPastCountyGames set`);
             }
             i++;
         });
@@ -472,13 +494,18 @@ export let getSecretaryOfCountyUpcomingClubGames = async (clubId: string) => {
                 if (!games.includes(game)) {
                     games = [...games, game];
                 }
-                if (!allgames.includes(game)) {
-                    allgames = [...allgames, game];
-                }
+                allgames = [...allgames, game];
+
                 if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
+                    if (games.length > 0) {
+                        games = removeDuplicateObjectsFromArray(games);
+                    }
                     secCountyUpcomingClubGames.set(games);
+
+                    if (allgames.length > 0) {
+                        allgames = removeDuplicateObjectsFromArray(allgames);
+                    }
                     allGames.set(allgames);
-                    console.log(`secCountyUpcomingClubGames set`);
                 }
                 i++;
             });
@@ -555,13 +582,18 @@ export let getSecretaryOfCountyPastClubGames = async (clubId: string) => {
                 if (!games.includes(game)) {
                     games = [...games, game];
                 }
-                if (!allgames.includes(game)) {
-                    allgames = [...allgames, game];
-                }
+                allgames = [...allgames, game];
+
                 if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
+                    if (games.length > 0) {
+                        games = removeDuplicateObjectsFromArray(games);
+                    }
                     secCountyPastClubGames.set(games);
+
+                    if (allgames.length > 0) {
+                        allgames = removeDuplicateObjectsFromArray(allgames);
+                    }
                     allGames.set(allgames);
-                    console.log(`secCountyPastClubGames set`);
                 }
                 i++;
             });
@@ -639,11 +671,16 @@ export let getSecretaryOfProvinceUpcomingGames = async (clubId: string) => {
                 if (!games.includes(game)) {
                     games = [...games, game];
                 }
-                if (!allgames.includes(game)) {
-                    allgames = [...allgames, game];
-                }
+                allgames = [...allgames, game];
                 if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
+                    if (games.length > 0) {
+                        games = removeDuplicateObjectsFromArray(games);
+                    }
                     secProvinceUpcomingGames.set(games);
+
+                    if (allgames.length > 0) {
+                        allgames = removeDuplicateObjectsFromArray(allgames);
+                    }
                     allGames.set(allgames);
                 }
                 i++;
@@ -725,13 +762,19 @@ export let getSecretaryOfProvincePastGames = async (clubId: string) => {
                 if (!games.includes(game)) {
                     games = [...games, game];
                 }
-                if (!allgames.includes(game)) {
-                    allgames = [...allgames, game];
-                }
+                allgames = [...allgames, game];
+
+
                 if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
+                    if (games.length > 0) {
+                        games = removeDuplicateObjectsFromArray(games);
+                    }
                     secProvincePastGames.set(games);
+
+                    if (allgames.length > 0) {
+                        allgames = removeDuplicateObjectsFromArray(allgames);
+                    }
                     allGames.set(allgames);
-                    console.log(`secProvincePastGames set`);
                 }
                 i++;
             });
@@ -802,18 +845,22 @@ export let getSecretaryOfCouncilUpcomingGames = async () => {
                     if (!games.includes(game)) {
                         games = [...games, game];
                     }
-                    if (!allgames.includes(game)) {
-                        allgames = [...allgames, game];
-                    }
+                    allgames = [...allgames, game];
+
                 }
                 else {
                     console.log(`${doc.id} ${gamePromise}`);
 
                 }
                 if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
+                    if (games.length > 0) {
+                        games = removeDuplicateObjectsFromArray(games);
+                    }
                     secCouncilUpcomingGames.set(games);
+                    if (allgames.length > 0) {
+                        allgames = removeDuplicateObjectsFromArray(allgames);
+                    }
                     allGames.set(allgames);
-                    console.log(`secCouncilUpcomingGames set`);
                 }
                 i++;
 
@@ -892,14 +939,19 @@ export let getSecretaryOfCouncilPastGames = async () => {
                     if (!games.includes(game)) {
                         games = [...games, game];
                     }
-                    if (!allgames.includes(game)) {
-                        allgames = [...allgames, game];
-                    }
+                    allgames = [...allgames, game];
+
                 } else {
                     console.log(`${doc.id} ${gamePromise}`);
                 }
                 if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
+                    if (games.length > 0) {
+                        games = removeDuplicateObjectsFromArray(games);
+                    }
                     secCouncilPastGames.set(games);
+                    if (allgames.length > 0) {
+                        allgames = removeDuplicateObjectsFromArray(allgames);
+                    }
                     allGames.set(allgames);
                 }
                 i++;
@@ -966,13 +1018,19 @@ export let getRefereeUpcomingGames = async (memberId: string) => {
                 if (!games.includes(game)) {
                     games = [...games, game];
                 }
-                if (!allgames.includes(game)) {
-                    allgames = [...allgames, game];
-                }
+                allgames = [...allgames, game];
+
             }
             else (console.log("Doc Id " + doc.id + "gamePromise " + gamePromise));
             if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
+                if (games.length > 0) {
+                    games = removeDuplicateObjectsFromArray(games);
+                }
                 refUpcomingGames.set(games);
+
+                if (allgames.length > 0) {
+                    allgames = removeDuplicateObjectsFromArray(allgames);
+                }
                 allGames.set(allgames);
             }
             i++;
@@ -1039,11 +1097,17 @@ export let getRefereePastGames = async (memberId: string) => {
             if (!games.includes(game)) {
                 games = [...games, game];
             }
-            if (!allgames.includes(game)) {
-                allgames = [...allgames, game];
-            }
+            allgames = [...allgames, game];
+
             if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
+                if (games.length > 0) {
+                    games = removeDuplicateObjectsFromArray(games);
+                }
                 refPastGames.set(games);
+
+                if (allgames.length > 0) {
+                    allgames = removeDuplicateObjectsFromArray(allgames);
+                }
                 allGames.set(allgames);
             }
             i++;
@@ -1113,14 +1177,19 @@ export let getTeamOfficialUpcomingGames = async (memberId: string) => {
                 if (!games.includes(game)) {
                     games = [...games, game];
                 }
-                if (!allgames.includes(game)) {
-                    allgames = [...allgames, game];
-                }
-                else { console.log(`all games already includes ${game}`); }
+                allgames = [...allgames, game];
+
+
                 if (games != null && games != undefined && i == (querySnapshotA.size - 1)) {
+                    if (games.length > 0) {
+                        games = removeDuplicateObjectsFromArray(games);
+                    }
                     teamOfficialUpcomingGames.set(games);
+
+                    if (allgames.length > 0) {
+                        allgames = removeDuplicateObjectsFromArray(allgames);
+                    }
                     allGames.set(allgames);
-                    console.log(`teamOfficialUpcoming Games set`);
 
                 }
                 i++;
@@ -1168,13 +1237,18 @@ export let getTeamOfficialUpcomingGames = async (memberId: string) => {
                 if (!games.includes(game)) {
                     games = [...games, game];
                 }
-                if (!allgames.includes(game)) {
-                    allgames = [...allgames, game];
-                }
+                allgames = [...allgames, game];
+
                 if (games != null && games != undefined && i == (querySnapshotB.size - 1)) {
+                    if (games.length > 0) {
+                        games = removeDuplicateObjectsFromArray(games);
+                    }
                     teamOfficialUpcomingGames.set(games);
+
+                    if (allgames.length > 0) {
+                        allgames = removeDuplicateObjectsFromArray(allgames);
+                    }
                     allGames.set(allgames);
-                    console.log(`teamOfficialUpcoming Games set`);
                 }
                 i++;
             });
@@ -1244,13 +1318,18 @@ export let getTeamOfficialPastGames = async (memberId: string) => {
                 if (!games.includes(game)) {
                     games = [...games, game];
                 }
-                if (!allgames.includes(game)) {
-                    allgames = [...allgames, game];
-                }
+                allgames = [...allgames, game];
+
                 if (games != null && games != undefined && i == (querySnapshotA.size - 1)) {
+                    if (games.length > 0) {
+                        games = removeDuplicateObjectsFromArray(games);
+                    }
                     teamOfficialPastGames.set(games);
+
+                    if (allgames.length > 0) {
+                        allgames = removeDuplicateObjectsFromArray(allgames);
+                    }
                     allGames.set(allgames);
-                    console.log(`teamOfficialPastGames set`);
 
                 }
                 i++;
@@ -1299,13 +1378,19 @@ export let getTeamOfficialPastGames = async (memberId: string) => {
                 if (!games.includes(game)) {
                     games = [...games, game];
                 }
-                if (!allgames.includes(game)) {
-                    allgames = [...allgames, game];
-                }
+                allgames = [...allgames, game];
+
                 if (games != null && games != undefined && i == (querySnapshotB.size - 1)) {
+                    if (games.length > 0) {
+                        games = removeDuplicateObjectsFromArray(games);
+                    }
                     teamOfficialPastGames.set(games);
+
+                    if (allgames.length > 0) {
+                        allgames = removeDuplicateObjectsFromArray(allgames);
+                    }
                     allGames.set(allgames);
-                    console.log(`teamOfficialPastGames set`);
+
                 }
                 i++;
             });
@@ -2531,4 +2616,82 @@ export let createGameInFirestore = async (memberId: string, date: any, time: any
 }
 
 
+let listenForGameUpdatesInFirebase = async (clubId, memberId, teamOfficial, secOfClub, secOfCounty,
+    secOfProvince, secOfCouncil, refOfClub, refOfCounty) => {
+    db.collection("Game").onSnapshot(() => {
+        console.log(`new game added`)
+        if (secOfCouncil) {
+            console.log(`new game added - sec of council`);
 
+            getSecretaryOfCouncilUpcomingGames();
+        }
+        if (secOfProvince) {
+            console.log(`new game added - sec of prov`)
+
+            getSecretaryOfProvinceUpcomingGames(clubId);
+        }
+        if (secOfCounty) {
+            console.log(`new game added - sec of county`)
+
+            getSecretaryOfCountyUpcomingClubGames(clubId);
+            getSecretaryOfCountyUpcomingCountyGames(clubId);
+        }
+        if (secOfClub) {
+            console.log(`new game added - sec of club`)
+
+            getSecretaryOfClubUpcomingGames(clubId);
+        }
+
+        if (teamOfficial) {
+            console.log(`new game added - team offical`);
+
+            getTeamOfficialUpcomingGames(memberId);
+        }
+        if (refOfClub || refOfCounty) {
+            console.log(`new game added - ref`)
+
+            getRefereeUpcomingGames(memberId);
+        }
+
+    })
+}
+
+let getPastGames = async (clubId, memberId, teamOfficial, secOfClub, secOfCounty,
+    secOfProvince, secOfCouncil, refOfClub, refOfCounty) => {
+    db.collection("Game").onSnapshot(() => {
+        console.log(`past`)
+        if (secOfCouncil) {
+            console.log(`past - sec of council`);
+
+            getSecretaryOfCouncilPastGames();
+        }
+        if (secOfProvince) {
+            console.log(`past - sec of prov`)
+
+            getSecretaryOfProvincePastGames(clubId);
+        }
+        if (secOfCounty) {
+            console.log(`past - sec of county`)
+
+            getSecretaryOfCountyPastClubGames(clubId);
+            getSecretaryOfCountyPastCountyGames(clubId);
+        }
+        if (secOfClub) {
+            console.log(`past - sec of club`)
+
+            getSecretaryOfClubPastGames(clubId);
+        }
+
+        if (teamOfficial) {
+            console.log(`past - team offical`);
+
+            getTeamOfficialPastGames(memberId);
+        }
+        if (refOfClub || refOfCounty) {
+            console.log(`past - ref`)
+
+            getRefereePastGames(memberId);
+        }
+
+    })
+}

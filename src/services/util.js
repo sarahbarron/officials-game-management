@@ -33,7 +33,7 @@ export let convertTimestampToTime = (timestamp) => {
             const hour = date.getHours();
             let mins = date.getMinutes();
             if (mins < 10) {
-                mins = `${mins}0`;
+                mins = `0${mins}`;
             }
             const time = `${hour}:${mins}`;
             return time;
@@ -44,4 +44,19 @@ export let convertTimestampToTime = (timestamp) => {
     } catch (e) {
         console.log("convertTimestampToTime exception: " + e);
     }
+}
+
+export let removeDuplicateObjectsFromArray = (games) =>{
+    try{
+        let check = new Set();
+        let reduced_games = games.filter(
+            (obj) => !check.has(obj.id) && check.add(obj.id)
+        );
+        console.log("[");
+        reduced_games.forEach(game => {
+            console.log(game.id);
+        });
+        console.log("];");
+        return reduced_games;
+    }catch(e){console.log("removeDuplicateObjects exception: "+e)}
 }

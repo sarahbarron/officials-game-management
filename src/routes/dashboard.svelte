@@ -10,7 +10,6 @@
         lastName,
         refereeOfClub,
         refereeOfCounty,
-        resetStore,
         secretaryOfClub,
         secretaryOfCouncil,
         secretaryOfCounty,
