@@ -44,6 +44,7 @@ export const clubName = writable('clubName', "");
 export const countyName = writable('countyName', "");
 export const provinceName = writable('provinceName', "");
 export const crest = writable('crest', "");
+export const spinner = writable('spinner', true);
 
 export const resetStore = async () => {
     try {

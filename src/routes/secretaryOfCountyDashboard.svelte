@@ -14,6 +14,7 @@
     } from "../services/storeUser";
     import FormCreateGame from "../components/FormCreateGame.svelte";
     import CountyCreateGame from "../components/CountyCreateGame.svelte";
+    import Spinner from "../components/Spinner.svelte";
 
     let loginString = `You need to <a href='/login'>Login</a>`;
     let heading = "Secretary Of County Dashboard";
@@ -79,6 +80,7 @@
             <Nav {isActive} />
             <div class="container padding-for-footer">
                 <h1>{heading}</h1>
+                <Spinner />
                 <CountyCreateGame />
                 <Card
                     cardHeader={upcomingCountyCardHeader}

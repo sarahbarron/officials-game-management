@@ -10,6 +10,7 @@
         secClubPastGames,
     } from "../services/storeUser";
     import Card from "../components/Card.svelte";
+    import Spinner from "../components/Spinner.svelte";
 
     let loginString = `You need to <a href='/login'>Login</a>`;
     let heading = "Secretary Of Club Dashboard";
@@ -68,6 +69,7 @@
             <Nav {isActive} />
             <div class="container padding-for-footer">
                 <h1>{heading}</h1>
+                <Spinner />
                 <Card cardHeader={upcomingCardHeader} games={upcomingGames} />
                 <br /><br />
                 <Card cardHeader={pastCardHeader} games={pastGames} />

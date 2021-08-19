@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { Circle3 } from "svelte-loading-spinners";
     import { auth } from "../services/firebase";
     import router from "page";
     import Nav from "../components/NavBar.svelte";
@@ -17,6 +16,7 @@
         teamOfficial,
     } from "../services/storeUser";
     import DashboardAccordion from "../components/DashboardAccordion.svelte";
+    import Spinner from "../components/Spinner.svelte";
     let loginString = `You are not registered you need to <br><a href='/'>Login as a GAA Official</a>`;
     interface User {
         email: String;
@@ -92,12 +92,6 @@
         referee = true;
     }
     let isActive = "home";
-    let pause = true;
-    onMount(async () => {
-        setTimeout(() => {
-            pause = false;
-        }, 15000);
-    });
 </script>
 
 <div class="page-container">
@@ -108,22 +102,7 @@
             <Nav {isActive} />
             <div class="padding-for-footer">
                 <h1>{heading}</h1>
-
-                <div class="div circle">
-                    {#if pause}
-                        <Circle3
-                            size="60"
-                            ballTopLeft="#00ff11"
-                            ballTopRight="#005E82"
-                            ballBottomRight="#fcfc07"
-                            ballBottomLeft="#fa00ff"
-                            unit="px"
-                            duration="1s"
-                        />
-                        <h2>Loading .....</h2>
-                    {/if}
-                </div>
-
+                <Spinner />
                 <DashboardAccordion
                     {referee}
                     {team_official}
@@ -143,10 +122,6 @@
 </div>
 
 <style>
-    .circle {
-        text-align: -webkit-center;
-    }
-
     .login {
         border-style: solid;
         border-radius: 20px;

@@ -6,8 +6,9 @@
 
 <!-- Competition Select Menu -->
 <div class="row pb-3">
-    <label for={selectId}>{labelText}</label>
-
+    {#if labelText != ""}
+        <label for={selectId}>{labelText}</label>
+    {/if}
     <select id={selectId} class={selectId} required>
         {#each values as value}
             <option value={value.id}>{value.name}</option>

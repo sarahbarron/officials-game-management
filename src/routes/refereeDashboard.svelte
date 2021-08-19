@@ -11,6 +11,7 @@
         refereeOfCounty,
     } from "../services/storeUser";
     import { onDestroy } from "svelte";
+    import Spinner from "../components/Spinner.svelte";
     let upcomingGames = [];
     let pastGames = [];
 
@@ -63,6 +64,7 @@
                 <Nav {isActive} />
                 <div class="container padding-for-footer">
                     <h1>{heading}</h1>
+                    <Spinner />
                     <Card
                         cardHeader={upcomingCardHeader}
                         games={upcomingGames}

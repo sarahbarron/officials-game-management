@@ -35,9 +35,6 @@
 </div>
 
 <style>
-    h1 {
-        text-align: left;
-    }
     .container {
         border-style: solid;
         border-radius: 30px;

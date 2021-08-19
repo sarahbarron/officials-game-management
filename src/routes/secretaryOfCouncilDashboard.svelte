@@ -11,6 +11,7 @@
     } from "../services/storeUser";
     import { onDestroy } from "svelte";
     import CouncilCreateGame from "../components/CouncilCreateGame.svelte";
+    import Spinner from "../components/Spinner.svelte";
     let upcomingGames = [];
     let pastGames = [];
 
@@ -58,6 +59,7 @@
             <Nav {isActive} />
             <div class="container padding-for-footer">
                 <h1>{heading}</h1>
+                <Spinner />
                 <CouncilCreateGame />
                 <Card cardHeader={upcomingCardHeader} games={upcomingGames} />
                 <br /><br />

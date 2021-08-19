@@ -7,6 +7,10 @@
     import { allGames, memberId } from "../services/storeUser";
     import { onDestroy } from "svelte";
     import { getGame } from "../services/firebaseQueries";
+    import GameDetails from "../components/GameDetails.svelte";
+    import GameOfficialsDetails from "../components/GameOfficialsDetails.svelte";
+    import TeamSheetListPlayers from "../components/TeamSheetListPlayers.svelte";
+    import Field from "../components/Field.svelte";
 
     let loginString = `You need to <a href='/login'>Login</a>`;
     let heading = "Teamsheet";
@@ -16,7 +20,7 @@
     let game;
     let gameId = params.gameId;
     let teamId = params.teamId;
-
+    console.log(gameId, teamId);
     interface User {
         email: String;
         uid: String;
@@ -58,6 +62,16 @@
     };
 
     $: game;
+
+    $: referee = `${game.referee.firstName} ${game.referee.lastName}`;
+    $: date = game.date;
+    $: time = game.time;
+    $: venue = game.venue.name;
+    $: competition = game.competition.name;
+    $: teamA = game.teamA.name;
+    $: teamB = game.teamB.name;
+    $: linesmen = game.linesmen;
+    $: umpires = game.umpires;
 
     // The authorised member must be the secretary who creted the game or the
     // the referee of the game to view the match report.
@@ -102,6 +116,30 @@
             {#if authorised}
                 <div class="container padding-for-footer">
                     <h1>{heading}</h1>
+
+                    <div class="row">
+                        <div class="col-12 col-lg-6">
+                            <GameDetails
+                                {date}
+                                {time}
+                                {venue}
+                                {competition}
+                                {teamA}
+                                {teamB}
+                            />
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            <GameOfficialsDetails
+                                {referee}
+                                {linesmen}
+                                {umpires}
+                            />
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <TeamSheetListPlayers {teamId} {gameId}/>
+                    </div>
                 </div>
             {:else}
                 <div class="row">

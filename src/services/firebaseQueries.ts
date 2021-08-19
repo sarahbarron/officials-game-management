@@ -9,7 +9,7 @@ import {
     secClubUpcomingGames, secClubPastGames,
     secProvinceUpcomingGames, secProvincePastGames,
     secCouncilUpcomingGames, secCouncilPastGames,
-    teamOfficialUpcomingGames, teamOfficialPastGames, allGames
+    teamOfficialUpcomingGames, teamOfficialPastGames, allGames, spinner
 } from './storeUser';
 import { db } from "./firebase";
 import { convertTimestampToDate, convertTimestampToTime, removeDuplicateObjectsFromArray } from '../services/util';
@@ -26,6 +26,7 @@ let allgames = [];
 */
 export let getMember = async (email: string) => {
     try {
+        spinner.set(true);
         await getMemberDetails(email);
         if (clubId != null && clubId != undefined) {
             await getClubDetails(clubId);
@@ -2652,7 +2653,7 @@ export let getCountyTeams = async (club_id: string) => {
     }
 }
 
-export let getCountyReferees = async (club_id) => {
+export let getCountyReferees = async (club_id: string) => {
     try {
         let referees = [];
         if (club_id != null && club_id != undefined) {
@@ -2820,4 +2821,50 @@ export let createGameInFirestore = async (memberId: string, date: any, time: any
     } catch (e) {
         console.error(`createGameInFirestore exception ${e}`);
     }
+}
+
+// Get List of Players for teamsheet
+export let getListOfTeamPlayers = async (teamId: string) => {
+    const teamDoc = db.collection("Team").doc(teamId);
+    const doc = await teamDoc.get();
+    let players = [];
+    if (doc.exists) {
+        let playerDocs = doc.data().players;
+        if (playerDocs != null && playerDocs != undefined) {
+
+            for (let i = 0; i < playerDocs.length; i++) {
+                let doc = playerDocs[i];
+                let id = doc.id;
+                let unavailable = false;
+                let onField = false;
+                let fieldPosition = null;
+                let jerseyNumber = null;
+
+                let name = "";
+                const memberDoc = await db.collection("Member").doc(id).get();
+                if (memberDoc.exists) {
+                    name = `${memberDoc.data().firstName} ${memberDoc.data().lastName}`;
+
+                }
+                let player = { id: id, name: name, unavailable, onField, fieldPosition, jerseyNumber };
+                players = [...players, player];
+            }
+
+        }
+    }
+    return players;
+}
+
+export let addPlayerToTeamSheetInFirestore = async (gameId: string, teamId: string, player) => {
+    let teamsheet = db.collection("Game").doc(gameId).collection("teamsheet").doc(teamId).collection("players");
+    teamsheet.doc(player.id).set({
+        fieldPosition: player.fieldPosition,
+        jerseyNumber: player.jerseyNumber,
+        onField: player.onField
+    });
+}
+
+export let removePlayerFromTeamSheetInFirestore = async (gameId: string, teamId: string, playerId: string){
+    let teamsheet = db.collection("Game").doc(gameId).collection("teamsheet").doc(teamId).collection("players");
+    teamsheet.doc(playerId).delete();
 }
