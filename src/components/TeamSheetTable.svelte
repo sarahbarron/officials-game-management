@@ -3,7 +3,6 @@
         addPlayerToTeamSheetInFirestore,
         removePlayerFromTeamSheetInFirestore,
     } from "../services/firebaseQueries";
-    import Field from "./Field.svelte";
     import TeamSheetPlayerRow from "./TeamSheetPlayerRow.svelte";
     export let players = [];
     export let gameId = "";
@@ -176,35 +175,44 @@
 </script>
 
 <div class="container">
-    <div class="table-responsive">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col-6">Player Name</th>
-                    <th scope="col">Field Position</th>
-                    <th scope="col">Jersey Num</th>
-                    <th scope="col">Unavailable</th>
-                </tr>
-            </thead>
-            <tbody>
-                {#each players as player}
-                    <TeamSheetPlayerRow {player} />
-                {/each}
-            </tbody>
-        </table>
-        <button on:click={saveTeamSheet}>Save Teamsheet</button>
-        {#if error}
-            <div class="error">
-                <p>{error_message}</p>
+    <div class="row">
+        <br />
+        <h3>Input Teamsheet Details</h3>
+        <br />
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col-6">Player Name</th>
+                        <th scope="col">Field Position</th>
+                        <th scope="col">Jersey Num</th>
+                        <th scope="col">Unavailable</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {#each players as player}
+                        <TeamSheetPlayerRow {player} />
+                    {/each}
+                </tbody>
+            </table>
+            <div class="col-12 btn-right">
+                <button on:click={saveTeamSheet} class="btn btn-primary btn-lg"
+                    >Save Teamsheet</button
+                >
             </div>
-        {/if}
-    </div>
-    <div class="d-none d-lg-block col-4">
-        <Field {players} />
+            {#if error}
+                <div class="error">
+                    <p>{error_message}</p>
+                </div>
+            {/if}
+        </div>
     </div>
 </div>
 
 <style>
+    .btn-right {
+        text-align: right;
+    }
     .container {
         border-style: solid;
         border-radius: 30px;

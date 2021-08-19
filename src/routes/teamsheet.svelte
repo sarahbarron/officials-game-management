@@ -10,7 +10,6 @@
     import GameDetails from "../components/GameDetails.svelte";
     import GameOfficialsDetails from "../components/GameOfficialsDetails.svelte";
     import TeamSheetListPlayers from "../components/TeamSheetListPlayers.svelte";
-    import Field from "../components/Field.svelte";
 
     let loginString = `You need to <a href='/login'>Login</a>`;
     let heading = "Teamsheet";
@@ -138,7 +137,7 @@
                     </div>
                     <br />
                     <div class="row">
-                        <TeamSheetListPlayers {teamId} {gameId}/>
+                        <TeamSheetListPlayers {teamId} {gameId} />
                     </div>
                 </div>
             {:else}
