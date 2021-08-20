@@ -9,6 +9,7 @@
     export let gameId = "";
     export let teamId = "";
     $: error = false;
+    $: saved = false;
     $: error_message = "";
 
     // check if all the field Positions have been filled
@@ -166,6 +167,7 @@
 
     // save the team sheet if input is valid and the game hasn't started already
     let saveTeamSheet = async () => {
+        saved = false;
         error = false;
         error_message = "";
         let validInput = checkForValidInput();
@@ -175,6 +177,7 @@
             if (!gameStarted) {
                 removeUnavailablePlayersFromFirestore();
                 saveToFirestore();
+                saved = true;
             } else {
                 error_message =
                     "Can't update teamsheet as the game has already started";
@@ -215,6 +218,11 @@
                     <p>{error_message}</p>
                 </div>
             {/if}
+            {#if saved}
+                <div class="saved">
+                    <p>Team Sheet saved</p>
+                </div>
+            {/if}
         </div>
     </div>
 </div>
@@ -237,6 +245,15 @@
 
     .error > p {
         color: red;
+    }
+
+    .saved > p {
+        color: green;
+    }
+    .error,
+    .saved {
+        padding-top: 20px;
         font-weight: bold;
+        text-align: right;
     }
 </style>
