@@ -1,6 +1,7 @@
 <script lang="ts">
     import {
         addPlayerToTeamSheetInFirestore,
+        hasGameStarted,
         removePlayerFromTeamSheetInFirestore,
     } from "../services/firebaseQueries";
     import TeamSheetPlayerRow from "./TeamSheetPlayerRow.svelte";
@@ -162,14 +163,23 @@
             }
         });
     };
+
+    // save the team sheet if input is valid and the game hasn't started already
     let saveTeamSheet = async () => {
         error = false;
         error_message = "";
         let validInput = checkForValidInput();
         console.log("valid input" + validInput);
         if (validInput) {
-            removeUnavailablePlayersFromFirestore();
-            saveToFirestore();
+            let gameStarted = await hasGameStarted(gameId);
+            if (!gameStarted) {
+                removeUnavailablePlayersFromFirestore();
+                saveToFirestore();
+            } else {
+                error_message =
+                    "Can't update teamsheet as the game has already started";
+                error = true;
+            }
         }
     };
 </script>

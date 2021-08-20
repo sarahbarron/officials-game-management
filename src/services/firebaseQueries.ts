@@ -2868,3 +2868,13 @@ export let removePlayerFromTeamSheetInFirestore = async (gameId: string, teamId:
     let teamsheet = db.collection("Game").doc(gameId).collection("teamsheet").doc(teamId).collection("players");
     teamsheet.doc(playerId).delete();
 }
+
+export let hasGameStarted = async (gameId) => {
+    let gameDoc = await db.collection("Game").doc(gameId).get();
+    let matchStarted = gameDoc.data().matchStarted;
+
+    if (matchStarted == "" || matchStarted == undefined || matchStarted == null) {
+        return false;
+    }
+    return true;
+}
