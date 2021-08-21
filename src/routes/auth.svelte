@@ -31,5 +31,6 @@
     }
     #auth-footer {
         position: relative;
+        min-height: 97vh;
     }
 </style>
