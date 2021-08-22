@@ -31,11 +31,6 @@
     export let refereeOptions = [];
     $: filteredReferees = refereeOptions;
 
-    $: console.log(`Venues: ${venueOptions}`);
-    $: console.log(`Competitins ${competitionOptions}`);
-    $: console.log(`Teams ${teamOptions}`);
-    $: console.log(`Referee ${refereeOptions}`);
-
     let member_Id: string;
     const unsubscribeMemberId = memberId.subscribe((value) => {
         member_Id = value;

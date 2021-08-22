@@ -8,7 +8,6 @@
         spin = value;
     });
     onDestroy(unsubscribeSpinner);
-    console.log(spin);
     if (spin) {
         setTimeout(() => {
             spinner.set(false);
