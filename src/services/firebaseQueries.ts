@@ -2881,6 +2881,7 @@ export let getTeamSheet = async (gameId: string, teamId: string) => {
             players = [...players, player];
         }
     }
+    console.log(players);
     return players;
 }
 export let addPlayerToTeamSheetInFirestore = async (gameId: string, teamId: string, player) => {
@@ -2892,7 +2893,7 @@ export let addPlayerToTeamSheetInFirestore = async (gameId: string, teamId: stri
     });
 }
 
-export let removePlayerFromTeamSheetInFirestore = async (gameId: string, teamId: string, playerId: string){
+export let removePlayerFromTeamSheetInFirestore = async (gameId: string, teamId: string, playerId: string) => {
     let teamsheet = db.collection("Game").doc(gameId).collection("teamsheet").doc(teamId).collection("players");
     teamsheet.doc(playerId).delete();
 }

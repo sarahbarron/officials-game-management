@@ -17,6 +17,8 @@
     import MatchReportInjuredPlayers from "../components/MatchReportInjuredPlayers.svelte";
     import MatchReportCards from "../components/matchReportCards.svelte";
     import MatchReportAdditionalComments from "../components/MatchReportAdditionalComments.svelte";
+    import ViewTeamSheet from "../components/ViewTeamSheet.svelte";
+    import GameViewButton from "../components/GameViewButton.svelte";
 
     let loginString = `You need to <a href='/login'>Login</a>`;
     let heading = "Match Report";
@@ -131,7 +133,7 @@
                                 />
                             </div>
                         </div>
-                        <br />
+                        <br /><br />
                         <div class="row">
                             <div class="col-12">
                                 <MRGameDetails
@@ -144,7 +146,7 @@
                                 />
                             </div>
                         </div>
-                        <br />
+                        <br /><br />
                         <div class="row">
                             <div class="col-12">
                                 <RefereesAccount
@@ -156,7 +158,7 @@
                                 />
                             </div>
                         </div>
-                        <br />
+                        <br /><br />
                         <div class="row">
                             <div class="col-12">
                                 <Substitutes
@@ -168,7 +170,7 @@
                                 />
                             </div>
                         </div>
-                        <br />
+                        <br /><br />
                         <MatchReportCards
                             {gameId}
                             {teamA}
@@ -176,7 +178,7 @@
                             {teamAid}
                             {teamBid}
                         />
-                        <br />
+                        <br /><br />
                         <div class="row">
                             <div class="col-12">
                                 <MatchReportInjuredPlayers
@@ -188,7 +190,7 @@
                                 />
                             </div>
                         </div>
-                        <br />
+                        <br /><br />
                         <div class="row">
                             <div class="col-12">
                                 <MatchReportAdditionalComments
@@ -196,8 +198,28 @@
                                 />
                             </div>
                         </div>
+                        <br /><br />
+                        <ViewTeamSheet
+                            {gameId}
+                            {teamA}
+                            {teamB}
+                            teamAId={teamAid}
+                            teamBId={teamBid}
+                        />
+
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-12 back-btn">
+                                    <GameViewButton
+                                        {gameId}
+                                        buttonText={"Back To Game"}
+                                    />
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 {/if}
+
                 <Footer />
             {:else}
                 <p>
@@ -211,3 +233,9 @@
         {/if}
     </div>
 </div>
+
+<style>
+    .back-btn {
+        text-align: right;
+    }
+</style>

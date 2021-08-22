@@ -9,10 +9,8 @@
     import { getGame } from "../services/firebaseQueries";
     import GameDetails from "../components/GameDetails.svelte";
     import GameOfficialsDetails from "../components/GameOfficialsDetails.svelte";
-    import TeamSheetListPlayers from "../components/TeamSheetListPlayers.svelte";
     import ViewTeamSheet from "../components/ViewTeamSheet.svelte";
 
-    let loginString = `You need to <a href='/login'>Login</a>`;
     let heading = "Match Teamsheet";
     let member: string = "";
     let all_games = [];

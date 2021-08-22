@@ -1,6 +1,6 @@
 <script lang="ts">
     import router from "page";
-    let buttonText: string = "View Game";
+    export let buttonText: string = "View Game";
     export let gameId: string = "";
     function clickEvent() {
         router.redirect(`/game/${gameId}`);

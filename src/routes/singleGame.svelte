@@ -91,9 +91,6 @@
         authorisedToViewMatchReport = true;
     }
 
-    $: teamAOfficials = game.teamA.teamOfficials;
-    $: teamBOfficials = game.teamB.teamOfficials;
-
     $: teamId = getOfficialsTeamId(member, game);
 
     $: if (teamId != null && teamId != undefined) {
