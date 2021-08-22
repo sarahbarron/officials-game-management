@@ -11,6 +11,7 @@
     import GameOfficialsDetails from "../components/GameOfficialsDetails.svelte";
     import MatchReportViewButton from "../components/MatchReportViewButton.svelte";
     import TeamsheetViewButton from "../components/TeamsheetViewButton.svelte";
+    import MatchTeamsheetViewButton from "../components/MatchTeamsheetViewButton.svelte";
     let loginString = `You need to <a href='/login'>Login</a>`;
     let heading = "View Game Details";
     let all_games = [];
@@ -70,8 +71,6 @@
         } else if (teamBOfficials.includes(memId)) {
             return game.teamB.id;
         }
-        console.log(`NULL: ${memId} : ${game.id}`);
-
         return null;
     };
     $: game;
@@ -138,18 +137,21 @@
                         <div class="row">
                             <div class="col-12">
                                 <MatchReportViewButton {gameId} />
+                                <MatchTeamsheetViewButton {gameId} />
                                 <TeamsheetViewButton {gameId} {teamId} />
                             </div>
                         </div>
                     {:else if authorisedToViewMatchReport}
                         <div class="row">
                             <div class="col-12">
-                                <p><MatchReportViewButton {gameId} /></p>
+                                <MatchReportViewButton {gameId} />
+                                <MatchTeamsheetViewButton {gameId} />
                             </div>
                         </div>
                     {:else if authorisedToSubmitTeamSheet}
                         <div class="row">
                             <div class="col-12">
+                                <MatchTeamsheetViewButton {gameId} />
                                 <TeamsheetViewButton {gameId} {teamId} />
                             </div>
                         </div>

@@ -2855,6 +2855,34 @@ export let getListOfTeamPlayers = async (teamId: string) => {
     return players;
 }
 
+// Return the list of players on a team sheet for a team
+export let getTeamSheet = async (gameId: string, teamId: string) => {
+    let players = [];
+    let snapshotQuery = await db.collection("Game").doc(gameId).collection("teamsheet").doc(teamId).collection("players").orderBy("fieldPosition").get();
+    if (!snapshotQuery.empty) {
+        for (let i = 0; i < snapshotQuery.size; i++) {
+            let doc = snapshotQuery.docs[i];
+            let id = doc.id;
+            let name = "";
+            let member = await db.collection("Member").doc(id).get();
+            if (member.exists) {
+                name = `${member.data().firstName} ${member.data().lastName}`;
+            }
+            let onField = doc.data().onField;
+            let fieldPosition = doc.data().fieldPosition;
+            let jerseyNumber = doc.data().jerseyNumber;
+            let player = {
+                id: id,
+                name: name,
+                onField: onField,
+                fieldPosition: fieldPosition,
+                jerseyNumber: jerseyNumber
+            }
+            players = [...players, player];
+        }
+    }
+    return players;
+}
 export let addPlayerToTeamSheetInFirestore = async (gameId: string, teamId: string, player) => {
     let teamsheet = db.collection("Game").doc(gameId).collection("teamsheet").doc(teamId).collection("players");
     teamsheet.doc(player.id).set({

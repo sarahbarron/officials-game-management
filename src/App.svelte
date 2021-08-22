@@ -14,6 +14,7 @@
 	import Logout from "./routes/logout.svelte";
 	import MatchReport from "./routes/matchReport.svelte";
 	import Teamsheet from "./routes/teamsheet.svelte";
+	import ViewMatchTeamsheet from "./routes/ViewMatchTeamsheet.svelte";
 	let page;
 	let params = {};
 	let qs = {};
@@ -68,6 +69,16 @@
 		},
 		() => (page = Teamsheet)
 	);
+
+	router(
+		"/game/:gameId/teamsheet",
+		(ctx: { params: { gameId } }, next) => {
+			params = ctx.params;
+			next();
+		},
+		() => (page = ViewMatchTeamsheet)
+	);
+
 	router("/*", () => (page = NotFound));
 	router.start();
 </script>
