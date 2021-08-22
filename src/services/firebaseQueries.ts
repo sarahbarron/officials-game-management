@@ -150,7 +150,6 @@ export let getSecretaryOfClubUpcomingGames = async (clubId: string) => {
             .where("dateTime", ">=", new Date())
             .orderBy("dateTime")
             .onSnapshot((querySnapshot) => {
-                console.log("secretary of club upcoming games");
                 querySnapshot.forEach(async (doc) => {
                     const gamePromise = await createGame(doc);
                     let id = gamePromise.id;
@@ -227,7 +226,6 @@ export let getSecretaryOfClubPastGames = async (clubId: string) => {
             .where("dateTime", "<=", new Date())
             .orderBy("dateTime")
             .onSnapshot((querySnapshot) => {
-                console.log("get sec of club past games");
                 querySnapshot.forEach(async (doc) => {
                     const gamePromise = await createGame(doc);
                     let id = gamePromise.id;
@@ -307,7 +305,6 @@ export let getSecretaryOfCountyUpcomingCountyGames = async (clubId: string) => {
             .where("dateTime", ">=", new Date())
             .orderBy("dateTime")
             .onSnapshot((querySnapshot) => {
-                console.log("sec of county upcoming COUNTY games");
                 querySnapshot.forEach(async (doc) => {
                     const gamePromise = await createGame(doc);
                     let id = gamePromise.id;
@@ -384,7 +381,6 @@ export let getSecretaryOfCountyPastCountyGames = async (clubId: string) => {
             .where("dateTime", "<=", new Date())
             .orderBy("dateTime")
             .onSnapshot((querySnapshot) => {
-                console.log("get sec of county past COUNTY Games");
                 querySnapshot.forEach(async (doc) => {
                     const gamePromise = await createGame(doc);
                     let id = gamePromise.id;
@@ -472,7 +468,6 @@ export let getSecretaryOfCountyUpcomingClubGames = async (clubId: string) => {
                 .where("dateTime", ">=", new Date())
                 .orderBy("dateTime")
                 .onSnapshot((querySnapshot) => {
-                    console.log("getting secretary of county upcoming CLUB games");
                     querySnapshot.forEach(async (doc) => {
                         const gamePromise = await createGame(doc);
                         let id = gamePromise.id;
@@ -558,7 +553,6 @@ export let getSecretaryOfCountyPastClubGames = async (clubId: string) => {
                 .where("dateTime", "<=", new Date())
                 .orderBy("dateTime")
                 .onSnapshot((querySnapshot) => {
-                    console.log("getting sec of county past CLUB Games");
                     querySnapshot.forEach(async (doc) => {
                         const gamePromise = await createGame(doc);
                         let id = gamePromise.id;
@@ -636,28 +630,21 @@ export let getSecretaryOfProvinceUpcomingGames = async (clubId: string) => {
     try {
         let games = [];
         const club = await db.collection("Club").doc(clubId).get();
-
         const countyRef = club.data().county;
         const county = await db.collection("County").doc(countyRef.id).get();
-
         const provinceRef = county.data().province;
-
         const competitionsDocs = db.collection("Competition");
         const competitions = await competitionsDocs
             .where("isProvincial", "==", provinceRef).get();
-
         competitions.forEach(async (doc) => {
             let i = 0;
             const competitionRef = db.collection("Competition").doc(doc.id);
             const gamesCollection = db.collection("Game");
-            // const querySnapshot = 
             await gamesCollection
                 .where("competition", "==", competitionRef)
                 .where("dateTime", ">=", new Date())
                 .orderBy("dateTime")
                 .onSnapshot((querySnapshot) => {
-
-                    console.log(`getting provincial games`);
                     querySnapshot.forEach(async (doc) => {
                         const gamePromise = await createGame(doc);
                         let id = gamePromise.id;
@@ -691,8 +678,6 @@ export let getSecretaryOfProvinceUpcomingGames = async (clubId: string) => {
                             matchEnded: matchEnded
                         }
 
-
-
                         if (!games.includes(game)) {
                             games = [...games, game];
                         }
@@ -711,8 +696,6 @@ export let getSecretaryOfProvinceUpcomingGames = async (clubId: string) => {
                         i++;
                     });
                 });
-
-
             return;
         });
     } catch (e) {
@@ -747,7 +730,6 @@ export let getSecretaryOfProvincePastGames = async (clubId: string) => {
                 .where("dateTime", "<=", new Date())
                 .orderBy("dateTime")
                 .onSnapshot((querySnapshot) => {
-                    console.log("sec of province past games");
                     querySnapshot.forEach(async (doc) => {
                         const gamePromise = await createGame(doc);
                         let id = gamePromise.id;
@@ -838,7 +820,6 @@ export let getSecretaryOfCouncilUpcomingGames = async () => {
                 .where("dateTime", ">=", new Date())
                 .orderBy("dateTime")
                 .onSnapshot((querySnapshot) => {
-                    console.log("Sec of council upcoming games")
                     querySnapshot.forEach(async (doc) => {
                         const gamePromise = await createGame(doc);
                         if (gamePromise != undefined && gamePromise != null) {
@@ -929,7 +910,6 @@ export let getSecretaryOfCouncilPastGames = async () => {
                 .where("dateTime", "<=", new Date())
                 .orderBy("dateTime")
                 .onSnapshot((querySnapshot) => {
-                    console.log("sec of council past games");
                     querySnapshot.forEach(async (doc) => {
                         const gamePromise = await createGame(doc);
                         if (gamePromise != undefined && gamePromise != null) {
@@ -1016,7 +996,6 @@ export let getRefereeUpcomingGames = async (memberId: string) => {
             .where("dateTime", ">=", new Date())
             .orderBy("dateTime")
             .onSnapshot((querySnapshot) => {
-                console.log("referees upcoming games");
                 querySnapshot.forEach(async (doc) => {
                     const gamePromise = await createGame(doc);
                     if (gamePromise != undefined && gamePromise != null) {
@@ -1180,7 +1159,6 @@ export let getTeamOfficialUpcomingGames = async (memberId: string) => {
                 .where("dateTime", ">=", new Date())
                 .orderBy("dateTime")
                 .onSnapshot((querySnapshotA) => {
-                    console.log(`Getting Team Officials Upcoming Games A`)
                     querySnapshotA.forEach(async (gameDoc) => {
                         const gamePromise = await createGame(gameDoc);
                         let id = gamePromise.id;
@@ -1244,7 +1222,6 @@ export let getTeamOfficialUpcomingGames = async (memberId: string) => {
                 .where("dateTime", ">=", new Date())
                 .orderBy("dateTime")
                 .onSnapshot((querySnapshotB) => {
-                    console.log("getting team officials upcoming games");
                     querySnapshotB.forEach(async (gameDocB) => {
                         const gamePromise = await createGame(gameDocB);
                         let id = gamePromise.id;
@@ -1323,7 +1300,6 @@ export let getTeamOfficialPastGames = async (memberId: string) => {
                 .where("dateTime", "<=", new Date())
                 .orderBy("dateTime")
                 .onSnapshot((querySnapshotA) => {
-                    console.log(`Get Team Officials Past Games A`);
                     querySnapshotA.forEach(async (gameDoc) => {
                         const gamePromise = await createGame(gameDoc);
                         let id = gamePromise.id;
@@ -1386,8 +1362,6 @@ export let getTeamOfficialPastGames = async (memberId: string) => {
                 .where("dateTime", "<=", new Date())
                 .orderBy("dateTime")
                 .onSnapshot((querySnapshotB) => {
-                    console.log(`Get Team Officials Past Games B`);
-
                     querySnapshotB.forEach(async (gameDocB) => {
                         const gamePromise = await createGame(gameDocB);
                         let id = gamePromise.id;
