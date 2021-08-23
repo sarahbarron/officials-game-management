@@ -15,10 +15,8 @@
     // check if all the field Positions have been filled
     let checkAreAllFieldPosititonsFilled = (fieldNumbersUsed) => {
         fieldNumbersUsed.sort((a, b) => a - b);
-        console.log(fieldNumbersUsed);
         let fieldNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
         let isEqual = fieldNumbers.toString() === fieldNumbersUsed.toString();
-        console.log(`isEqual ${fieldNumbersUsed} : ${isEqual}`);
         return isEqual;
     };
 
@@ -133,7 +131,6 @@
     };
     let saveToFirestore = async () => {
         players.forEach((player) => {
-            console.log(player);
             let unavailable = player.unavailable;
             if (!unavailable) {
                 let fieldPosition = player.fieldPosition;
@@ -155,7 +152,6 @@
                     fieldPosition: fieldPosition,
                     onField: onField,
                 };
-                console.log(firestorePlayer);
                 addPlayerToTeamSheetInFirestore(
                     gameId,
                     teamId,
@@ -171,7 +167,6 @@
         error = false;
         error_message = "";
         let validInput = checkForValidInput();
-        console.log("valid input" + validInput);
         if (validInput) {
             let gameStarted = await hasGameStarted(gameId);
             if (!gameStarted) {
@@ -187,43 +182,41 @@
     };
 </script>
 
-<div class="container">
-    <div class="row">
-        <br />
-        <h3>Input Teamsheet Details</h3>
-        <br />
-        <div class="table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col-6">Player Name</th>
-                        <th scope="col">Field Position</th>
-                        <th scope="col">Jersey Num</th>
-                        <th scope="col">Unavailable</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {#each players as player}
-                        <TeamSheetPlayerRow {player} />
-                    {/each}
-                </tbody>
-            </table>
-            <div class="col-12 btn-right">
-                <button on:click={saveTeamSheet} class="btn btn-primary btn-lg"
-                    >Save Teamsheet</button
-                >
-            </div>
-            {#if error}
-                <div class="error">
-                    <p>{error_message}</p>
-                </div>
-            {/if}
-            {#if saved}
-                <div class="saved">
-                    <p>Team Sheet saved</p>
-                </div>
-            {/if}
+<div class="row">
+    <br />
+    <h3>Input Teamsheet Details</h3>
+    <br />
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col-6">Player Name</th>
+                    <th scope="col">Field Position</th>
+                    <th scope="col">Jersey Num</th>
+                    <th scope="col">Unavailable</th>
+                </tr>
+            </thead>
+            <tbody>
+                {#each players as player}
+                    <TeamSheetPlayerRow {player} />
+                {/each}
+            </tbody>
+        </table>
+        <div class="col-12 btn-right">
+            <button on:click={saveTeamSheet} class="btn btn-primary btn-lg"
+                >Save Teamsheet</button
+            >
         </div>
+        {#if error}
+            <div class="error">
+                <p>{error_message}</p>
+            </div>
+        {/if}
+        {#if saved}
+            <div class="saved">
+                <p>Team Sheet saved</p>
+            </div>
+        {/if}
     </div>
 </div>
 
@@ -231,14 +224,7 @@
     .btn-right {
         text-align: right;
     }
-    .container {
-        border-style: solid;
-        border-radius: 30px;
-        border-color: #f8f9fa;
-        padding-bottom: 50px;
 
-        height: 100%;
-    }
     th {
         font-size: 20px;
     }

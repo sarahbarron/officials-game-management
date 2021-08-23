@@ -20,7 +20,6 @@
     let game;
     let gameId = params.gameId;
     let teamId = params.teamId;
-    console.log(gameId, teamId);
     interface User {
         email: String;
         uid: String;

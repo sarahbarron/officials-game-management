@@ -644,7 +644,6 @@ export let getSecretaryOfProvinceUpcomingGames = async (clubId: string) => {
                 .where("dateTime", ">=", new Date())
                 .orderBy("dateTime")
                 .onSnapshot((querySnapshot) => {
-                    console.log(querySnapshot.docs);
                     querySnapshot.forEach(async (doc) => {
                         const gamePromise = await createGame(doc);
                         let id = gamePromise.id;
@@ -1912,9 +1911,10 @@ export let getTeam = async (gameId: string, teamId: string) => {
                 teamName = null;
             }
             if (teamOfficialIds != null && teamOfficialIds != undefined) {
-                teamOfficialIds.forEach((doc: { id: any; }) => {
+                teamOfficialIds.forEach((doc) => {
                     let official = doc.id;
                     teamOfficials = [...teamOfficials, official];
+
                 });
             }
             else {
@@ -2825,7 +2825,6 @@ export let getTeamSheet = async (gameId: string, teamId: string) => {
             players = [...players, player];
         }
     }
-    console.log(players);
     return players;
 }
 export let addPlayerToTeamSheetInFirestore = async (gameId: string, teamId: string, player) => {

@@ -17,7 +17,6 @@
     $: teamBNoTeamsheet = false;
 
     let getGameTeamsheets = async () => {
-        console.log(`Team A ${teamAId} TBb ${teamBId}`);
         let teamsheetA = await getTeamSheet(gameId, teamAId);
         let teamsheetB = await getTeamSheet(gameId, teamBId);
         if (
@@ -25,7 +24,6 @@
             teamsheetA != undefined &&
             teamsheetA.length > 0
         ) {
-            console.log(teamsheetA.length);
             loadingAPlayers = false;
             teamATeamsheet = teamsheetA;
         } else {
