@@ -765,8 +765,6 @@ export let getSecretaryOfProvincePastGames = async (clubId: string) => {
                         allGames.set(allgames);
                     });
                 });
-
-
             return;
         });
     } catch (e) {

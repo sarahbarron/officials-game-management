@@ -233,9 +233,3 @@
         {/if}
     </div>
 </div>
-
-<style>
-    .back-btn {
-        text-align: right;
-    }
-</style>

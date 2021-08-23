@@ -10,6 +10,7 @@
     import GameDetails from "../components/GameDetails.svelte";
     import GameOfficialsDetails from "../components/GameOfficialsDetails.svelte";
     import TeamSheetListPlayers from "../components/TeamSheetListPlayers.svelte";
+    import GameViewButton from "../components/GameViewButton.svelte";
 
     let loginString = `You need to <a href='/login'>Login</a>`;
     let heading = "Teamsheet";
@@ -138,6 +139,16 @@
                     <br />
                     <div class="row">
                         <TeamSheetListPlayers {teamId} {gameId} />
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12 back-btn">
+                                <GameViewButton
+                                    {gameId}
+                                    buttonText="Back To Game"
+                                />
+                            </div>
+                        </div>
                     </div>
                 </div>
             {:else}

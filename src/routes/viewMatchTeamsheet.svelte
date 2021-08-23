@@ -10,6 +10,7 @@
     import GameDetails from "../components/GameDetails.svelte";
     import GameOfficialsDetails from "../components/GameOfficialsDetails.svelte";
     import ViewTeamSheet from "../components/ViewTeamSheet.svelte";
+    import GameViewButton from "../components/GameViewButton.svelte";
 
     let heading = "Match Teamsheet";
     let member: string = "";
@@ -106,6 +107,16 @@
                         {teamA}
                         {teamB}
                     />
+                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12 back-btn">
+                            <GameViewButton
+                                {gameId}
+                                buttonText={"Back To Game"}
+                            />
+                        </div>
+                    </div>
                 </div>
             </div>
         {:else}
