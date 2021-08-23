@@ -637,7 +637,6 @@ export let getSecretaryOfProvinceUpcomingGames = async (clubId: string) => {
         const competitions = await competitionsDocs
             .where("province", "==", provinceRef).get();
         competitions.forEach(async (doc) => {
-            let i = 0;
             const competitionRef = db.collection("Competition").doc(doc.id);
             const gamesCollection = db.collection("Game");
             await gamesCollection
@@ -645,7 +644,6 @@ export let getSecretaryOfProvinceUpcomingGames = async (clubId: string) => {
                 .where("dateTime", ">=", new Date())
                 .orderBy("dateTime")
                 .onSnapshot((querySnapshot) => {
-                    console.log("SNAPSHOT SIZE" + querySnapshot.size);
                     console.log(querySnapshot.docs);
                     querySnapshot.forEach(async (doc) => {
                         const gamePromise = await createGame(doc);
@@ -680,26 +678,12 @@ export let getSecretaryOfProvinceUpcomingGames = async (clubId: string) => {
                             matchEnded: matchEnded
                         }
 
-                        if (!games.includes(game)) {
-                            games = [...games, game];
-                        }
+                        games = [...games, game];
                         allgames = [...allgames, game];
-                        console.log(`Id ${id}  : games: ${games} i: ${i} snapshotsize: ${querySnapshot.size}`);
-                        if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
-                            if (games.length > 0) {
-                                console.log(games);
-                                games = removeDuplicateObjectsFromArray(games);
-                                console.log(`after dup ${games}`);
-                            }
-                            console.log(games);
-                            secProvinceUpcomingGames.set(games);
-
-                            if (allgames.length > 0) {
-                                allgames = removeDuplicateObjectsFromArray(allgames);
-                            }
-                            allGames.set(allgames);
-                        }
-                        i++;
+                        games = removeDuplicateObjectsFromArray(games);
+                        allgames = removeDuplicateObjectsFromArray(allgames);
+                        secProvinceUpcomingGames.set(games);
+                        allGames.set(allgames);
                     });
                 });
             return;
@@ -2495,7 +2479,6 @@ export let getProvincialCompetitions = async (provinceId: string) => {
         if (provinceId != null && provinceId != undefined) {
             let provinceRef = db.collection("Province").doc(provinceId);
             let competitionDocs = await db.collection("Competition").where("province", "==", provinceRef).get()
-            console.log(competitionDocs.size);
             competitionDocs.forEach((doc) => {
                 let id = doc.id;
                 let countyId = null

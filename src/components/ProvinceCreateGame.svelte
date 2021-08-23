@@ -43,7 +43,6 @@
         let countyReferences = [];
         let clubReferences = [];
         let provinceId = await getProvinceId(club_id);
-        console.log(provinceId);
 
         if (provinceId != null && provinceId != undefined) {
             countyReferences = await getCountyRefsOfProvince(provinceId);
