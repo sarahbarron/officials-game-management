@@ -712,7 +712,6 @@ export let getSecretaryOfProvincePastGames = async (clubId: string) => {
             .where("province", "==", provinceRef).get();
 
         competitions.forEach(async (doc) => {
-            let i = 0;
             const competitionRef = db.collection("Competition").doc(doc.id);
             const gamesCollection = db.collection("Game");
             const querySnapshot = await gamesCollection
@@ -758,25 +757,12 @@ export let getSecretaryOfProvincePastGames = async (clubId: string) => {
                         }
                         // const game = convertPromiseToGameObject(gamePromise);
 
-
-                        if (!games.includes(game)) {
-                            games = [...games, game];
-                        }
+                        games = [...games, game];
                         allgames = [...allgames, game];
-
-
-                        if (games != null && games != undefined && i == (querySnapshot.size - 1)) {
-                            if (games.length > 0) {
-                                games = removeDuplicateObjectsFromArray(games);
-                            }
-                            secProvincePastGames.set(games);
-
-                            if (allgames.length > 0) {
-                                allgames = removeDuplicateObjectsFromArray(allgames);
-                            }
-                            allGames.set(allgames);
-                        }
-                        i++;
+                        games = removeDuplicateObjectsFromArray(games);
+                        allgames = removeDuplicateObjectsFromArray(allgames);
+                        secProvincePastGames.set(games);
+                        allGames.set(allgames);
                     });
                 });
 
