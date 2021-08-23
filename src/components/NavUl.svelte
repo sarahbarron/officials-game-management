@@ -121,7 +121,7 @@
         <NavLi
             id="team-official-nav"
             href="/team-official"
-            text="Official"
+            text="Trainer"
             active={officialActive}
             aria={officialAria}
         />
@@ -139,7 +139,7 @@
         <NavLi
             id="secretary-of-province-nav"
             href="/secretary-of-province"
-            text="Province"
+            text="Provincial"
             active={provinceActive}
             aria={provinceAria}
         />
